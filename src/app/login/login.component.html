@@ -1,0 +1,61 @@
+<div class="form-container">
+
+    <form [formGroup]="loginForm">
+        <!-- (submit)="" -->
+
+        <h2>Sign In</h2>
+        <div class="form-box">
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input type="email" formControlName="email" matInput class="formControl" placeholder="email" #email
+                    required autocomplete="none" [class.invalid-filled-input]="
+                email.value.length > 0 && !loginForm.controls['email'].valid
+              ">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input type="password" formControlName="password" matInput class="formControl" placeholder="Password"
+                    #userPassword required autocomplete="none"
+                    [class.invalid-filled-input]="!loginForm.controls['password'].valid">
+            </mat-form-field>
+
+            <div class="forgotPassword">
+                <button mat-button mat-dialog-close routerLink="">Forgot Password?</button>
+            </div>
+
+            <div mat-dialog-actions>
+                <button mat-raised-button mat-dialog-close [disabled]="
+            !(loginForm.valid && (loginForm.dirty || loginForm.touched))
+          " type="submit">Login</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="other-options" [ngStyle]="{'margin-top.px': '75'}">
+
+        <div class="option-box" [ngStyle]="{'flex-direction': 'column', 'gap':'20px'}">
+
+            <div class="sub-option">
+
+                <span>Login as Guest</span>
+                <button mat-raised-button mat-dialog-close class="redirect" routerLink="/home"
+                    [ngStyle]="{'width': '115px', 'display':'flex', 'justify-content':'center'}"> Guest
+                    Login</button>
+
+            </div>
+            <!-- 
+            <div class="sub-option">
+
+                <span>Don't have an account?</span>
+                <button mat-raised-button mat-dialog-close class="redirect" routerLink="/startscreen"
+                    (click)="closeDialog()"> Sign
+                    Up</button>
+
+            </div> -->
+        </div>
+    </div>
+
+</div>
