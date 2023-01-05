@@ -1,7 +1,7 @@
 <div class="form-container">
 
-    <form [formGroup]="loginForm">
-        <!-- (submit)="" -->
+    <form [formGroup]="loginForm"
+        (submit)="authService.login(loginForm.controls['email'].value, loginForm.controls['password'].value)">
 
         <h2>Sign In</h2>
         <div class="form-box">
@@ -41,13 +41,13 @@
             <div class="sub-option">
 
                 <span>Login as Guest</span>
-                <button mat-raised-button mat-dialog-close routerLink="/home"
-                    [ngStyle]="{'width': '115px', 'display':'flex', 'justify-content':'center'}"> Guest
+                <button mat-raised-button mat-dialog-close
+                    [ngStyle]="{'width': '115px', 'display':'flex', 'justify-content':'center'}"
+                    (click)="authService.guestLogin()"> Guest
                     Login</button>
 
             </div>
 
-            <!-- <button (click)="authService.logout()">logout</button> -->
 
             <!-- 
             <div class="sub-option">

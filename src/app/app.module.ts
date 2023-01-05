@@ -32,6 +32,7 @@ import { RegisterComponent } from './register/register.component';
 import { DialogSuccessMessageComponent } from './dialog-components/dialog-success-message/dialog-success-message.component';
 import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-error.component';
 import { HomeComponent } from './home/home.component';
+import { MessageBoxComponent } from './message-box/message-box.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { HomeComponent } from './home/home.component';
     RegisterComponent,
     DialogSuccessMessageComponent,
     DialogErrorComponent,
-    HomeComponent
+    HomeComponent,
+    MessageBoxComponent
   ],
   imports: [
     BrowserModule,
