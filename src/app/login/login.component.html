@@ -10,7 +10,7 @@
                 <mat-label>Email</mat-label>
                 <input type="email" formControlName="email" matInput class="formControl" placeholder="email" #email
                     required autocomplete="none" [class.invalid-filled-input]="
-                email.value.length > 0 && !loginForm.controls['email']?.valid
+                email.value.length > 0 && !loginForm.controls['email'].valid
               ">
             </mat-form-field>
 
@@ -18,7 +18,7 @@
                 <mat-label>Password</mat-label>
                 <input type="password" formControlName="password" matInput class="formControl" placeholder="Password"
                     #userPassword required autocomplete="none"
-                    [class.invalid-filled-input]="!loginForm.controls['password']?.valid">
+                    [class.invalid-filled-input]="!loginForm.controls['password'].valid">
             </mat-form-field>
 
             <div class="forgotPassword">
@@ -27,7 +27,7 @@
 
             <div mat-dialog-actions>
                 <button mat-raised-button mat-dialog-close [disabled]="
-            !(loginForm?.valid && (loginForm?.dirty || loginForm.touched))
+            !(loginForm.valid && (loginForm.dirty || loginForm.touched))
           " type="submit">Login</button>
             </div>
         </div>

@@ -31,6 +31,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { DialogSuccessMessageComponent } from './dialog-components/dialog-success-message/dialog-success-message.component';
 import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-error.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-er
     LoginComponent,
     RegisterComponent,
     DialogSuccessMessageComponent,
-    DialogErrorComponent
+    DialogErrorComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
