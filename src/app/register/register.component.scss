@@ -1,0 +1,48 @@
+.form-container {
+    width: 400px;
+    height: 500px;
+
+    h2 {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .form-box {
+        display: flex;
+        flex-direction: column;
+
+        .forgotPassword {
+            color: rgba($color: #000000, $alpha: .4);
+
+            &:hover {
+                color: black;
+                transition: 225ms ease-in-out;
+            }
+        }
+
+        .mat-dialog-actions {
+            display: flex;
+            justify-content: center;
+
+            button {
+                width: 150px;
+                height: 40px;
+            }
+        }
+    }
+
+    .option-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        span {
+            padding: 0 16px;
+        }
+    }
+
+    .other-options {
+        margin-top: 125px;
+    }
+}

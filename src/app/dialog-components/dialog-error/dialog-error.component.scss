@@ -1,0 +1,36 @@
+.error-container {
+    background-color: rgba($color: #dfdfdfbc, $alpha: .5);
+    margin: -25px;
+    padding: 30px;
+    border: 5px solid red;
+
+    .iconBox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 50px;
+
+        mat-icon {
+            font-size: 50px;
+            color: red;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    }
+
+    .errBox {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        text-align: center;
+
+        h2 {
+            color: red;
+            text-decoration: underline;
+        }
+    }
+
+
+}
