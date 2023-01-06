@@ -37,6 +37,10 @@ import { HomeComponent } from './home/home.component';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { NavTreeComponent } from './nav-tree/nav-tree.component';
 
+import { MessageBoxComponent } from './message-box/message-box.component';
+import { QuillModule } from 'ngx-quill';
+
+
 
 @NgModule({
   declarations: [
@@ -48,7 +52,8 @@ import { NavTreeComponent } from './nav-tree/nav-tree.component';
     DialogErrorComponent,
     HomeComponent,
     SearchbarComponent,
-    NavTreeComponent
+    NavTreeComponent,
+    MessageBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -70,8 +75,8 @@ import { NavTreeComponent } from './nav-tree/nav-tree.component';
     MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTreeModule
-
+    MatTreeModule,
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

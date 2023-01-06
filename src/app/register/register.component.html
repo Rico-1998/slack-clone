@@ -4,7 +4,7 @@
     <div class="login-box">
 
         <form [formGroup]="registerForm"
-            (submit)="authService.registrateUser(registerForm.controls['email'].value, registerForm.controls['password'].value, registerForm)">
+            (submit)="authService.registrateUser(registerForm.controls['email'].value, registerForm.controls['password'].value, registerForm.controls['displayName'].value, registerForm)">
 
             <h2>Sign Up</h2>
 

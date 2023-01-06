@@ -1,4 +1,6 @@
 @import 'src/modules/_vars';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
 
 * {
     margin: 0;
@@ -15,4 +17,12 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+#emoji-palette {
+    top: -165px !important;
+    left: 0px !important;
+    height: 120px;
+    overflow: hidden;
+    max-width: 100% !important;
 }
