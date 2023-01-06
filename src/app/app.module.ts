@@ -33,6 +33,9 @@ import { DialogSuccessMessageComponent } from './dialog-components/dialog-succes
 import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-error.component';
 import { HomeComponent } from './home/home.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
+import { QuillModule } from 'ngx-quill';
+
+
 
 @NgModule({
   declarations: [
@@ -64,7 +67,8 @@ import { MessageBoxComponent } from './message-box/message-box.component';
     MatCardModule,
     MatMenuModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QuillModule.forRoot()
 
   ],
   providers: [],

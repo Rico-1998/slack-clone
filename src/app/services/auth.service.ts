@@ -70,7 +70,7 @@ export class AuthService {
   }
 
 
-  registrateUser(email: string, password: string, name: string, form) {
+  registrateUser(email: string, password: string, name: string, form: any) {
     let emailUser = email;
     let passwordUser = password;
 
