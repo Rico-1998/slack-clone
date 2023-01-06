@@ -7,7 +7,6 @@ import { StartScreenComponent } from './start-screen/start-screen.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 
-
 //angular material imports
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +19,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatTreeModule} from '@angular/material/tree';
 
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -32,6 +34,9 @@ import { RegisterComponent } from './register/register.component';
 import { DialogSuccessMessageComponent } from './dialog-components/dialog-success-message/dialog-success-message.component';
 import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-error.component';
 import { HomeComponent } from './home/home.component';
+import { SearchbarComponent } from './searchbar/searchbar.component';
+import { NavTreeComponent } from './nav-tree/nav-tree.component';
+
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
 
@@ -46,6 +51,8 @@ import { QuillModule } from 'ngx-quill';
     DialogSuccessMessageComponent,
     DialogErrorComponent,
     HomeComponent,
+    SearchbarComponent,
+    NavTreeComponent,
     MessageBoxComponent
   ],
   imports: [
@@ -68,8 +75,8 @@ import { QuillModule } from 'ngx-quill';
     MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
-    QuillModule.forRoot()
-
+    MatTreeModule,
+    QuillModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
