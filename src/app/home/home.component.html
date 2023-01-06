@@ -1,1 +1,24 @@
-<p>home works!</p>
+<app-searchbar></app-searchbar>
+<mat-drawer-container class="content-container" autosize>
+  <mat-drawer #drawer class="sidenav" [opened]="true" mode="side">
+    <div class="workspace">
+      <h1>Developer Akademie</h1>
+      <div class="new-chat-container">
+        <mat-icon class="material-symbols-outlined">edit_square</mat-icon>
+      </div>
+    </div>
+    <app-nav-tree></app-nav-tree>
+  </mat-drawer>
+  <mat-toolbar>
+    <button
+      mat-icon-button
+      class="example-icon"
+      aria-label="Example icon-button with menu icon"
+      (click)="drawer.toggle()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Channel/chat name</span>
+    <!--todo-->
+  </mat-toolbar>
+</mat-drawer-container>
