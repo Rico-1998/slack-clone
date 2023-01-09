@@ -44,6 +44,8 @@ import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
 import { CreateChatComponent } from './create-chat/create-chat.component';
 import { AutofocusDirective } from './autofocus.directive';
+import { ChannelsComponent } from './channels/channels.component';
+import { DialogAddChannelComponent } from './dialog-components/dialog-add-channel/dialog-add-channel.component';
 
 
 
@@ -60,7 +62,9 @@ import { AutofocusDirective } from './autofocus.directive';
     NavTreeComponent,
     MessageBoxComponent,
     CreateChatComponent,
-    AutofocusDirective
+    AutofocusDirective,
+    ChannelsComponent,
+    DialogAddChannelComponent
   ],
   imports: [
     BrowserModule,

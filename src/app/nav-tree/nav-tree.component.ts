@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
 
 @Component({
   selector: 'app-nav-tree',
@@ -12,10 +14,15 @@ export class NavTreeComponent implements OnInit {
   channels: string[] = ['allgemein', 'angular', 'random'];
   chats: string[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
   
-  constructor(){}
+  constructor(
+    public dialog: MatDialog,
+    ){}
 
   ngOnInit(): void {
   }
 
+  openDialogAddChannel(){
+    this.dialog.open(DialogAddChannelComponent);
+  }
 
 }
