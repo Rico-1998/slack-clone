@@ -13,9 +13,9 @@ export class NavTreeComponent implements OnInit {
   db = getFirestore();
 
   channels: string[] = ['allgemein', 'angular', 'random'];
-  chats: string[] = ['Tobias', 'Rico', 'Phil'];
+  chats: string[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
 
-  constructor(private firestore: Firestore) { }
+  constructor() { }
 
   ngOnInit(): void {
     let currentUserId = JSON.parse(localStorage.getItem('user'));

@@ -1,6 +1,6 @@
 <app-searchbar #searchbar></app-searchbar>
 <mat-drawer-container class="content-container" autosize>
-  <mat-drawer #drawer class="sidenav" [opened]="true" mode="side">
+  <mat-drawer class="sidenav" [opened]="toggler.isSidenavOpen" mode="side">
     <div class="workspace">
       <h1>Developer Akademie</h1>
       <div class="new-chat-container">
