@@ -1,30 +1,35 @@
-mat-drawer-container {
+:host {
     height: 100vh;
     width: 100%;
 }
 
-mat-toolbar {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
+.content-container {
+    height: calc(100% - 64px);
 
-.workspace {
-    display: flex;
-    align-items: center;
-    padding: 20px;
 
-    h1 {
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        width: 150px;
-        margin: 0;
+    mat-toolbar {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
     }
 
-    .new-chat-container {
-        border-radius: 100%;
-        height: 20px;
-        aspect-ratio: 1;
+    .workspace {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+
+        h1 {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: 150px;
+            margin: 0;
+        }
+
+        .new-chat-container {
+            border-radius: 100%;
+            height: 20px;
+            aspect-ratio: 1;
+        }
     }
 }

@@ -1,4 +1,4 @@
-<app-searchbar></app-searchbar>
+<app-searchbar #searchbar></app-searchbar>
 <mat-drawer-container class="content-container" autosize>
   <mat-drawer #drawer class="sidenav" [opened]="true" mode="side">
     <div class="workspace">
@@ -9,7 +9,7 @@
     </div>
     <app-nav-tree></app-nav-tree>
   </mat-drawer>
-  <mat-toolbar>
+  <!-- <mat-toolbar>
     <button
       mat-icon-button
       class="example-icon"
@@ -19,6 +19,6 @@
       <mat-icon>menu</mat-icon>
     </button>
     <span>Channel/chat name</span>
-    <!--todo-->
-  </mat-toolbar>
+  </mat-toolbar> -->
+  <router-outlet></router-outlet>
 </mat-drawer-container>
