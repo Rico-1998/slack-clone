@@ -34,7 +34,7 @@ export class UserService {
   getData() {
     getDocs(this.ref)
       .then((response) => {
-        console.log(response.docs.map(docs => docs.data()));
+        // console.log(response.docs.map(docs => docs.data()));
       })
     // console.log('das ist der Current User:', this.currentUser);
 

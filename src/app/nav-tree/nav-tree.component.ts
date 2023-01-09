@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 
 @Component({
   selector: 'app-nav-tree',
@@ -8,13 +10,21 @@ import { Component, OnInit } from '@angular/core';
 export class NavTreeComponent implements OnInit {
   openChannelPanel = false;
   openChatsPanel = false;
+  db = getFirestore();
 
   channels: string[] = ['allgemein', 'angular', 'random'];
   chats: string[] = ['Tobias', 'Rico', 'Phil'];
 
-  constructor() { }
+  constructor(private firestore: Firestore) { }
 
   ngOnInit(): void {
+    let currentUserId = JSON.parse(localStorage.getItem('user'));
+    getDoc(doc(this.db, 'users', currentUserId.uid))
+      .then((doc) => {
+        console.log(doc.data());
+      })
+
   }
+
 
 }

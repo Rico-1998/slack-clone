@@ -41,6 +41,7 @@ import { NavTreeComponent } from './nav-tree/nav-tree.component';
 
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
+import { CreateChatComponent } from './create-chat/create-chat.component';
 
 
 
@@ -55,7 +56,8 @@ import { QuillModule } from 'ngx-quill';
     HomeComponent,
     SearchbarComponent,
     NavTreeComponent,
-    MessageBoxComponent
+    MessageBoxComponent,
+    CreateChatComponent
   ],
   imports: [
     BrowserModule,
