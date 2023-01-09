@@ -23,6 +23,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatListModule} from '@angular/material/list';
 
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -75,7 +77,7 @@ import { QuillModule } from 'ngx-quill';
     MatMenuModule,
     FormsModule,
     ReactiveFormsModule,
-    MatTreeModule,
+    MatListModule,
     QuillModule.forRoot(),
   ],
   providers: [],
