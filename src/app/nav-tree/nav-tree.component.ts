@@ -10,7 +10,7 @@ export class NavTreeComponent implements OnInit {
   openChatsPanel = false;
 
   channels: string[] = ['allgemein', 'angular', 'random'];
-  chats: string[] = ['Tobias', 'Rico', 'Phil'];
+  chats: string[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
   
   constructor(){}
 

@@ -25,6 +25,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatListModule} from '@angular/material/list';
+import {MatDividerModule} from '@angular/material/divider';
 
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -42,6 +43,7 @@ import { NavTreeComponent } from './nav-tree/nav-tree.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
 import { CreateChatComponent } from './create-chat/create-chat.component';
+import { AutofocusDirective } from './autofocus.directive';
 
 
 
@@ -57,7 +59,8 @@ import { CreateChatComponent } from './create-chat/create-chat.component';
     SearchbarComponent,
     NavTreeComponent,
     MessageBoxComponent,
-    CreateChatComponent
+    CreateChatComponent,
+    AutofocusDirective
   ],
   imports: [
     BrowserModule,
@@ -80,6 +83,7 @@ import { CreateChatComponent } from './create-chat/create-chat.component';
     FormsModule,
     ReactiveFormsModule,
     MatListModule,
+    MatDividerModule,
     QuillModule.forRoot(),
   ],
   providers: [],

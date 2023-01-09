@@ -1,13 +1,27 @@
 <mat-toolbar>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
-  >
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Direct message</span>
+  <mat-toolbar-row>
+    <button
+      mat-icon-button
+      class="example-icon"
+      (click)="toggler.toggleNav()"
+      *ngIf="viewportWidth"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Direct message</span>
+  </mat-toolbar-row>
+  <mat-toolbar-row>
+    <span>To:</span><input type="text" autofocus />
+  </mat-toolbar-row>
 </mat-toolbar>
-<div>
-  <input type="text" autofocus />
+<div class="last-messages">
+  <div class="message">
+    <p>{{ lastMessages.date }}</p>
+    <mat-card>
+      <mat-card-content>
+        <span>{{ lastMessages.name }}</span>
+        <span>{{ lastMessages.message }}</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
+import { DrawerTogglerService } from '../services/drawer-toggler.service';
 
 
 @Component({
@@ -9,10 +10,11 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  constructor(public authService: AuthService, private firestore: Firestore) { }
 
+  constructor(public authService: AuthService, private firestore: Firestore, public toggler: DrawerTogglerService) { }
+  
   ngOnInit(): void {
-
+   
   }
 
 
