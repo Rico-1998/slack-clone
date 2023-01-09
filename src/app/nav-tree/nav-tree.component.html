@@ -1,17 +1,46 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <!-- This is the tree node template for leaf nodes -->
-  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-    <!-- use a disabled button to provide padding for tree leaf -->
-    <button mat-icon-button disabled></button>
-    {{ node.name }}
-  </mat-tree-node>
-  <!-- This is the tree node template for expandable nodes -->
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
-      </mat-icon>
-    </button>
-    {{ node.name }}
-  </mat-tree-node>
-</mat-tree>
+<mat-selection-list [multiple]="false">
+  <div class="header-container">
+    <div class="headline" (click)="openChannelPanel = !openChannelPanel">
+      <mat-icon>{{
+        openChannelPanel ? "arrow_drop_down" : "arrow_right"
+        }}</mat-icon>
+      <span>Channels</span>
+    </div>
+    <div class="header-add">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+  <div *ngIf="openChannelPanel">
+    <mat-list-item *ngFor="let channel of channels">
+      <div matListItemTitle># {{ channel }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <div class="addItem" matListItemTitle>
+        <mat-icon>add</mat-icon>Channel hinzufügen
+      </div>
+    </mat-list-item>
+  </div>
+</mat-selection-list>
+<mat-selection-list [multiple]="false">
+  <div class="header-container">
+    <div class="headline" (click)="openChatsPanel = !openChatsPanel">
+      <mat-icon>{{
+        openChatsPanel ? "arrow_drop_down" : "arrow_right"
+        }}</mat-icon>
+      <span>Chats</span>
+    </div>
+    <div class="header-add">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+  <div *ngIf="openChatsPanel">
+    <mat-list-item *ngFor="let chat of chats">
+      <div matListItemTitle>{{ chat }}</div>
+    </mat-list-item>
+    <mat-list-item>
+      <div class="addItem" matListItemTitle>
+        <mat-icon>add</mat-icon>Chat hinzufügen
+      </div>
+    </mat-list-item>
+  </div>
+</mat-selection-list>
