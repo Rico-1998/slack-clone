@@ -21,10 +21,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatTreeModule} from '@angular/material/tree';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatListModule} from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -80,6 +83,8 @@ import { CreateChatComponent } from './create-chat/create-chat.component';
     FormsModule,
     ReactiveFormsModule,
     MatListModule,
+    MatSelectModule,
+    MatAutocompleteModule,
     QuillModule.forRoot(),
   ],
   providers: [],

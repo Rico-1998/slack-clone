@@ -21,7 +21,7 @@ export class NavTreeComponent implements OnInit {
     let currentUserId = JSON.parse(localStorage.getItem('user'));
     getDoc(doc(this.db, 'users', currentUserId.uid))
       .then((doc) => {
-        console.log(doc.data());
+        // console.log(doc.data());
       })
 
   }

@@ -1,7 +1,12 @@
 <mat-toolbar>
   <div class="searchbar-container">
-    <input class="searchbar" type="text" />
+    <input class="searchbar" type="text" [matAutocomplete]="users" />
   </div>
+  <mat-autocomplete #users="matAutocomplete">
+    <mat-option *ngFor="let user of allUsers" (click)="createChat(user.id)">
+      {{ user.userName }}
+    </mat-option>
+  </mat-autocomplete>
   <div class="settings">
     <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon>
     <div class="img-container">
