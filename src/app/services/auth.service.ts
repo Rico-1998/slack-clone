@@ -22,7 +22,7 @@ export class AuthService {
   loggedIn: boolean = false;
   db: any = getFirestore();
   colRef: any = collection(this.db, 'users');
-  currentUser: Observable<any> = authState(this.auth);
+  loggedUser: Observable<any> = authState(this.auth);
 
 
   constructor(public dialog: MatDialog,

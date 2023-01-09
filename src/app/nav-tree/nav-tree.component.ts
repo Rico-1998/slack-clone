@@ -10,11 +10,11 @@ interface chatNode {
 const TREE_DATA: chatNode[] = [
   {
     name: 'Channels',
-    children: [{name: '#allgemein'}, {name: '#random'}, {name: '#Angular'}],
+    children: [{ name: '#allgemein' }, { name: '#random' }, { name: '#Angular' }],
   },
   {
     name: 'Chats',
-    children: [{name: 'Rico'}, {name: 'Tobias'}, {name: 'Viktor'}, {name: 'Phil'}],
+    children: [{ name: 'Rico' }, { name: 'Tobias' }, { name: 'Viktor' }, { name: 'Phil' }],
   },
 ];
 

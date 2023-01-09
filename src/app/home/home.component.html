@@ -10,15 +10,12 @@
     <app-nav-tree></app-nav-tree>
   </mat-drawer>
   <mat-toolbar>
-    <button
-      mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with menu icon"
-      (click)="drawer.toggle()"
-    >
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+      (click)="drawer.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Channel/chat name</span>
     <!--todo-->
   </mat-toolbar>
+  <app-message-box></app-message-box>
 </mat-drawer-container>

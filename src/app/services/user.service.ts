@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { docData, Firestore, getDocs, doc, getDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { collection, onSnapshot } from '@firebase/firestore';
-import { Observable } from 'rxjs';
+import { filter, map, Observable, switchMap } from 'rxjs';
 
 
 @Injectable({
@@ -10,21 +10,33 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
   currentUser$: Observable<any>;
+  currentUser: any;
   users: any = [];
+  ref: any = collection(this.firestore, 'users');
 
   constructor(public authService: AuthService, private firestore: Firestore) {
     onSnapshot(collection(this.firestore, 'users'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
-        this.users.push({ ...(doc.data() as object), id: doc.id })
+        this.users.push({ ...(doc.data() as object), id: doc.id });
       })
     })
 
-    this.authService.currentUser.subscribe((user$) => {
+    this.authService.loggedUser.subscribe((user$) => {
       this.currentUser$ = user$;
-      // docData(doc(this.firestore, 'users', user$.uid as string)).subscribe((user) => {
-      //   this.currentUser$ = user as object;
-      //   console.log(this.currentUser$);
-      // })
+      getDoc(doc(this.firestore, 'users', user$.uid as string))
+        .then((user) => {
+          this.currentUser = user.data();
+        })
     })
+  }
+
+
+  getData() {
+    getDocs(this.ref)
+      .then((response) => {
+        console.log(response.docs.map(docs => docs.data()));
+      })
+    // console.log('das ist der Current User:', this.currentUser);
+
   }
 }

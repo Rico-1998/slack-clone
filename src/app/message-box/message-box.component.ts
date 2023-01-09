@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import 'quill-emoji/dist/quill-emoji.js';
 
 
@@ -24,11 +25,29 @@ export class MessageBoxComponent implements OnInit {
     ]
   };
 
-  constructor() { }
+  messageForm: FormGroup;
+  text: any = '';
 
-  ngOnInit(): void {
+
+  constructor() {
+    this.messageForm = new FormGroup({
+      'msgEditor': new FormControl()
+    })
   }
 
+  ngOnInit(): void {
+
+  }
+
+  sendMessage() {
+
+  }
+
+  checkEditor(event) {
+    console.log(event.event);
+    console.log(this.text);
+
+  }
 
 
 }
