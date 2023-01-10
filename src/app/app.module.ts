@@ -30,6 +30,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
+
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
@@ -42,11 +43,15 @@ import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-er
 import { HomeComponent } from './home/home.component';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { NavTreeComponent } from './nav-tree/nav-tree.component';
+import { AngularFireModule } from '@angular/fire/compat'; //Tobi added Firestore version 8
+
 
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
 import { CreateChatComponent } from './create-chat/create-chat.component';
 import { AutofocusDirective } from './autofocus.directive';
+import { ChannelsComponent } from './channels/channels.component';
+import { DialogAddChannelComponent } from './dialog-components/dialog-add-channel/dialog-add-channel.component';
 
 
 
@@ -63,11 +68,14 @@ import { AutofocusDirective } from './autofocus.directive';
     NavTreeComponent,
     MessageBoxComponent,
     CreateChatComponent,
-    AutofocusDirective
+    AutofocusDirective,
+    ChannelsComponent,
+    DialogAddChannelComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase), // Tobi added web version 8
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),

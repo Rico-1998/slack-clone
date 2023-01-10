@@ -14,6 +14,19 @@ export const environment = {
   production: false
 };
 
+//Test api von Tobias
+// export const environment = {
+//   firebase: {
+//     apiKey: "AIzaSyC95BMHE9WOaa1Cd6P8OqaBh0swfbqhH4M",
+//   authDomain: "slack-clone-test-8a7aa.firebaseapp.com",
+//   projectId: "slack-clone-test-8a7aa",
+//   storageBucket: "slack-clone-test-8a7aa.appspot.com",
+//   messagingSenderId: "635661196966",
+//   appId: "1:635661196966:web:66f050213d5c69b000de67"
+//   },
+//   production: false
+// };
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

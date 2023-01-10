@@ -1,0 +1,22 @@
+.welcome-card {
+    display: flex;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    .leftframe {
+        span {
+            background-color: #ABABAD;
+            padding: 6px;
+            border-radius: 5px;
+        }
+    }
+
+    .welcome-content {
+        margin-left: 24px;
+    }
+}
+
+.highlight {
+    color: #1D9BD1;
+    font-weight: bold;
+}
