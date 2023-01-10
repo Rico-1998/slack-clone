@@ -27,6 +27,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatListModule} from '@angular/material/list';
 import {MatDividerModule} from '@angular/material/divider';
 
+
 //firebase imports
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideDatabase, getDatabase } from '@angular/fire/database';
@@ -39,6 +40,8 @@ import { DialogErrorComponent } from './dialog-components/dialog-error/dialog-er
 import { HomeComponent } from './home/home.component';
 import { SearchbarComponent } from './searchbar/searchbar.component';
 import { NavTreeComponent } from './nav-tree/nav-tree.component';
+import { AngularFireModule } from '@angular/fire/compat'; //Tobi added Firestore version 8
+
 
 import { MessageBoxComponent } from './message-box/message-box.component';
 import { QuillModule } from 'ngx-quill';
@@ -69,6 +72,7 @@ import { DialogAddChannelComponent } from './dialog-components/dialog-add-channe
   imports: [
     BrowserModule,
     AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase), // Tobi added web version 8
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),

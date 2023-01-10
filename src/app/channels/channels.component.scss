@@ -1,0 +1,12 @@
+mat-card {
+    display: flex;
+    padding-top: 50px;
+
+    .leftframe {
+        span {
+            background-color: #ABABAD;
+            padding: 6px;
+            border-radius: 5px;
+        }
+    }
+}

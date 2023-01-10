@@ -7,14 +7,14 @@
       <span><b>Name des Channels</b></span>
       <mat-form-field appearance="outline">
         <!-- <mat-label>Name</mat-label> -->
-        <input disable="loading" matInput placeholder="z.B. budget-planung">
+        <input disable="loading" matInput [(ngModel)]="channel.channelName" placeholder="z.B. budget-planung">
       </mat-form-field>
     </div>
     <div>
       <span><b>Beschreibung</b> (optional)</span>
       <mat-form-field appearance="outline">
         <!-- <mat-label>Beschreibung</mat-label> -->
-        <input disable="loading" matInput placeholder="Worum geht es in diesem Channel?">
+        <input disable="loading" matInput [(ngModel)]="channel.channelDescription" placeholder="Worum geht es in diesem Channel?">
       </mat-form-field>
     </div>
     </div>

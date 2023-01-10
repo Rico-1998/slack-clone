@@ -11,8 +11,9 @@
     </div>
   </div>
   <div *ngIf="openChannelPanel">
-    <mat-list-item *ngFor="let channel of channels" [routerLink]="['/channels/']">
-      <div matListItemTitle># {{ channel }}</div>
+    
+    <mat-list-item *ngFor="let channel of channels">
+      <div matListItemTitle routerLink="channel/{{ channel.customIdName }}"># {{ channel.channelName }}</div>
     </mat-list-item>
     <mat-list-item>
       <div class="addItem" matListItemTitle>

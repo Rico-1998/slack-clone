@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
+import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
+
+
 
 @Component({
   selector: 'app-nav-tree',
@@ -11,14 +14,21 @@ export class NavTreeComponent implements OnInit {
   openChannelPanel = false;
   openChatsPanel = false;
 
-  channels: string[] = ['allgemein', 'angular', 'random'];
+  channels;
   chats: string[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
   
   constructor(
     public dialog: MatDialog,
+    private angularFirestore: AngularFirestore, //Tobi added Firestore version 8
     ){}
 
   ngOnInit(): void {
+    this.angularFirestore
+      .collection('channels')
+      .valueChanges({idField: 'customIdName'})
+      .subscribe((change) => {
+        this.channels = change
+      })
   }
 
   openDialogAddChannel(){

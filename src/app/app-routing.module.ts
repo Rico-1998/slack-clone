@@ -15,6 +15,7 @@ const routes: Routes = [
     children: [
       // {path: '', component:HomeComponent},
       {path: 'create-chat', component:CreateChatComponent},
+      {path: 'channel/:id', component: ChannelsComponent}
     ]
     },
 ];

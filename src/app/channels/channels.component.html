@@ -1,12 +1,13 @@
 <mat-card>
+    <div class="leftframe">
+      <span class="material-symbols-outlined">
+        tag
+        </span>
+    </div>
     <mat-card-content>
-      <div class="message-container">
-        <div>
-            Name  + Uhrzeit/Datum
-        </div>
-        <div>
-            hier könnte ihre Werbung stehen
-        </div>
-      </div>
+      <span>
+        Thats the beginning of this channel #{{ channel.channelName }}
+      </span><br>
+      <span>Channeldescription: {{ channel.channelDescription }} and was created at:</span>
     </mat-card-content>
   </mat-card>
