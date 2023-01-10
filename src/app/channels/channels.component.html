@@ -1,13 +1,14 @@
-<mat-card>
+<mat-card class="welcome-card">
     <div class="leftframe">
       <span class="material-symbols-outlined">
         tag
         </span>
     </div>
-    <mat-card-content>
+    <mat-card-content class="welcome-content">
       <span>
-        Thats the beginning of this channel #{{ channel.channelName }}
+        Thats the beginning of this channel <span class="highlight">#{{ channel.channelName }}</span>
       </span><br>
-      <span>Channeldescription: {{ channel.channelDescription }} and was created at:</span>
+      <span>This Channel was created at: 12.05.2022</span><br>
+      <span>Channeldescription: <span class="highlight">#{{ channel.channelDescription }}</span></span>
     </mat-card-content>
   </mat-card>

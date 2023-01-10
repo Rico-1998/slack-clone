@@ -1,6 +1,7 @@
-mat-card {
+.welcome-card {
     display: flex;
     padding-top: 50px;
+    padding-bottom: 50px;
 
     .leftframe {
         span {
@@ -9,4 +10,13 @@ mat-card {
             border-radius: 5px;
         }
     }
+
+    .welcome-content {
+        margin-left: 24px;
+    }
+}
+
+.highlight {
+    color: #1D9BD1;
+    font-weight: bold;
 }

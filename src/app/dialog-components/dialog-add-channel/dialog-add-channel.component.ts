@@ -3,6 +3,7 @@ import { Firestore, getFirestore, collection, doc, setDoc, addDoc} from '@angula
 import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
 import { Router } from '@angular/router';
 import { Channel } from 'src/modules/channels.class';
+import { timestamp } from 'rxjs';
 
 
 
