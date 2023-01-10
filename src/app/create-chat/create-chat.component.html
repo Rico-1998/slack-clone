@@ -1,17 +1,16 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <button
-      mat-icon-button
-      class="example-icon"
-      (click)="toggler.toggleNav()"
-      *ngIf="viewportWidth"
-    >
+    <button mat-icon-button class="example-icon" (click)="toggler.toggleNav()" *ngIf="viewportWidth">
       <mat-icon>menu</mat-icon>
     </button>
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span>To:</span><input type="text" autofocus />
+    <span>To:</span><input type="text" (keyup)="searchUser($event)" autofocus [matAutocomplete]="searchedUsers" />
+    <mat-autocomplete #searchedUsers="matAutocomplete">
+      <mat-option>
+      </mat-option>
+    </mat-autocomplete>
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="last-messages">
