@@ -34,6 +34,7 @@ export class ChannelsComponent implements OnInit {
         this.channel.channelDescription = channel.channelDescription;
         this.channel.created = channel.created;
         this.channel.messages = channel.messages;
+        console.log(channel)
         });
 
 
