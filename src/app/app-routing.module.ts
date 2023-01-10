@@ -11,13 +11,14 @@ import { ChannelsComponent } from './channels/channels.component';
 const routes: Routes = [
   { path: '', component: StartScreenComponent },
   { path: 'channels', component: ChannelsComponent },
-  { path: 'home', component: HomeComponent,
+  {
+    path: 'home', component: HomeComponent,
     children: [
       // {path: '', component:HomeComponent},
-      {path: 'create-chat', component:CreateChatComponent},
-      {path: 'channel/:id', component: ChannelsComponent}
+      { path: 'create-chat', component: CreateChatComponent },
+      { path: 'channel/:id', component: ChannelsComponent }
     ]
-    },
+  },
 ];
 
 @NgModule({

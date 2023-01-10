@@ -3,7 +3,7 @@
     <div class="headline" (click)="openChannelPanel = !openChannelPanel">
       <mat-icon>{{
         openChannelPanel ? "arrow_drop_down" : "arrow_right"
-      }}</mat-icon>
+        }}</mat-icon>
       <span>Channels</span>
     </div>
     <div class="header-add">
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div *ngIf="openChannelPanel">
-    
+
     <mat-list-item *ngFor="let channel of channels">
       <div matListItemTitle routerLink="channel/{{ channel.id }}"># {{ channel.channelName }}</div>
     </mat-list-item>
@@ -28,7 +28,7 @@
     <div class="headline" (click)="openChatsPanel = !openChatsPanel">
       <mat-icon>{{
         openChatsPanel ? "arrow_drop_down" : "arrow_right"
-      }}</mat-icon>
+        }}</mat-icon>
       <span>Chats</span>
     </div>
     <div class="header-add" routerLink="/home/create-chat">

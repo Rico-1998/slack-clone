@@ -7,7 +7,7 @@ import { DialogSuccessMessageComponent } from '../dialog-components/dialog-succe
 import { Router } from '@angular/router';
 import { setDoc } from '@firebase/firestore';
 import { Observable } from 'rxjs';
-import { authState } from '@angular/fire/auth';
+import { authState, user } from '@angular/fire/auth';
 
 
 
@@ -22,7 +22,7 @@ export class AuthService {
   loggedIn: boolean = false;
   db: any = getFirestore();
   colRef: any = collection(this.db, 'users');
-  currentUser: Observable<any> = authState(this.auth);
+  loggedUser: Observable<any> = authState(this.auth);
 
 
   constructor(public dialog: MatDialog,
@@ -82,6 +82,8 @@ export class AuthService {
         // console.log('user created:', cred.user);
         setDoc(doc(this.colRef, cred.user.uid), {
           userName: name,
+          id: cred.user.uid,
+          email: email
         });
         this.dialog.open(DialogSuccessMessageComponent);
         form.reset();
@@ -108,6 +110,10 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
+        // getDoc(doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid))
+        //   .then((data) => {
+        //     console.log(data.data());
+        //   })
         console.log('user logged in:', cred.user)
         this.loggedIn = true;
         this.router.navigate(['/home']);
