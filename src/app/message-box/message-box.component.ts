@@ -1,4 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import 'quill-emoji/dist/quill-emoji.js';
 
@@ -10,6 +11,8 @@ import 'quill-emoji/dist/quill-emoji.js';
   styleUrls: ['./message-box.component.scss']
 })
 export class MessageBoxComponent implements OnInit {
+  messageText: string = '';
+
   modules = {
     'emoji-shortname': true,
     'emoji-textarea': false,
@@ -29,7 +32,7 @@ export class MessageBoxComponent implements OnInit {
   text: any = '';
 
 
-  constructor() {
+  constructor(public firestore:Firestore) {
     this.messageForm = new FormGroup({
       'msgEditor': new FormControl()
     })
