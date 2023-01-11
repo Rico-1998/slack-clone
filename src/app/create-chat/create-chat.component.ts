@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { Firestore, getFirestore, onSnapshot } from '@angular/fire/firestore';
+import { addDoc, doc, Firestore, getDoc, getDocs, getFirestore, onSnapshot, setDoc } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { UserService } from '../services/user.service';
@@ -17,11 +17,14 @@ export class CreateChatComponent implements OnInit {
     "date": '09.01.2022',
     "message": 'Du: Das ist eine Testnachricht!',
   }
-  searchedUSers = [];
+  foundedUsers: any[] = [];
+  value: any;
+  db = getFirestore();
 
-  constructor(public toggler: DrawerTogglerService, private firestore: Firestore, private userService: UserService) { }
+  constructor(public toggler: DrawerTogglerService, private firestore: Firestore, public userService: UserService) { }
 
   ngOnInit(): void {
+
   }
 
   @HostListener('window:resize', ['$event'])
@@ -30,12 +33,24 @@ export class CreateChatComponent implements OnInit {
   }
 
   searchUser(event: any) {
-    this.userService.users.forEach((user, index) => {
-      let users: string = user.userName.toLowerCase();
-      if (users.startsWith(event.key.toLowerCase() as string)) {
-        this.searchedUSers.push(user.userName);
-      }
-    });
+    this.foundedUsers = event;
+  }
+
+  createChat(userYouWantToChat: any) {
+    this.foundedUsers = [];
+    let chatDoc = getDocs((collection(this.db, 'chats')))
+      .then((doc) => {
+        console.log(doc.docs.map(data => data.data() as object))
+      })
+
+    console.log(chatDoc);
+
+
+    // addDoc(collection(this.db, 'chats'), {
+    //   name: 'rico',
+    //   msg: 'test',
+    //   userId: [this.userService.currentUser.id, userYouWantToChat]
+    // })
   }
 
 }

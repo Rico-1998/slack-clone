@@ -12,10 +12,10 @@ export class UserService {
   currentUser$: Observable<any>;
   currentUser: any;
   users: any = [];
-  ref: any = collection(this.firestore, 'users');
+  userRef: any = collection(this.firestore, 'users');
 
   constructor(public authService: AuthService, private firestore: Firestore) {
-    onSnapshot(collection(this.firestore, 'users'), (snapshot) => {
+    onSnapshot(this.userRef, (snapshot) => {
       snapshot.docs.forEach((doc) => {
         this.users.push({ ...(doc.data() as object), id: doc.id });
       })
@@ -23,7 +23,7 @@ export class UserService {
 
     this.authService.loggedUser.subscribe((user$) => {
       this.currentUser$ = user$;
-      getDoc(doc(this.firestore, 'users', user$.uid as string))
+      getDoc(doc(this.userRef, user$.uid as string))
         .then((user) => {
           this.currentUser = user.data();
         })
@@ -32,7 +32,7 @@ export class UserService {
 
 
   getData() {
-    getDocs(this.ref)
+    getDocs(this.userRef)
       .then((response) => {
         // console.log(response.docs.map(docs => docs.data()));
       })
