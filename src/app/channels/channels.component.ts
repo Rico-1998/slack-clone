@@ -5,6 +5,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { timestamp } from 'rxjs';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot } from '@firebase/firestore';
+import { FirestoreService } from '../services/firestore.service';
+import { UserService } from '../services/user.service';
 
 
 
@@ -16,10 +18,14 @@ import { collection, getFirestore, onSnapshot } from '@firebase/firestore';
 export class ChannelsComponent implements OnInit {
   channelId: string;
   channel: Channel;
+  userName: any;
   date: Date;
   db: any = getFirestore();
+  currentChannel: any = '';
 
   constructor(
+    public firestoreService: FirestoreService,
+    public user: UserService,
     private route: ActivatedRoute,
     // private angularFirestore: AngularFirestore
     private firestore: Firestore
@@ -40,16 +46,14 @@ export class ChannelsComponent implements OnInit {
     //       this.channel.messages = channel.messages;
     //     });
     // })
-
-
-
-    this.channel = new Channel;
+    
     this.route.params.subscribe((params) => {
       this.channelId = params['id'];
       let document = doc(this.db, 'channels', this.channelId);
       getDoc(document)
         .then((doc) => {
-          console.log(doc.data());
+          this.firestoreService.channelID = this.channelId;
+          this.firestoreService.currentChannel = doc.data();
         })
     })
   }

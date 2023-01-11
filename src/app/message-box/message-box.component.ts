@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import 'quill-emoji/dist/quill-emoji.js';
 import { Message } from 'src/modules/messages.class';
+import { FirestoreService } from '../services/firestore.service';
 
 
 
@@ -39,10 +40,13 @@ export class MessageBoxComponent implements OnInit {
   db: any = getFirestore();
 
 
-  constructor(public firestore:Firestore,
+  constructor(
+    public firestore:Firestore,
+    public firestoreService: FirestoreService,
     private route: ActivatedRoute) {
     this.messageForm = new FormGroup({
-      'msgEditor': new FormControl()
+      // 'msgEditor': new FormControl()
+      msgEditor : new FormControl()
     })
   }
 
@@ -62,9 +66,15 @@ export class MessageBoxComponent implements OnInit {
   }
 
   checkEditor(event) {
-    console.log(event.event);
-    console.log(this.message);
+    // console.log(event.event);
+    // console.log(this.message);
 
+  }
+
+  onSubmit(){
+    this.firestoreService.messageInput = this.messageForm.value.msgEditor;
+    this.firestoreService.postMessage();
+    console.log(this.firestoreService.messageInput);
   }
 
 
