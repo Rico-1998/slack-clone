@@ -1,10 +1,18 @@
+@import 'src/modules/_vars';
+
 :host {
     height: 100vh;
     width: 100%;
 }
 
+mat-drawer-container, mat-drawer {
+    background-color: $bgClr-primary !important;
+    color: $txt-clr-primary;
+    border: $border-primary;
+}
+
 .content-container {
-    height: calc(100% - 64px);
+    height: calc(100% - $height-searchbar);
 
 
     mat-toolbar {
@@ -14,22 +22,37 @@
     }
 
     .workspace {
+        height: $height-headers;
         display: flex;
         align-items: center;
-        padding: 20px;
-
+        gap: $gap-primary;
+        padding: $padding-sidenav-header;
+        border-bottom: $border-primary;
+        
         h1 {
+            margin: 0;
+            width: 150px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            width: 150px;
-            margin: 0;
+            font-size: 18px;
         }
 
         .new-chat-container {
-            border-radius: 100%;
-            height: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-origin: 5px 5px;
+            height: 40px;
             aspect-ratio: 1;
+            border-radius: 100%;
+            background-color: $bgClr-thirdary;
+            color: $txt-clr-thirdary;
+
+            mat-icon {
+                margin-bottom: 5px;
+            }
         }
     }
 }

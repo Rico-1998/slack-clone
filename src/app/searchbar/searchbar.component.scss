@@ -1,12 +1,37 @@
 @import 'src/modules/_vars';
 
+.mat-toolbar-single-row {
+    height: $height-searchbar !important;
+}
+
 mat-toolbar {
     position: relative;
     display: flex;
     justify-content: center;
-    background-color: black;
-    color: white;
+    background-color: $bgClr-secondary;
+    color: $txt-clr-secondary;
 
+    .searchbar-container {
+        display: flex;
+        align-items: center;
+
+        .searchbar {
+            width: clamp(170px, 55vw, 500px);    
+            height: 30px;
+            border-radius: 5px;
+            outline: none;
+            background-color: $bgClr-input;
+            padding: 0 8px;
+            border: 1px solid $border-clr-input;
+
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: $txt-clr-secondary;
+                opacity: 1; /* Firefox */
+              }
+        }
+    }
+    
+    
     .settings {
         position: absolute;
         right: 15px;
@@ -23,28 +48,7 @@ mat-toolbar {
             'opsz' 40
         }
 
-        .img-container {
-            position: relative;
-            height: $size-profile-img;
-            aspect-ratio: 1;
-            .profile-img {
-                height: $size-profile-img;
-                aspect-ratio: 1;
-                object-fit: cover;
-                border-radius: $border-radius;
-            }
-
-            .dot {
-                position: absolute;
-                bottom: -1.5px;
-                right: -1.5px;
-                border-radius: 100%;
-                height: 7px;
-                aspect-ratio: 1;
-                background-color: rgb(16, 229, 16);
-                outline: 4px solid black;
-            }
-        }
+        
     }
 }
 
