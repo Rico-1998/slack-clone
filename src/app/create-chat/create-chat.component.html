@@ -7,7 +7,7 @@
   </mat-toolbar-row>
   <mat-toolbar-row>
     <span>To:</span><input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers"
-      [(ngModel)]="value" #usersField />
+      [(ngModel)]="value" #usersField placeholder="@someone or someone@some.one" />
     <!-- autofocus -->
     <mat-autocomplete #searchedUsers="matAutocomplete">
       <div *ngIf="value !== ''">

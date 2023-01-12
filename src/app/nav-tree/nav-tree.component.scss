@@ -1,24 +1,96 @@
-.header-container {
+@import 'src/modules/_vars';
+$inner-size: 18px;
+
+:host {
+    background-color: $bgClr-primary;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 
-    .headline {
-        display: flex;
-        align-items: center;
-    }
+    mat-selection-list {
+        cursor: pointer;
+        margin: 10px 0;
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: $padding-sidenav-content;
 
-    .header-add {
+            .headline {
+                display: flex;
+                align-items: center;
+                gap: $gap-primary;
 
-        .material-icons {
-            font-size: 18px;
+                h3 {
+                    margin: 0;
+                }
+
+                mat-icon {
+                    border-radius: $br-primary;
+                    transition: $transition-hover;
+
+                    &:hover {
+                        background-color: $bgClr-secondary;
+                    }
+                }
+            }
+
+            .icon-hover-wrapper {                
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: $icon-size;
+                width: $icon-size;
+                border-radius: $br-primary;
+                transition: $transition-hover;
+
+                &:hover {
+                    background-color: $bgClr-secondary;
+                }                   
+            }
+
+        }
+
+        mat-list-item {
+            height: 30px !important;
+            color: $txt-clr-primary;
+            transition: $transition-hover;
+
+            &:hover {
+                background-color: $bgClr-secondary;
+            }
+            
+            .listItem {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: $gap-primary;
+                padding: $padding-sidenav-content;
+                font-size: $fs-m;
+            }
         }
     }
-
 }
 
 .addItem {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    gap: $gap-primary;
+    padding: $padding-sidenav-content;
+    font-size: $fs-m;
+}
+
+.material-icons {
+    font-size: $inner-size;
+    height: $inner-size;
+    width: $inner-size;                 
+}
+
+.hashtag {
+    height: $icon-size;
+    width: $icon-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

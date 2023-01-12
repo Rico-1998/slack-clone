@@ -32,11 +32,69 @@ body {
     border-top-right-radius: 10px;
 }
 
-.ng-star-inserted {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+// .ng-star-inserted {
+//     border-bottom-left-radius: 10px;
+//     border-bottom-right-radius: 10px;
+// }
+
+// .ql-editor.ql-blank::before {
+//     // color: white;
+// }
+
+
+/* 
+    Styling for the status of the user
+*/
+
+
+.dot-nav {
+    outline: 4px solid $bgClr-secondary;
+    position: absolute;
+    bottom: -1.5px;
+    right: -1.5px;
+    border-radius: 100%;
+    height: 10px;
+    aspect-ratio: 1;
+    
 }
 
-.ql-editor.ql-blank::before {
-    // color: white;
+.dot-sidenav {
+    outline: 4px solid $bgClr-primary;
+    position: absolute;
+    bottom: -1.5px;
+    right: -1.5px;
+    border-radius: 100%;
+    height: 10px;
+    aspect-ratio: 1;    
+}
+
+.online {
+    background-color: $online;
+}
+
+.absent {
+    background-color: $bgClr-primary;
+    border: 2.5px solid $absent;
+}
+
+.img-container {
+    position: relative;
+    height: $size-profile-img;
+    aspect-ratio: 1;
+
+    .profile-img {
+        height: inherit;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: $br-primary;
+    }
+
+}
+
+.sidenav-shrink {
+    transform: scale(0.7);
+}
+
+.mat-list-item-content {
+    padding: 0 !important;
 }
