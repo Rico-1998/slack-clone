@@ -44,7 +44,7 @@ export class ChannelsComponent implements OnInit {
     //       this.channel.messages = channel.messages;
     //     });
     // })
-    
+
     this.route.params.subscribe((params) => {
       this.channelId = params['id'];
       let document = doc(this.db, 'channels', this.channelId);
