@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 
 
 
