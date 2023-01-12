@@ -6,8 +6,9 @@
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span>To:</span><input type="text" (ngModelChange)="searchUser($event)" autofocus [matAutocomplete]="searchedUsers"
+    <span>To:</span><input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers"
       [(ngModel)]="value" #usersField />
+    <!-- autofocus -->
     <mat-autocomplete #searchedUsers="matAutocomplete">
       <div *ngIf="value !== ''">
         <div *ngFor="let user of userService.users">

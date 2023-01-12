@@ -3,6 +3,8 @@ import { addDoc, doc, Firestore, getDoc, getDocs, getFirestore, onSnapshot, setD
 import { collection } from '@firebase/firestore';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { UserService } from '../services/user.service';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 
 @Component({
@@ -20,11 +22,18 @@ export class CreateChatComponent implements OnInit {
   foundedUsers: any[] = [];
   value: any;
   db = getFirestore();
+  DataContext: any;
+  Position: any;
+  chatDocs: object[] = [];
 
-  constructor(public toggler: DrawerTogglerService, private firestore: Firestore, public userService: UserService) { }
+  constructor(public toggler: DrawerTogglerService, private firestore: Firestore, public userService: UserService, private cdref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-
+    onSnapshot(collection(this.db, 'chats'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        this.chatDocs.push(({ ...(doc.data() as object), chatIdDoc: doc.id }));
+      })
+    })
   }
 
   @HostListener('window:resize', ['$event'])
@@ -36,21 +45,64 @@ export class CreateChatComponent implements OnInit {
     this.foundedUsers = event;
   }
 
-  createChat(userYouWantToChat: any) {
+  async createChat(userYouWantToChat: any) {
     this.foundedUsers = [];
-    let chatDoc = getDocs((collection(this.db, 'chats')))
-      .then((doc) => {
-        console.log(doc.docs.map(data => data.data() as object))
+    // let chatDoc = await getDocs((collection(this.db, 'chats')))
+    // chatDoc.forEach((doc) => {
+    //   chatDocs.push({ ...(doc.data() as object), chatIdDoc: doc.id });
+    // });
+
+
+    if (this.chatDocs.length == 0) {
+      addDoc(collection(this.db, 'chats'), {
+        name: 'rico',
+        msg: 'test',
+        userId: [this.userService.currentUser.id, userYouWantToChat]
       })
+    } else {
+      let el;
+      for (let i = 0; i < this.chatDocs.length; i++) {
+        el = this.chatDocs[i];
+      }
+      if (el['userId'].includes(this.userService.currentUser.id && userYouWantToChat)) {
+        console.log(el['chatIdDoc']);
 
-    console.log(chatDoc);
+      } else {
+        addDoc(collection(this.db, 'chats'), {
+          name: 'rico',
+          msg: 'test',
+          userId: [this.userService.currentUser.id, userYouWantToChat]
+        })
+      }
 
 
-    // addDoc(collection(this.db, 'chats'), {
-    //   name: 'rico',
-    //   msg: 'test',
-    //   userId: [this.userService.currentUser.id, userYouWantToChat]
+      // chatDocs.forEach((element, index) => {
+      //   if (!element['userId'].includes(userYouWantToChat) && !element['userId'].includes(this.userService.currentUser.id)) {
+      //     console.log('klappt');
+      // addDoc(collection(this.db, 'chats'), {
+      //   name: 'rico',
+      //   msg: 'test',
+      //   userId: [this.userService.currentUser.id, userYouWantToChat]
+      // })
+      //   }
+      // })
+    }
+
+    // .then((doc) => {
+    //   console.log(doc.docs.map(data => data.data() as object, ))
     // })
+
+
+
+
+  }
+
+  ngAfterContentChecked() {
+
+    this.userService.users.DataContext = this.DataContext;
+    this.userService.users.Position = this.Position;
+    this.cdref.detectChanges();
+
   }
 
 }
