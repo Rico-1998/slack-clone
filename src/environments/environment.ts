@@ -14,7 +14,7 @@ export const environment = {
   production: false
 };
 
-//Test api von Tobias
+// Test api von Tobias
 // export const environment = {
 //   firebase: {
 //     apiKey: "AIzaSyC95BMHE9WOaa1Cd6P8OqaBh0swfbqhH4M",

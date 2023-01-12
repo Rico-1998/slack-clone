@@ -1,9 +1,7 @@
 <div class="text-box">
-    <form [formGroup]="messageForm">
-
-        <quill-editor class="editor" [modules]="modules" formControlName="msgEditor"
-            (onEditorChanged)="checkEditor($event)" [(ngModel)]="text"></quill-editor>
-        <mat-icon (click)="sendMessage()">send</mat-icon>
-
+    <form [formGroup]="messageForm" (submit)="onSubmit()">
+        <quill-editor class="editor" [modules]="modules" formControlName="msgEditor" minlength="1"
+            (onEditorChanged)="checkEditor($event)"></quill-editor>
+        <button type="submit" mat-raised-button>Post</button>
     </form>
 </div>

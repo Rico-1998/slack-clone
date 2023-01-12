@@ -3,6 +3,7 @@ import { docData, Firestore, getDocs, doc, getDoc } from '@angular/fire/firestor
 import { AuthService } from './auth.service';
 import { collection, onSnapshot } from '@firebase/firestore';
 import { filter, map, Observable, switchMap } from 'rxjs';
+import { FirestoreService } from './firestore.service';
 
 
 @Injectable({
@@ -14,10 +15,13 @@ export class UserService {
   users: any = [];
   ref: any = collection(this.firestore, 'users');
 
-  constructor(public authService: AuthService, private firestore: Firestore) {
+  constructor(
+    public authService: AuthService, 
+    private firestore: Firestore,
+    public firestoreService: FirestoreService) {
     onSnapshot(collection(this.firestore, 'users'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
-        this.users.push({ ...(doc.data() as object), id: doc.id });
+        this.users.push({ ...(doc.data() as object), id: doc.id });       
       })
     })
 
@@ -26,6 +30,7 @@ export class UserService {
       getDoc(doc(this.firestore, 'users', user$.uid as string))
         .then((user) => {
           this.currentUser = user.data();
+          console.log(this.currentUser);
         })
     })
   }

@@ -1,6 +1,11 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import 'quill-emoji/dist/quill-emoji.js';
+import { Message } from 'src/modules/messages.class';
+import { FirestoreService } from '../services/firestore.service';
 
 
 
@@ -10,6 +15,8 @@ import 'quill-emoji/dist/quill-emoji.js';
   styleUrls: ['./message-box.component.scss']
 })
 export class MessageBoxComponent implements OnInit {
+  messageText: string = '';
+
   modules = {
     'emoji-shortname': true,
     'emoji-textarea': false,
@@ -26,12 +33,20 @@ export class MessageBoxComponent implements OnInit {
   };
 
   messageForm: FormGroup;
-  text: any = '';
+  message = new Message;
+  text : string; '';
+  messageID: string = '';
+  channelName: any = '';
+  db: any = getFirestore();
 
 
-  constructor() {
+  constructor(
+    public firestore:Firestore,
+    public firestoreService: FirestoreService,
+    private route: ActivatedRoute) {
     this.messageForm = new FormGroup({
-      'msgEditor': new FormControl()
+      // 'msgEditor': new FormControl()
+      msgEditor : new FormControl()
     })
   }
 
@@ -39,14 +54,27 @@ export class MessageBoxComponent implements OnInit {
 
   }
 
-  sendMessage() {
-
+  async sendMessage() {
+    this.route.params.subscribe((params) => {
+      this.messageID = params['id'];
+      let document = doc(this.db, 'messages', this.messageID);
+      getDoc(document)
+        .then((doc) => {
+          console.log(doc.data());
+        })
+    })
   }
 
   checkEditor(event) {
-    console.log(event.event);
-    console.log(this.text);
+    // console.log(event.event);
+    // console.log(this.message);
 
+  }
+
+  onSubmit(){
+    this.firestoreService.messageInput = this.messageForm.value.msgEditor;
+    this.firestoreService.postMessage();
+    console.log(this.firestoreService.messageInput);
   }
 
 
