@@ -4,7 +4,6 @@ import { Channel } from 'src/modules/channels.class';
 import { timestamp } from 'rxjs';
 import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot } from '@firebase/firestore';
-import { FirestoreService } from '../services/firestore.service';
 import { UserService } from '../services/user.service';
 
 
@@ -23,13 +22,14 @@ export class ChannelsComponent implements OnInit {
   currentChannel: any = '';
 
   constructor(
-    public firestoreService: FirestoreService,
     public user: UserService,
     private route: ActivatedRoute,
     private firestore: Firestore
   ) { }
 
   ngOnInit(): void {
+    this.user.channelEditor = true;
+    this.user.chatEditor = false;
     // this.channel = new Channel;
     // this.route.params.subscribe((params) => {
     //   this.channelId = params['id'];
@@ -50,8 +50,8 @@ export class ChannelsComponent implements OnInit {
       let document = doc(this.db, 'channels', this.channelId);
       getDoc(document)
         .then((doc) => {
-          this.firestoreService.channelID = this.channelId;
-          this.firestoreService.currentChannel = doc.data();
+          // this.firestoreService.channelID = this.channelId;
+          // this.firestoreService.currentChannel = doc.data();
         })
     })
   }

@@ -6,17 +6,29 @@
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span>To:</span><input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers"
-      [(ngModel)]="value" #usersField placeholder="@someone or someone@some.one" />
+    <span>To:</span>
+    <div class="selectedUser-container" *ngFor="let selectedUser of chatService.selectedUserList">
+      <div class="selectedUser" style="background-color: 'lightblue'">
+        <!-- <div class="img-container sidenav-shrink">
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+        </div> -->
+        <span style="color: 'black'">
+          {{ selectedUser.userName }}
+        </span>
+      </div>
+    </div>
+    <input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers" [(ngModel)]="value"
+      #usersField placeholder="@someone or someone@some.one" />
     <!-- autofocus -->
     <mat-autocomplete #searchedUsers="matAutocomplete">
       <div *ngIf="value !== ''">
         <div *ngFor="let user of userService.users">
           <mat-option
-            *ngIf="user.userName.toLowerCase().includes(foundedUsers) && user.userName.toLowerCase() !== 'guest'"
-            (click)="createChat(user.id)">
+            *ngIf="user.userName.toLowerCase().includes(chatService.foundedUsers) && user.userName.toLowerCase() !== 'guest'"
+            (click)="chatService.setToChatList(user)">
             <span>
-              {{ user['userName'] }}</span>
+              {{ user['userName'] }}
+            </span>
           </mat-option>
         </div>
       </div>
@@ -33,4 +45,8 @@
       </mat-card-content>
     </mat-card>
   </div>
+</div>
+<div class="texteditor-container">
+  <app-message-box></app-message-box>
+  <!-- *ngIf="visibleTextEditor" -->
 </div>

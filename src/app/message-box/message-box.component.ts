@@ -5,7 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import 'quill-emoji/dist/quill-emoji.js';
 import { Message } from 'src/modules/messages.class';
-import { FirestoreService } from '../services/firestore.service';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 
 
 
@@ -16,6 +17,7 @@ import { FirestoreService } from '../services/firestore.service';
 })
 export class MessageBoxComponent implements OnInit {
   messageText: string = '';
+  valid: boolean = false;
 
   modules = {
     'emoji-shortname': true,
@@ -34,24 +36,32 @@ export class MessageBoxComponent implements OnInit {
 
   messageForm: FormGroup;
   message = new Message;
-  text : string; '';
+  text: string; '';
   messageID: string = '';
   channelName: any = '';
   db: any = getFirestore();
 
-
   constructor(
-    public firestore:Firestore,
-    public firestoreService: FirestoreService,
-    private route: ActivatedRoute) {
+    public firestore: Firestore,
+    private route: ActivatedRoute,
+    public userService: UserService,
+    public chatService: ChatService) {
     this.messageForm = new FormGroup({
       // 'msgEditor': new FormControl()
-      msgEditor : new FormControl()
+      msgEditor: new FormControl()
     })
   }
 
   ngOnInit(): void {
 
+  }
+
+  check() {
+    if (this.userService.channelEditor) {
+      console.log('channel');
+    } else if (this.userService.chatEditor) {
+      this.chatService.createChat();
+    }
   }
 
   async sendMessage() {
@@ -66,15 +76,20 @@ export class MessageBoxComponent implements OnInit {
   }
 
   checkEditor(event) {
-    // console.log(event.event);
-    // console.log(this.message);
-
+    if (event.event === 'text-change') {
+      let html = event.html
+      if (html !== null) {
+        this.valid = true;
+      } else {
+        this.valid = false;
+      }
+    }
   }
 
-  onSubmit(){
-    this.firestoreService.messageInput = this.messageForm.value.msgEditor;
-    this.firestoreService.postMessage();
-    console.log(this.firestoreService.messageInput);
+  onSubmit() {
+    // this.firestoreService.messageInput = this.messageForm.value.msgEditor;
+    // this.firestoreService.postMessage();
+    // console.log(this.firestoreService.messageInput);
   }
 
 

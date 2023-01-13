@@ -1,18 +1,40 @@
+@import 'src/modules/_vars';
+
 .text-box {
-    position: absolute;
-    bottom: 16px;
+    position: relative;
     width: 100%;
-    padding: 0 16px;
+    padding: 0 16px 16px 16px;
 
     .editor {
         width: 100%;
         height: 75px;
     }
 
-    mat-icon {
+    button {
         position: absolute;
-        bottom: 20px;
+        bottom: 30px;
         right: 30px;
         cursor: pointer;
+        outline: none;
+        border: none;
+        background-color: $btn-clr-green;
+        min-width: unset !important;
+        padding: 0 12px !important;
+
+        &:hover {
+            filter: brightness(1.2);
+        }
+
+
+        &:disabled {
+            background-color: unset;
+            cursor: not-allowed;
+        }
+    }
+
+    mat-icon {
+        // font-size: 20px;
+        color: $txt-clr-primary;
+        transition: $transition-hover;
     }
 }
