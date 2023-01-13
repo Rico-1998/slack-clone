@@ -77,8 +77,8 @@ export class MessageBoxComponent implements OnInit {
 
   checkEditor(event) {
     if (event.event === 'text-change') {
-      let html = event.html
-      if (html !== null) {
+      this.chatService.chatMsg = event.html
+      if (this.chatService.chatMsg !== null) {
         this.valid = true;
       } else {
         this.valid = false;

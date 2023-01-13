@@ -12,6 +12,7 @@ export class ChatService {
   foundedUsers: any[] = [];
   db = getFirestore();
   chatsRef = collection(this.db, 'chats');
+  chatMsg = [];
 
   constructor(public userService: UserService) { }
 
@@ -47,10 +48,16 @@ export class ChatService {
     // addDoc(collection(this.db, 'chats', this.arrayToString(this.createRoomId()), 'roomId'), {
     //   userIds: [this.createRoomId()],
     // });
-    let roomId = this.arrayToString(this.createRoomId()) as string;
-    setDoc(doc(this.db, 'chats', this.arrayToString(this.createRoomId())), {
+    let roomId = this.arrayToString(this.createRoomId());
+    setDoc(doc(this.db, 'chats', roomId), {
       userIds: this.createRoomId(),
+    });
+    addDoc(collection(this.db, 'chats', roomId , 'messages'), {
+      msg: this.chatMsg,
     })
+    // interface chatMessage erstellen mit (timestamp, author, msg)
+    // value aus dem texteditor holen
+    // format chatMsg bearbeiten (siehe andere Gruppe)
 
 
     // let chats: any = query(collection(this.db, 'chats'), where("userId", "array-contains", userYouWantToChat.id), orderBy('userId', 'desc'));
