@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, getFirestore, orderBy, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, getFirestore, orderBy, setDoc, where } from '@angular/fire/firestore';
 import { query } from '@firebase/firestore';
 import { UserService } from './user.service';
 
@@ -11,6 +11,7 @@ export class ChatService {
   selectedUserList = [];
   foundedUsers: any[] = [];
   db = getFirestore();
+  chatsRef = collection(this.db, 'chats');
 
   constructor(public userService: UserService) { }
 
@@ -33,13 +34,24 @@ export class ChatService {
     this.selectedUserList.forEach((user) => {
       roomId.push(user.id);
     })
-    return roomId.sort().join('');
+    return roomId;
+  }
+
+  arrayToString(array) {
+    return array.sort().join('')
   }
 
   async createChat() {
     this.foundedUsers = [];
-    let roomId = this.createRoomId();
-    console.log(roomId);
+    
+    // addDoc(collection(this.db, 'chats', this.arrayToString(this.createRoomId()), 'roomId'), {
+    //   userIds: [this.createRoomId()],
+    // });
+    let roomId = this.arrayToString(this.createRoomId()) as string;
+    setDoc(doc(this.db, 'chats', this.arrayToString(this.createRoomId())), {
+      userIds: this.createRoomId(),
+    })
+
 
     // let chats: any = query(collection(this.db, 'chats'), where("userId", "array-contains", userYouWantToChat.id), orderBy('userId', 'desc'));
     // if (this.chatDocs.length == 0) {
