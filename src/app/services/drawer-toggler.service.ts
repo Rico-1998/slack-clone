@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DrawerTogglerService {
-isSidenavOpen: boolean = false;
+isSidenavOpen: boolean = true;
   constructor() {
     // if(window.innerWidth < 600) {
     //   this.isSidenavOpen = true;
