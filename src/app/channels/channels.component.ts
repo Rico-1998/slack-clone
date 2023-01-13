@@ -44,7 +44,8 @@ export class ChannelsComponent implements OnInit {
     //       this.channel.messages = channel.messages;
     //     });
     // })
-    
+
+    // this.channel = new Channel;
     this.route.params.subscribe((params) => {
       this.channelId = params['id'];
       let document = doc(this.db, 'channels', this.channelId);
@@ -52,6 +53,10 @@ export class ChannelsComponent implements OnInit {
         .then((doc) => {
           this.firestoreService.channelID = this.channelId;
           this.firestoreService.currentChannel = doc.data();
+          // this.channel.channelName = doc.data()['channelName'];
+          // this.channel.channelDescription = doc.data()['channelDescription'];
+          // this.channel.created = doc.data()['created'];
+          // this.channel.messages = doc.data()['messages'];
         })
     })
   }
