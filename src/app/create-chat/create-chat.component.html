@@ -6,10 +6,20 @@
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span>To:</span><input type="text" (keyup)="searchUser($event)" autofocus [matAutocomplete]="searchedUsers" />
+    <span>To:</span><input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers"
+      [(ngModel)]="value" #usersField placeholder="@someone or someone@some.one" />
+    <!-- autofocus -->
     <mat-autocomplete #searchedUsers="matAutocomplete">
-      <mat-option>
-      </mat-option>
+      <div *ngIf="value !== ''">
+        <div *ngFor="let user of userService.users">
+          <mat-option
+            *ngIf="user.userName.toLowerCase().includes(foundedUsers) && user.userName.toLowerCase() !== 'guest'"
+            (click)="createChat(user.id)">
+            <span>
+              {{ user['userName'] }}</span>
+          </mat-option>
+        </div>
+      </div>
     </mat-autocomplete>
   </mat-toolbar-row>
 </mat-toolbar>

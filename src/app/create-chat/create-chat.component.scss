@@ -1,12 +1,44 @@
-mat-toolbar-row {
-    border: 1px solid lightgray;
-}
+@import 'src/modules/_vars';
 
-mat-card-content {
-    display: flex;
-    flex-direction: column;
-}
+mat-toolbar {
+    background-color: $bgClr-primary;
+    color: $txt-clr-primary;
+    
+    mat-toolbar-row {
+        border: $border-primary;
+        height: $height-headers;
+        font-size: $fs-l;
 
+        input {
+            background-color: inherit;
+            outline: none;
+            border: none;
+            width: 100%;
+            padding: $padding-sidenav-header;
+            caret-color: $txt-clr-secondary;
+        }
+    }
+}
 .last-messages {
+    height: calc(100% - 2*64px);
     padding: 16px;
+    background-color: $bgClr-newChat;
+
+    
+    mat-card {
+        background-color: $bgClr-primary;
+        color: $txt-clr-primary;
+        border-radius: $br-primary;
+        transition: $transition-hover;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: $bgClr-newChat;
+        }
+
+        mat-card-content {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }

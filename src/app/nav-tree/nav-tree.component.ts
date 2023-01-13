@@ -32,7 +32,6 @@ export class NavTreeComponent implements OnInit {
     //   .subscribe((change) => {
     //     this.channels = change;
     //     console.log(this.channels);
-
     //   })
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
@@ -40,7 +39,7 @@ export class NavTreeComponent implements OnInit {
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })
-      console.log(this.channels);
+      // console.log(this.channels);
     })
 
 

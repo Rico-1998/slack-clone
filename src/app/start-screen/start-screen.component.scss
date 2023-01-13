@@ -2,7 +2,7 @@
 
 
 .start-screen-section {
-    background-color: $background;
+    background-color: $bgClr-start;
     padding: 75px 100px 75px 100px;
     height: 100vh;
     width: 100vw;
@@ -48,7 +48,7 @@
                 margin-top: 50px;
                 width: 250px;
                 padding: 10px;
-                background-color: $sign-in-btn-color;
+                background-color: $sign-in-btn-clr;
                 color: white;
                 font-weight: 400;
                 font-size: 20px;
