@@ -16,7 +16,6 @@ import { UserService } from '../services/user.service';
 export class ChannelsComponent implements OnInit {
   channelId: string;
   channel: Channel;
-  userName: any;
   date: Date;
   db: any = getFirestore();
   currentChannel: any = '';
@@ -24,7 +23,6 @@ export class ChannelsComponent implements OnInit {
   constructor(
     public user: UserService,
     private route: ActivatedRoute,
-    private firestore: Firestore
   ) { }
 
   ngOnInit(): void {
@@ -50,8 +48,8 @@ export class ChannelsComponent implements OnInit {
       let document = doc(this.db, 'channels', this.channelId);
       getDoc(document)
         .then((doc) => {
-          // this.firestoreService.channelID = this.channelId;
-          // this.firestoreService.currentChannel = doc.data();
+          this.currentChannel = doc.data();
+          console.log(this.currentChannel );
         })
     })
   }
