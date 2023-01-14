@@ -1,13 +1,21 @@
 <mat-toolbar>
   <mat-toolbar-row>
-    <button mat-icon-button class="example-icon" (click)="toggler.toggleNav()" *ngIf="viewportWidth">
+    <button
+      mat-icon-button
+      class="example-icon"
+      (click)="toggler.toggleNav()"
+      *ngIf="viewportWidth"
+    >
       <mat-icon>menu</mat-icon>
     </button>
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
     <span>To:</span>
-    <div class="selectedUser-container" *ngFor="let selectedUser of chatService.selectedUserList">
+    <div
+      class="selectedUser-container"
+      *ngFor="let selectedUser of chatService.selectedUserList"
+    >
       <div class="selectedUser" style="background-color: 'lightblue'">
         <!-- <div class="img-container sidenav-shrink">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
@@ -17,17 +25,27 @@
         </span>
       </div>
     </div>
-    <input type="text" (ngModelChange)="searchUser($event)" [matAutocomplete]="searchedUsers" [(ngModel)]="value"
-      #usersField placeholder="@someone or someone@some.one" />
+    <input
+      type="text"
+      (ngModelChange)="searchUser($event)"
+      [matAutocomplete]="searchedUsers"
+      [(ngModel)]="value"
+      #usersField
+      placeholder="@someone or someone@some.one"
+    />
     <!-- autofocus -->
     <mat-autocomplete #searchedUsers="matAutocomplete">
       <div *ngIf="value !== ''">
         <div *ngFor="let user of userService.users">
           <mat-option
-            *ngIf="user.userName.toLowerCase().includes(chatService.foundedUsers) && user.userName.toLowerCase() !== 'guest'"
-            (click)="chatService.setToChatList(user)">
+            *ngIf="
+              user.userName.toLowerCase().includes(chatService.foundedUsers) &&
+              user.userName.toLowerCase() !== 'guest'
+            "
+            (click)="chatService.setToChatList(user)"
+          >
             <span>
-              {{ user['userName'] }}
+              {{ user["userName"] }}
             </span>
           </mat-option>
         </div>

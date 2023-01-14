@@ -8,7 +8,7 @@
     />
   </div>
   <mat-autocomplete #users="matAutocomplete">
-    <mat-option *ngFor="let user of allUsers" (click)="createChat(user.id)">
+    <mat-option *ngFor="let user of allUsers">
       {{ user.userName }}
     </mat-option>
   </mat-autocomplete>
