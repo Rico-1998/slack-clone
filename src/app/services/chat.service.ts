@@ -1,6 +1,7 @@
 import { IfStmt } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, where } from '@angular/fire/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
 import { UserService } from './user.service';
 
@@ -15,7 +16,9 @@ export class ChatService {
   chatsRef = collection(this.db, 'chats');
   chatMsg = [];
 
-  constructor(public userService: UserService) { }
+  constructor(public userService: UserService,
+    public route: ActivatedRoute,
+    public router: Router) { }
 
   setToChatList(user) {
     // this.selectedUserList.push(this.userService.currentUser);
@@ -86,56 +89,13 @@ export class ChatService {
     if (!((await chatRoomExists).data())) {
       this.setChatRoom(roomId);
       this.saveMsg(roomId);
+      this.router.navigate(['/home/chatroom/' + roomId])
     } else {
       this.saveMsg(roomId);
+      this.router.navigate(['/home/chatroom/' + roomId])
     }
     // interface chatMessage erstellen mit (timestamp, author, msg)
     // value aus dem texteditor holen
     // format chatMsg bearbeiten (siehe andere Gruppe)
   }
 }
-
-// let chats: any = query(collection(this.db, 'chats'), where("userId", "array-contains", userYouWantToChat.id), orderBy('userId', 'desc'));
-// if (this.chatDocs.length == 0) {
-//   addDoc(collection(this.db, 'chats'), {
-//     userId: [this.userService.currentUser.id, userYouWantToChat]
-// users: [{
-//   name:this.userService.currentUser.userName,
-
-//  },
-// {
-// name: userYouWantToChat.userName
-// }]
-//   })
-// } else {
-//   this.actualChatDocument = '';
-//   this.actualChatDocument = this.chatDocs.find((n) => n['userId'].includes(this.userService.currentUser.id && userYouWantToChat));
-//   console.log('das ist actualDoc', this.actualChatDocument);
-
-//   if (this.userService.currentUser.id === userYouWantToChat) {
-//     console.log('same');
-//   } else if (this.actualChatDocument) {
-//     console.log('klappt');
-//   } else {
-//     addDoc(collection(this.db, 'chats'), {
-//       name: 'rico',
-//       msg: 'test',
-//       userId: [this.userService.currentUser.id, userYouWantToChat]
-//     })
-//   }
-
-// chatDocs.forEach((element, index) => {
-//   if (!element['userId'].includes(userYouWantToChat) && !element['userId'].includes(this.userService.currentUser.id)) {
-//     console.log('klappt');
-// addDoc(collection(this.db, 'chats'), {
-//   name: 'rico',
-//   msg: 'test',
-//   userId: [this.userService.currentUser.id, userYouWantToChat]
-// })
-//   }
-// })
-// }
-
-// .then((doc) => {
-//   console.log(doc.docs.map(data => data.data() as object, ))
-// })

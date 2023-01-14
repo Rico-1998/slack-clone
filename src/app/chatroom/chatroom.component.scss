@@ -1,0 +1,30 @@
+@import 'src/modules/_vars';
+
+
+:host {
+    height: 100%;
+}
+
+
+mat-toolbar-row {
+    padding: 0 16px;
+    border: 1px solid #313438;
+    height: 50px;
+    font-size: 18px;
+
+    .img-container-chatroom {
+        position: relative;
+        height: $size-profile-img-chatroom;
+        aspect-ratio: 1;
+
+        .profile-img {
+            height: inherit;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: $br-primary;
+        }
+
+        .sidenav-shrink {}
+
+    }
+}
