@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, addDoc, collection, doc, doc, getFirestore, orderBy, setDoc, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, getFirestore, orderBy, setDoc, where } from '@angular/fire/firestore';
 import { query } from '@firebase/firestore';
 import { UserService } from './user.service';
 
@@ -39,7 +39,7 @@ export class ChatService {
   }
 
   arrayToString(array) {
-    return array.sort().join('')
+    return array.sort().join('');
   }
 
 
