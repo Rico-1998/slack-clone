@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, doc, getFirestore, orderBy, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, addDoc, collection, doc, doc, getFirestore, orderBy, setDoc, setDoc, where } from '@angular/fire/firestore';
 import { query } from '@firebase/firestore';
 import { UserService } from './user.service';
 
@@ -12,6 +12,7 @@ export class ChatService {
   foundedUsers: any[] = [];
   db = getFirestore();
   chatsRef = collection(this.db, 'chats');
+  chatMsg = [];
 
   constructor(public userService: UserService) { }
 
@@ -44,25 +45,21 @@ export class ChatService {
 
   async createChat() {
     this.foundedUsers = [];
-    // let roomId = this.createRoomId();
-    // setDoc(doc(this.db, 'chats', this.createRoomId()), {
+
+    // addDoc(collection(this.db, 'chats', this.arrayToString(this.createRoomId()), 'roomId'), {
     //   userIds: [this.createRoomId()],
-    //   name: 'liebst du mich?'
-    // })
-    setDoc(doc(this.db, 'chats', this.arrayToString(this.createRoomId())), {
+    // });
+    let roomId = this.arrayToString(this.createRoomId());
+    setDoc(doc(this.db, 'chats', roomId), {
       userIds: this.createRoomId(),
-      test: 'maaaaaaacccc'
+    });
+    addDoc(collection(this.db, 'chats', roomId, 'messages'), {
+      msg: this.chatMsg,
     })
+    // interface chatMessage erstellen mit (timestamp, author, msg)
+    // value aus dem texteditor holen
+    // format chatMsg bearbeiten (siehe andere Gruppe)
 
-    addDoc(collection(this.db, 'chats', this.arrayToString(this.createRoomId()), 'messages'), {
-      name: 'rico',
-      msg: 'test',
-    })
-
-    // addDoc(collection(this.db, 'chats')), {
-    //   userIds: [this.createRoomId()],
-
-    // }
 
     // let chats: any = query(collection(this.db, 'chats'), where("userId", "array-contains", userYouWantToChat.id), orderBy('userId', 'desc'));
     // if (this.chatDocs.length == 0) {
