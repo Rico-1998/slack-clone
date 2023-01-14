@@ -19,7 +19,7 @@ export class NavTreeComponent implements OnInit {
 
   channels: any = [];
   chats: string[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
-  
+
   constructor(
     public dialog: MatDialog,
     // private angularFirestore: AngularFirestore, //Tobi added Firestore version 8
@@ -35,6 +35,7 @@ export class NavTreeComponent implements OnInit {
     //   })
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
+      this.channels = [];
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })

@@ -7,9 +7,8 @@ import { QuillEditorComponent } from 'ngx-quill';
 import 'quill-emoji/dist/quill-emoji.js';
 import { Message } from 'src/modules/messages.class';
 import { ChannelsComponent } from '../channels/channels.component';
+import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
-
-
 
 @Component({
   selector: 'app-message-box',
@@ -17,6 +16,8 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./message-box.component.scss']
 })
 export class MessageBoxComponent implements OnInit {
+  messageText: string = '';
+  valid: boolean = false;
   @ViewChild('messageInput')
   messageInput: QuillEditorComponent;
 
@@ -41,8 +42,8 @@ export class MessageBoxComponent implements OnInit {
   message = new Message;
   text: string; '';
   messageID: string = '';
+  channelName: any;
   db: any = getFirestore();
-  currentChannel: any;
 
 
   constructor(
@@ -50,7 +51,7 @@ export class MessageBoxComponent implements OnInit {
     public userService: UserService,
     private route: ActivatedRoute,
     public channel: ChannelsComponent,
-  ) {
+    public chatService: ChatService) {
     this.messageForm = new FormGroup({
       // 'msgEditor': new FormControl()
       msgEditor: new FormControl()
@@ -63,24 +64,37 @@ export class MessageBoxComponent implements OnInit {
         console.log(this.channel.currentChannel);
   }
 
+  check() {
+    if (this.userService.channelEditor) {
+      console.log('channel');
+    } else if (this.userService.chatEditor) {
+      this.chatService.createChatRoom();
+    }
+  }
+
 
 
   checkEditor(event) {
-    // console.log(event.event);
-    // console.log(this.message);
-
+    if (event.event === 'text-change') {
+      this.chatService.chatMsg = event.html
+      if (this.chatService.chatMsg !== null) {
+        this.valid = true;
+      } else {
+        this.valid = false;
+      }
+    }
   }
 
-  onSubmit() {
-    this.message = this.messageForm.value.msgEditor;
-    // this.messageInput.quillEditor.getContents([]);
+  // check() {
+  //   this.message = this.messageForm.value.msgEditor;
+  //   // this.messageInput.quillEditor.getContents([]);
 
-    let ref = collection(this.db, 'channels', this.channel.channelId as string, 'messages');
-    onSnapshot(ref, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        this.allMessages.push({ ...(doc.data() as object), id: doc.id });
-        console.log(this.allMessages);
-      })
-    })
-  }
+  //   let ref = collection(this.db, 'channels', this.channel.channelId as string, 'messages');
+  //   onSnapshot(ref, (snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       this.allMessages.push({ ...(doc.data() as object), id: doc.id });
+  //       console.log(this.allMessages);
+  //     })
+  //   })
+  // }
 }
