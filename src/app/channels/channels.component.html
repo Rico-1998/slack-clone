@@ -6,21 +6,20 @@
   </div>
   <mat-card-content class="welcome-content">
     <span>
-      Thats the beginning of this channel <span class="highlight">#{{ currentChannel.channelName }}</span>
+      Thats the beginning of this channel <span class="highlight">#{{ channel.currentChannel.channelName }}</span>
     </span><br>
     <span>This Channel was created at: 12.05.2022</span><br>
-    <span>Channeldescription: <span class="highlight">#{{ currentChannel.channelDescription }}</span></span>
+    <span>Channeldescription: <span class="highlight">#{{ channel.currentChannel.channelDescription }}</span></span>
   </mat-card-content>
 </mat-card>
 
-<mat-card class="message-container">
+<mat-card class="message-container" *ngFor="let message of channel.allMessages; let i=index ">
   <div>
     <div class="">
-      Here username and date
+      {{ message.author }} {{ message.timestamp }}
     </div>
     <span>
-      message 1. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga voluptate eos nisi vel quisquam nobis
-      velit labore sequi quis dignissimos nihil corrupti culpa impedit, neque quia earum tempore ratione deleniti?
+      {{ message.msg }}
     </span>
   </div>
 </mat-card>

@@ -5,8 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import { QuillEditorComponent } from 'ngx-quill';
 import 'quill-emoji/dist/quill-emoji.js';
-import { Message } from 'src/modules/messages.class';
-import { ChannelsComponent } from '../channels/channels.component';
+import { ChannelService } from '../services/channel.service';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
 
@@ -37,10 +36,7 @@ export class MessageBoxComponent implements OnInit {
   };
 
   userName: string;
-  allMessages: any = [];
   messageForm: FormGroup;
-  message = new Message;
-  text: string; '';
   messageID: string = '';
   channelName: any;
   db: any = getFirestore();
@@ -50,34 +46,34 @@ export class MessageBoxComponent implements OnInit {
     public firestore: Firestore,
     public userService: UserService,
     private route: ActivatedRoute,
-    public channel: ChannelsComponent,
+    public channel: ChannelService,
     public chatService: ChatService) {
     this.messageForm = new FormGroup({
-      // 'msgEditor': new FormControl()
       msgEditor: new FormControl()
     })
   }
   
+  
   ngOnInit(): void {
     console.log(this.userService.currentUser$);
-
-        console.log(this.channel.currentChannel);
   }
+
 
   check() {
     if (this.userService.channelEditor) {
-      console.log('channel');
+      this.channel.postInChannel();
     } else if (this.userService.chatEditor) {
       this.chatService.createChatRoom();
     }
   }
 
 
-
   checkEditor(event) {
     if (event.event === 'text-change') {
-      this.chatService.chatMsg = event.html
-      if (this.chatService.chatMsg !== null) {
+      this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
+      this.chatService.chatMsg = event.html;
+      // if (this.chatService.chatMsg !== null) {
+      if (this.messageText !== null) {
         this.valid = true;
       } else {
         this.valid = false;
@@ -85,16 +81,4 @@ export class MessageBoxComponent implements OnInit {
     }
   }
 
-  // check() {
-  //   this.message = this.messageForm.value.msgEditor;
-  //   // this.messageInput.quillEditor.getContents([]);
-
-  //   let ref = collection(this.db, 'channels', this.channel.channelId as string, 'messages');
-  //   onSnapshot(ref, (snapshot) => {
-  //     snapshot.docs.forEach((doc) => {
-  //       this.allMessages.push({ ...(doc.data() as object), id: doc.id });
-  //       console.log(this.allMessages);
-  //     })
-  //   })
-  // }
 }
