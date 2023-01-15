@@ -70,10 +70,15 @@ export class MessageBoxComponent implements OnInit {
 
   checkEditor(event) {
     if (event.event === 'text-change') {
+<<<<<<< HEAD
       this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
       this.chatService.chatMsg = event.html;
       // if (this.chatService.chatMsg !== null) {
       if (this.messageText !== null) {
+=======
+      this.chatService.chatMsg = event.html;
+      if (this.chatService.chatMsg !== null) {
+>>>>>>> 17ec9022e41fa532a44cbd24bd0ae35b26e636ce
         this.valid = true;
       } else {
         this.valid = false;
