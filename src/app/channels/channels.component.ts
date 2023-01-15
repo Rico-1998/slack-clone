@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
@@ -22,8 +22,13 @@ export class ChannelsComponent implements OnInit {
   constructor(
     public user: UserService,
     private route: ActivatedRoute,
-    public channel: ChannelService
-  ) { }
+    public channel: ChannelService,
+    public router: Router,
+  ) {
+    route.params.subscribe(val => {
+      this.getChannelRoom();
+    });
+  }
 
 
   ngOnInit() {
@@ -56,12 +61,13 @@ export class ChannelsComponent implements OnInit {
       })
     })
     console.log(this.allMessages);
+    // console.log(this.channelId == this.route['params']['_value'].id);
+    
   }
 
 
   postInChannel() {
     this.saveMsg();
-    this.addNewMsg();
   }
 
 
@@ -75,19 +81,7 @@ export class ChannelsComponent implements OnInit {
       .then(() => {
         alert('message added to firebase channel')
       });
-  }
-
-
-
-  async addNewMsg() {
-    await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        if (!this.allMessages.find(m => m.id == doc.id)) {
-          this.allMessages.push({ ...(doc.data() as object), id: doc.id });
-        }
-      })
-    })
-    console.log(this.allMessages);
+    this.loadMessagesInChannel();
   }
 
 }
