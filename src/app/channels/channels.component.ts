@@ -20,6 +20,7 @@ export class ChannelsComponent implements OnInit {
   currentChannel: any;
   allMessages: any[] = [];
   newMessage: Message;
+  
 
   constructor(
     public user: UserService,
@@ -105,6 +106,8 @@ export class ChannelsComponent implements OnInit {
 
   openThread(id) {
     console.log('id is:',id)
+    this.channel.threadId = id;
+    this.channel.threadOpen = true;
   }
 
   convertTimestamp(timestamp, type) {

@@ -19,6 +19,8 @@ export class ChannelService {
   newMessage: Message;
   userName: string;
   allMessages: any = [];
+  threadId: any; //In use 
+  threadOpen: boolean = false; // In use
 
   constructor(
     public user: UserService,
