@@ -1,27 +1,40 @@
-<mat-card class="welcome-card">
-  <div class="leftframe">
-    <span class="material-symbols-outlined">
-      tag
-    </span>
-  </div>
-  <mat-card-content class="welcome-content">
-    <span>
-      Thats the beginning of this channel <span class="highlight">#{{ channel.currentChannel.channelName }}</span>
-    </span><br>
-    <span>This Channel was created at: 12.05.2022</span><br>
-    <span>Channeldescription: <span class="highlight">#{{ channel.currentChannel.channelDescription }}</span></span>
-  </mat-card-content>
-</mat-card>
+<div class="main-container">
+  <div class="channels-content-container">
+    <div class="title"># {{ currentChannel?.channelName}}</div>
+    <div class="scroll-container">
+      <mat-card class="welcome-card">
+        <div class="leftframe">
+          <span class="material-symbols-outlined">
+            tag
+          </span>
+        </div>
+        <mat-card-content class="welcome-content">
+          <span>
+            Thats the beginning of this channel <span class="highlight">#{{ currentChannel?.channelName }}</span>
+          </span><br>
+          <span>This Channel was created at: {{ currentChannel?.created }}</span><br>
+          <span>Channeldescription: <span class="highlight">#{{ currentChannel?.channelDescription }}</span></span>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="message-container" *ngFor="let message of allMessages; let i=index ">
+        <div class="img-container">
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+      
+        </div>
+        <div class="message-content">
+          <div class="">
+            <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }}
+          </div>
+          <span>
+            {{ message.msg }}
+          </span>
+          <span class="open-thread-link" (click)="openThread(message.id)">Noch keine Antworten</span>
+        </div>
+      </mat-card>
+      <app-message-box class="message-box"></app-message-box>
 
-<mat-card class="message-container" *ngFor="let message of channel.allMessages; let i=index ">
-  <div>
-    <div class="">
-      {{ message.author }} {{ message.timestamp }}
     </div>
-    <span>
-      {{ message.msg }}
-    </span>
   </div>
-</mat-card>
-
-<app-message-box></app-message-box>
+  <app-thread *ngIf="channel.threadOpen"></app-thread>
+</div>

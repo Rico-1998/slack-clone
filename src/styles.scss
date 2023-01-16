@@ -108,3 +108,25 @@ body {
 .mat-toolbar-multiple-rows {
     min-height: unset !important;
 }
+
+//Scollbar Styling /* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #ABABAD;
+    -webkit-border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #cacacc;
+    
+  }

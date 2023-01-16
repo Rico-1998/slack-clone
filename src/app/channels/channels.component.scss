@@ -1,29 +1,83 @@
-.welcome-card {
+.main-container {
     display: flex;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    position: relative;
 
-    .leftframe {
-        span {
-            background-color: #ABABAD;
-            padding: 6px;
-            border-radius: 5px;
+    .channels-content-container {
+        position: relative;
+        width: 100%;
+
+        .title {
+            display: flex;
+            align-items: center;
+            height: 51px;
+            border-bottom: 1px solid #323438;
+            font-size: 16px;
+            font-weight: bold;
+            padding-left: 16px;
+        }
+
+        .scroll-container {
+            max-height: calc(100vh - 98px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+
+            .welcome-card {
+                display: flex;
+                padding-top: 50px;
+                padding-bottom: 50px;
+                background-color: transparent;
+                color: #D1D2D3;
+
+                .leftframe {
+                    span {
+                        background-color: #ABABAD;
+                        padding: 6px;
+                        border-radius: 5px;
+                        color: #1B1D21;
+                    }
+                }
+
+                .welcome-content {
+                    margin-left: 24px;
+                }
+            }
+
+            .highlight {
+                color: #1D9BD1;
+                font-weight: bold;
+            }
+
+            .message-container {
+                margin-top: 8px;
+                // margin-left: 50px;
+                // margin-right: 50px;
+                line-height: 24px;
+                background-color: transparent;
+                color: #D1D2D3;
+                display: flex;
+
+                .img-container {
+                    margin-right: 24px;
+                }
+
+                .message-content {
+                    display: flex;
+                    flex-direction: column;
+
+                    .open-thread-link {
+                        cursor: pointer;
+                        color: #1D9BD1;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+        }
+
+        .message-box {
+            position: sticky;
+            bottom: 0;
         }
     }
 
-    .welcome-content {
-        margin-left: 24px;
-    }
-}
-
-.highlight {
-    color: #1D9BD1;
-    font-weight: bold;
-}
-
-.message-container{
-    margin-top: 8px;
-    margin-left: 50px;
-    margin-right: 50px;
-    line-height: 24px;
 }

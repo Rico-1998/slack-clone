@@ -1,0 +1,41 @@
+.thread-main-container {
+    width: 400px;
+    border-left:  1px solid #313337;
+    min-height: calc(100vh - 47px);
+    
+    .title {
+        display: flex;
+        align-items: center;
+        height: 51px;
+        border-bottom: 1px solid #323438;
+        font-size: 16px;
+        font-weight: bold;
+        padding-left: 16px;
+    }
+
+    .thread-content-container {
+        .message-container {
+            margin-top: 8px;
+            // margin-left: 50px;
+            // margin-right: 50px;
+            line-height: 24px;
+            background-color: transparent;
+            color: #D1D2D3;
+            display: flex;
+
+            .img-container {
+                margin-right: 24px;
+            }
+
+            .message-content {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    }
+
+    .message-box {
+        position: sticky;
+        bottom: 0;
+    }
+}

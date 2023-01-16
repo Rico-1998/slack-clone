@@ -19,6 +19,8 @@ export class ChannelService {
   newMessage: Message;
   userName: string;
   allMessages: any = [];
+  threadId: any; //In use 
+  threadOpen: boolean = false; // In use
 
   constructor(
     public user: UserService,
@@ -26,10 +28,10 @@ export class ChannelService {
   ) { }
 
 
-  // getChannelRoom(){
+  // getChannelRoom() {
   //   this.route.params.subscribe((params) => {
   //     this.channelId = params['id'];
-  //     let document = doc(this.db, 'channels', this.channelId);
+  //     let document = doc(this.db, 'channels', this.channelId, 'messages');
   //     getDoc(document)
   //       .then((doc) => {
   //         this.currentChannel = doc.data();
@@ -37,33 +39,33 @@ export class ChannelService {
   //   })
   // }
 
-  
-  postInChannel() {
-    this.saveMsg();
-    // this.loadMessagesInChannel();
-  }
+
+  // postInChannel() {
+  //   this.saveMsg();
+  //   // this.loadMessagesInChannel();
+  // }
 
 
-  saveMsg() {
-    let timestamp = Timestamp.fromDate(new Date()).toDate();
-    addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
-      author: this.user.currentUser['userName'],
-      timestamp: timestamp,
-      msg: this.newMessage
-    })
-      .then(() => {
-        alert('message added to firebase channel')
-      });
-  }
+  // saveMsg() {
+  //   let timestamp = Timestamp.fromDate(new Date()).toDate();
+  //   addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
+  //     author: this.user.currentUser['userName'],
+  //     timestamp: timestamp,
+  //     msg: this.newMessage
+  //   })
+  //     .then(() => {
+  //       alert('message added to firebase channel')
+  //     });
+  // }
 
 
-  loadMessagesInChannel() {
-    onSnapshot(this.channelRef, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        this.allMessages.push({ ...(doc.data() as object), id: doc.id });
-      })
-    })
-    console.log(this.allMessages);
-  }
-  
+  // loadMessagesInChannel() {
+  //   onSnapshot(this.channelRef, (snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       this.allMessages.push({ ...(doc.data() as object), id: doc.id });
+  //     })
+  //   })
+  //   console.log(this.allMessages);
+  // }
+
 }
