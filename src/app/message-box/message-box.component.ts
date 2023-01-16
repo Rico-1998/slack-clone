@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import { QuillEditorComponent } from 'ngx-quill';
 import 'quill-emoji/dist/quill-emoji.js';
-import { ChannelsComponent } from '../channels/channels.component';
 import { ChannelService } from '../services/channel.service';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
@@ -47,14 +46,14 @@ export class MessageBoxComponent implements OnInit {
     public firestore: Firestore,
     public userService: UserService,
     private route: ActivatedRoute,
-    public channel: ChannelsComponent,
+    public channel: ChannelService,
     public chatService: ChatService) {
     this.messageForm = new FormGroup({
       msgEditor: new FormControl()
     })
   }
   
-
+  
   ngOnInit(): void {
     console.log(this.userService.currentUser$);
   }
@@ -62,7 +61,7 @@ export class MessageBoxComponent implements OnInit {
 
   check() {
     if (this.userService.channelEditor) {
-      this.channel.postInChannel();
+      // this.channel.postInChannel();
     } else if (this.userService.chatEditor) {
       this.chatService.createChatRoom();
     }
