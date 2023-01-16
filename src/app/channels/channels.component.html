@@ -17,7 +17,7 @@
         </mat-card-content>
       </mat-card>
       
-      <mat-card class="message-container" *ngFor="let message of allMessages; let i=index ">
+      <mat-card class="message-container" *ngFor="let message of allMessages; let i=index" >
         <div class="img-container">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
       
@@ -31,6 +31,9 @@
           </span>
           <span class="open-thread-link" (click)="openThread(message.id)">Noch keine Antworten</span>
         </div>
+        <button (click)="openDeleteMessageDialog()" mat-raised-button>
+          <mat-icon>delete</mat-icon>
+      </button>
       </mat-card>
       <app-message-box class="message-box"></app-message-box>
 

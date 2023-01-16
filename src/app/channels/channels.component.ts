@@ -6,6 +6,8 @@ import { ChannelService } from '../services/channel.service';
 import { addDoc, doc, getDoc } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 // import { query } from '@angular/animations';
 
 
@@ -20,13 +22,14 @@ export class ChannelsComponent implements OnInit {
   currentChannel: any;
   allMessages: any[] = [];
   newMessage: Message;
-  
+  showBtn: boolean = false;
 
   constructor(
     public user: UserService,
     private route: ActivatedRoute,
     public channel: ChannelService,
     public router: Router,
+    public dialog: MatDialog,
   ) {
     route.params.subscribe(val => {
       this.getChannelRoom();
@@ -43,14 +46,14 @@ export class ChannelsComponent implements OnInit {
 
   async getChannelRoom() {
     this.route.params.subscribe((params) => {
-      this.channelId = params['id'];
+      this.channel.channelId = params['id'];
     })
-    let document = doc(this.db, 'channels', this.channelId);
+    let document = doc(this.db, 'channels', this.channel.channelId);
     await getDoc(document)
       .then((doc) => {
         this.currentChannel = doc.data();
         this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate')
-        console.log(this.channelId);
+        console.log(this.channel.channelId);
       })
     this.loadMessagesInChannel();
   }
@@ -58,7 +61,7 @@ export class ChannelsComponent implements OnInit {
 
   async loadMessagesInChannel() {
     this.allMessages = [];
-    const colRef = collection(this.db, 'channels', this.channelId, 'messages');
+    const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     await onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -103,6 +106,17 @@ export class ChannelsComponent implements OnInit {
         // this.loadMessagesInChannel(); nachrichten werden automatisch geladen
       });
   }
+
+
+  openDeleteMessageDialog(){
+    this.dialog.open(DialogDeleteMessageComponent);
+  }
+
+
+  deleteMessage(){
+    console.log(this.allMessages);  
+  }
+
 
   openThread(id) {
     console.log('id is:',id)

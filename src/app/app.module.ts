@@ -54,6 +54,7 @@ import { ChannelsComponent } from './channels/channels.component';
 import { DialogAddChannelComponent } from './dialog-components/dialog-add-channel/dialog-add-channel.component';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { ThreadComponent } from './thread/thread.component';
+import { DialogDeleteMessageComponent } from './dialog-components/dialog-delete-message/dialog-delete-message.component';
 
 
 
@@ -74,7 +75,8 @@ import { ThreadComponent } from './thread/thread.component';
     ChannelsComponent,
     DialogAddChannelComponent,
     ChatroomComponent,
-    ThreadComponent
+    ThreadComponent,
+    DialogDeleteMessageComponent
   ],
   imports: [
     BrowserModule,
