@@ -61,7 +61,7 @@ export class MessageBoxComponent implements OnInit {
 
   check() {
     if (this.userService.channelEditor) {
-      // this.channel.postInChannel();
+      this.channel.postInChannel();
     } else if (this.userService.chatEditor) {
       this.chatService.createChatRoom();
     }
