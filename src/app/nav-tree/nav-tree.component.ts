@@ -18,7 +18,7 @@ export class NavTreeComponent implements OnInit {
   openChatsPanel = false;
   db = getFirestore();
   currentUser = JSON.parse(localStorage.getItem('user'));
-  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid))
+  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
   channels: any = [];
   chats: any[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
 
@@ -27,7 +27,7 @@ export class NavTreeComponent implements OnInit {
     private userService: UserService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
       this.channels = [];
@@ -36,15 +36,31 @@ export class NavTreeComponent implements OnInit {
       })
     })
 
-    getDocs(this.currentUserChats)
-      .then((docData) => {
-        this.chats = [];
-        docData.docs.forEach((user) => {
-          this.chats.push(({ ...(user.data() as object), id: user.id }));
-          console.log('chats',this.chats);
+    onSnapshot(this.currentUserChats, (snapshot) => {
+      this.chats = [];
+      snapshot.docs.forEach(async (doc) => {
+          this.chats.push(({ ...(doc.data() as object), id: doc.id }));
+          let q2 = query(collection(this.db, 'chats', doc.id, 'userIds'), where('id', '!=', this.currentUser.uid))
+          let abc = await getDocs(q2);
+          abc.forEach(async (doc) => {
+            console.log(doc.data());
+          });
         });
+        
+        
       })
-  }
+      // console.log(this.chats);        
+    }
+
+    // getDocs(this.currentUserChats)
+    //   .then((docData) => {
+    //     this.chats = [];
+    //     docData.docs.forEach((chatroom) => {
+    //       this.chats.push(({ ...(chatroom.data() as object), id: chatroom.id }));
+    //       console.log('chats',this.chats);
+    //     });
+    //   })
+  
 
   openDialogAddChannel() {
     this.dialog.open(DialogAddChannelComponent);

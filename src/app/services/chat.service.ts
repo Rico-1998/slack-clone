@@ -85,7 +85,7 @@ export class ChatService {
     // this.foundedUsers = [];    
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
-
+    debugger
     if (!((await chatRoomExists).data())) {
       this.setChatRoom(roomId);
       this.saveMsg(roomId);

@@ -40,23 +40,23 @@ export class ChannelService {
   // }
 
 
-  // postInChannel() {
-  //   this.saveMsg();
-  //   // this.loadMessagesInChannel();
-  // }
+  postInChannel() {
+    this.saveMsg();
+    // this.loadMessagesInChannel();
+  }
 
 
-  // saveMsg() {
-  //   let timestamp = Timestamp.fromDate(new Date()).toDate();
-  //   addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
-  //     author: this.user.currentUser['userName'],
-  //     timestamp: timestamp,
-  //     msg: this.newMessage
-  //   })
-  //     .then(() => {
-  //       alert('message added to firebase channel')
-  //     });
-  // }
+  saveMsg() {
+    let timestamp = Timestamp.fromDate(new Date()).toDate();
+    addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
+      author: this.user.currentUser['userName'],
+      timestamp: timestamp,
+      msg: this.newMessage
+    })
+      .then(() => {
+        alert('message added to firebase channel')
+      });
+  }
 
 
   // loadMessagesInChannel() {
