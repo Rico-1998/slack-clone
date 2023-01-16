@@ -35,7 +35,7 @@ export class NavTreeComponent implements OnInit {
     //   })
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
-      this.channels = []
+      this.channels = [];
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })

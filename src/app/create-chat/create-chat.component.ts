@@ -38,13 +38,13 @@ export class CreateChatComponent implements OnInit {
       })
     })
 
-    // let ref = collection(this.db, 'channels', '5jXBSiXLpYQWmpVigKY4', 'messages');
-    // onSnapshot(ref, (snapshot) => {
-    //   snapshot.docs.forEach((doc) => {
-    //     console.log(doc.data());
+    let ref = collection(this.db, 'channels', '5jXBSiXLpYQWmpVigKY4', 'messages');
+    onSnapshot(ref, (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        console.log(doc.data());
 
-    //   })
-    // })
+      })
+    })
     // setTimeout(() => {
 
     //   const ref: any = collection(this.db, 'chats');
