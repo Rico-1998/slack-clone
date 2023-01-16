@@ -92,6 +92,7 @@ export class ChannelsComponent implements OnInit {
   saveMsg() {
     // let timestamp = Timestamp.fromDate(new Date()).toDate();
     let timestamp = serverTimestamp();
+    debugger;
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
       author: this.user.currentUser['userName'],
       timestamp: timestamp,

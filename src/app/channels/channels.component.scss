@@ -2,12 +2,15 @@
     display: flex;
     padding-top: 50px;
     padding-bottom: 50px;
+    background-color: transparent;
+    color: #D1D2D3;
 
     .leftframe {
         span {
             background-color: #ABABAD;
             padding: 6px;
             border-radius: 5px;
+            color: #1B1D21;
         }
     }
 
@@ -23,7 +26,25 @@
 
 .message-container{
     margin-top: 8px;
-    margin-left: 50px;
-    margin-right: 50px;
+    // margin-left: 50px;
+    // margin-right: 50px;
     line-height: 24px;
+    background-color: transparent;
+    color: #D1D2D3;
+    display: flex;
+
+    .img-container {
+        margin-right: 24px;
+    }
+
+    .message-content {
+        display: flex;
+        flex-direction: column;
+
+        .open-thread-link {
+            cursor: pointer;
+            color: #1D9BD1;
+            font-weight: bold;
+        }
+    }
 }

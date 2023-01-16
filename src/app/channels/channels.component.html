@@ -14,13 +14,18 @@
 </mat-card>
 
 <mat-card class="message-container" *ngFor="let message of allMessages; let i=index ">
-  <div>
+  <div class="img-container">
+    <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+
+  </div>
+  <div class="message-content">
     <div class="">
-      {{ message.author }} {{ message.timestamp }}
+      <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }}
     </div>
     <span>
       {{ message.msg }}
     </span>
+    <span class="open-thread-link">Noch keine Antworten</span>
   </div>
 </mat-card>
 
