@@ -1,50 +1,85 @@
-.welcome-card {
+.main-container {
     display: flex;
-    padding-top: 50px;
-    padding-bottom: 50px;
-    background-color: transparent;
-    color: #D1D2D3;
+    position: relative;
+    
+    .channels-content-container {
+        position: relative;
+        width: 100%;
+        max-height: calc(100vh - 47px);
+        overflow-y: scroll;
+        overflow-x: hidden;
 
-    .leftframe {
-        span {
-            background-color: #ABABAD;
-            padding: 6px;
-            border-radius: 5px;
-            color: #1B1D21;
+        .title {
+            display: flex;
+            align-items: center;
+            height: 51px;
+            border-bottom: 1px solid #323438;
+            font-size: 16px;
+            font-weight: bold;
+            margin-left: 16px;
         }
-    }
 
-    .welcome-content {
-        margin-left: 24px;
-    }
-}
+        .welcome-card {
+            display: flex;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            background-color: transparent;
+            color: #D1D2D3;
 
-.highlight {
-    color: #1D9BD1;
-    font-weight: bold;
-}
+            .leftframe {
+                span {
+                    background-color: #ABABAD;
+                    padding: 6px;
+                    border-radius: 5px;
+                    color: #1B1D21;
+                }
+            }
 
-.message-container{
-    margin-top: 8px;
-    // margin-left: 50px;
-    // margin-right: 50px;
-    line-height: 24px;
-    background-color: transparent;
-    color: #D1D2D3;
-    display: flex;
+            .welcome-content {
+                margin-left: 24px;
+            }
+        }
 
-    .img-container {
-        margin-right: 24px;
-    }
-
-    .message-content {
-        display: flex;
-        flex-direction: column;
-
-        .open-thread-link {
-            cursor: pointer;
+        .highlight {
             color: #1D9BD1;
             font-weight: bold;
         }
+
+        .message-container {
+            margin-top: 8px;
+            // margin-left: 50px;
+            // margin-right: 50px;
+            line-height: 24px;
+            background-color: transparent;
+            color: #D1D2D3;
+            display: flex;
+
+            .img-container {
+                margin-right: 24px;
+            }
+
+            .message-content {
+                display: flex;
+                flex-direction: column;
+
+                .open-thread-link {
+                    cursor: pointer;
+                    color: #1D9BD1;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .message-box {
+            position: fixed;
+            bottom: 0;
+        }
     }
+
+    .thread {
+        width: 450px;
+        position: sticky;
+        
+    }
+
 }

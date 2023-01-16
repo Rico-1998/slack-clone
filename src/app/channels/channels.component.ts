@@ -92,7 +92,6 @@ export class ChannelsComponent implements OnInit {
   saveMsg() {
     // let timestamp = Timestamp.fromDate(new Date()).toDate();
     let timestamp = serverTimestamp();
-    debugger;
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
       author: this.user.currentUser['userName'],
       timestamp: timestamp,
@@ -104,14 +103,18 @@ export class ChannelsComponent implements OnInit {
       });
   }
 
+  openThread(id) {
+    console.log('id is:',id)
+  }
+
   convertTimestamp(timestamp, type) {
-    let date = timestamp.toDate();
-    let mm = date.getMonth();
-    let dd = date.getDate();
-    let yyyy = date.getFullYear();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let secondes = date.getSeconds();
+    let date = timestamp?.toDate();
+    let mm = date?.getMonth();
+    let dd = date?.getDate();
+    let yyyy = date?.getFullYear();
+    let hours = date?.getHours();
+    let minutes = date?.getMinutes();
+    let secondes = date?.getSeconds();
     if (secondes < 10) {
       secondes = '0' + secondes
     }
