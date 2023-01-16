@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
+import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
 import { addDoc, doc, getDoc } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
+// import { query } from '@angular/animations';
 
 
 @Component({
@@ -56,17 +57,28 @@ export class ChannelsComponent implements OnInit {
 
   async loadMessagesInChannel() {
     this.allMessages = [];
-    await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
+    const colRef = collection(this.db, 'channels', this.channelId, 'messages');
+    const q = query(colRef, orderBy('timestamp'));
+    await onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.allMessages.find(m => m.id == doc.id)) {
-          const message = { ...(doc.data() as object), id: doc.id };
+          let message = { ...(doc.data() as object), id: doc.id };
           message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
-          console.log(message['timestamp'])
           this.allMessages.push(message);
         }
       })
     })
-    console.log('all messages:', this.allMessages);
+   
+    // await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
+    //   snapshot.docs.forEach((doc) => {
+    //     if (!this.allMessages.find(m => m.id == doc.id)) {
+    //       const message = { ...(doc.data() as object), id: doc.id };
+    //       message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+    //       console.log(message['timestamp'])
+    //       this.allMessages.push(message);
+    //     }
+    //   })
+    // })
     // console.log(this.channelId == this.route['params']['_value'].id);
     
   }
@@ -78,7 +90,8 @@ export class ChannelsComponent implements OnInit {
 
 
   saveMsg() {
-    let timestamp = Timestamp.fromDate(new Date()).toDate();
+    // let timestamp = Timestamp.fromDate(new Date()).toDate();
+    let timestamp = serverTimestamp();
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
       author: this.user.currentUser['userName'],
       timestamp: timestamp,
@@ -86,8 +99,8 @@ export class ChannelsComponent implements OnInit {
     })
       .then(() => {
         alert('message added to firebase channel')
+        // this.loadMessagesInChannel(); nachrichten werden automatisch geladen
       });
-    this.loadMessagesInChannel();
   }
 
   convertTimestamp(timestamp, type) {
