@@ -1,9 +1,18 @@
 @import 'src/modules/_vars';
 
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100vh - 45px);
+}
+
 mat-toolbar {
+    display: flex;
+    justify-content: space-between;
     background-color: $bgClr-primary;
     color: $txt-clr-primary;
-    
+
     mat-toolbar-row {
         border: $border-primary;
         height: $height-headers;
@@ -19,19 +28,20 @@ mat-toolbar {
         }
     }
 }
+
 .last-messages {
-    height: calc(100% - 2*64px);
+    height: 100%;
     padding: 16px;
     background-color: $bgClr-newChat;
 
-    
+
     mat-card {
         background-color: $bgClr-primary;
         color: $txt-clr-primary;
         border-radius: $br-primary;
         transition: $transition-hover;
         cursor: pointer;
-        
+
         &:hover {
             background-color: $bgClr-newChat;
         }

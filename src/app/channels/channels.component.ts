@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Channel } from 'src/modules/channels.class';
-import { timestamp } from 'rxjs';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
-import { collection, getFirestore, onSnapshot } from '@firebase/firestore';
-import { FirestoreService } from '../services/firestore.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
-
+import { ChannelService } from '../services/channel.service';
+import { addDoc, doc, getDoc } from '@angular/fire/firestore';
+import { Message } from 'src/modules/messages.class';
+import { timestamp } from 'rxjs';
 
 
 @Component({
@@ -15,50 +14,104 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./channels.component.scss']
 })
 export class ChannelsComponent implements OnInit {
-  channelId: string;
-  channel: Channel;
-  userName: any;
-  date: Date;
-  db: any = getFirestore();
-  currentChannel: any = '';
+  db = getFirestore();
+  channelId: any;
+  currentChannel: any;
+  allMessages: any[] = [];
+  newMessage: Message;
 
   constructor(
-    public firestoreService: FirestoreService,
     public user: UserService,
     private route: ActivatedRoute,
-    private firestore: Firestore
-  ) { }
+    public channel: ChannelService,
+    public router: Router,
+  ) {
+    route.params.subscribe(val => {
+      this.getChannelRoom();
+    });
+  }
 
-  ngOnInit(): void {
-    // this.channel = new Channel;
-    // this.route.params.subscribe((params) => {
-    //   this.channelId = params['id'];
-    //   this.angularFirestore
-    //     .collection('channels')
-    //     .doc(this.channelId)
-    //     .valueChanges()
-    //     .subscribe((channel: any) => {
-    //       this.channel.channelName = channel.channelName;
-    //       this.channel.channelDescription = channel.channelDescription;
-    //       this.channel.created = channel.created;
-    //       this.channel.messages = channel.messages;
-    //     });
-    // })
 
-    // this.channel = new Channel;
+  ngOnInit() {
+    this.user.channelEditor = true;
+    this.user.chatEditor = false;
+    this.getChannelRoom();
+  }
+
+
+  async getChannelRoom() {
     this.route.params.subscribe((params) => {
       this.channelId = params['id'];
-      let document = doc(this.db, 'channels', this.channelId);
-      getDoc(document)
-        .then((doc) => {
-          this.firestoreService.channelID = this.channelId;
-          this.firestoreService.currentChannel = doc.data();
-          // this.channel.channelName = doc.data()['channelName'];
-          // this.channel.channelDescription = doc.data()['channelDescription'];
-          // this.channel.created = doc.data()['created'];
-          // this.channel.messages = doc.data()['messages'];
-        })
     })
+    let document = doc(this.db, 'channels', this.channelId);
+    await getDoc(document)
+      .then((doc) => {
+        this.currentChannel = doc.data();
+        this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate')
+        console.log(this.channelId);
+      })
+    this.loadMessagesInChannel();
+  }
+
+
+  async loadMessagesInChannel() {
+    this.allMessages = [];
+    await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (!this.allMessages.find(m => m.id == doc.id)) {
+          const message = { ...(doc.data() as object), id: doc.id };
+          message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+          console.log(message['timestamp'])
+          this.allMessages.push(message);
+        }
+      })
+    })
+    console.log('all messages:', this.allMessages);
+    // console.log(this.channelId == this.route['params']['_value'].id);
+    
+  }
+
+
+  postInChannel() {
+    this.saveMsg();
+  }
+
+
+  saveMsg() {
+    let timestamp = Timestamp.fromDate(new Date()).toDate();
+    addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
+      author: this.user.currentUser['userName'],
+      timestamp: timestamp,
+      msg: this.newMessage
+    })
+      .then(() => {
+        alert('message added to firebase channel')
+      });
+    this.loadMessagesInChannel();
+  }
+
+  convertTimestamp(timestamp, type) {
+    let date = timestamp.toDate();
+    let mm = date.getMonth();
+    let dd = date.getDate();
+    let yyyy = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let secondes = date.getSeconds();
+    if (secondes < 10) {
+      secondes = '0' + secondes
+    }
+    if (hours < 10) {
+      hours = '0' + hours
+    }
+    if (minutes < 10) {
+      minutes = '0' + minutes
+    }
+    let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
+    let onlyDate =  dd + '/' + (mm + 1) + '/' + yyyy;
+    if(type =='full') {
+      return fullDate;
+    } else return onlyDate;
   }
 
 }

@@ -11,9 +11,9 @@ export class Message {
 
     public toJson(): any{
         return {
-            messageText:this.messageText,
             timestamp: this.timestamp,
             userId: this.userId,
+            messageText:this.messageText,
         }
     }
 

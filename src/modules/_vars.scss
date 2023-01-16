@@ -15,7 +15,7 @@ $txt-clr-secondary: #fff;
 $txt-clr-thirdary: #000;
 $txt-clr-h1: #fff;
 $txt-clr-h2: #D1D2D3;
-$txt-clr-link:#1D9BD1;
+$txt-clr-link: #1D9BD1;
 $txt-clr-new: #DE4E2B;
 
 //font-sizes
@@ -35,12 +35,14 @@ $size-profile-img: 30px;
 $height-searchbar: 45px;
 $height-headers: 50px;
 $icon-size: 24px;
+$size-profile-img-chatroom: 40px;
 
 // borders
 $border-primary: 1px solid $border-clr;
 
 //border-radius
 $br-primary: 5px;
+$br-secondary: 10px;
 
 //status
 $online: #39E500;
@@ -55,6 +57,7 @@ $textEditor-icons-clr: #4C4E51;
 
 //button
 $sign-in-btn-clr: #007a6a;
+$btn-clr-green: #007A5A;
 
 //transition
 $transition-hover: all 75ms ease-in;
