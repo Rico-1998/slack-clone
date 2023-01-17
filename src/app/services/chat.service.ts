@@ -15,10 +15,13 @@ export class ChatService {
   db = getFirestore();
   chatsRef = collection(this.db, 'chats');
   chatMsg = [];
+  chats: any[] = [];
+  
 
   constructor(public userService: UserService,
     public route: ActivatedRoute,
-    public router: Router) { }
+    public router: Router) {    
+     }
 
   setToChatList(user) {
     // this.selectedUserList.push(this.userService.currentUser);
@@ -85,7 +88,6 @@ export class ChatService {
     // this.foundedUsers = [];    
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
-    debugger
     if (!((await chatRoomExists).data())) {
       this.setChatRoom(roomId);
       this.saveMsg(roomId);

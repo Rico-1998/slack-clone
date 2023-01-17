@@ -1,7 +1,13 @@
 <mat-toolbar-row>
-    <div class="img-container-chatroom sidenav-shrink">
-        <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
-        <div class="dot-sidenav online"></div>
-    </div>
-    <span>test</span>
+  <div class="img-container-chatroom sidenav-shrink">
+    <img
+      class="profile-img"
+      src="assets/img/profile-img.jpg"
+      alt="profile-img"
+    />
+    <div class="dot-sidenav online"></div>
+  </div>
+  <span *ngFor="let otherUser of currentChatMembers; let last = last">
+    {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
+  </span>
 </mat-toolbar-row>

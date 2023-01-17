@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added 
 import { doc, docData, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
+import { ChatService } from '../services/chat.service';
 
 
 
@@ -18,52 +19,44 @@ export class NavTreeComponent implements OnInit {
   openChatsPanel = false;
   db = getFirestore();
   currentUser = JSON.parse(localStorage.getItem('user'));
-  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid))
-  otherChatMembers: any = [];
+  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
   channels: any = [];
-  chats: any[] = ['Tobias', 'Rico', 'Phil', 'Viktor'];
 
   constructor(
     public dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    public chatService: ChatService,
+
   ) { }
 
   ngOnInit(): void {
     onSnapshot(this.currentUserChats, async (snapshot) => {
+      this.chatService.chats = [];
       snapshot.docs.forEach((doc) => {
-        this.otherChatMembers.push(((doc.data()['userIds'].filter(a => a != this.currentUser.uid))))
-      })
-      for (let i = 0; i < this.otherChatMembers.length; i++) {
-        const actualMember = this.otherChatMembers[i][0];
-        let q2 = query(collection(this.db, 'users'), where('id', '==', actualMember))
-        let userDocs = await getDocs(q2)
+        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        this.chatService.chats.push(({...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));   
+      });
+      console.log(this.chatService.chats);
+      // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
+      for (let i = 0; i < this.chatService.chats.length; i++) { 
+        let otherUsers = this.chatService.chats[i].otherUsers;
+        for (let i = 0; i < otherUsers.length; i++) {
+          const actualMember = otherUsers[i];
+          await getDoc(doc(this.db, 'users', actualMember))
           .then((docData) => {
-            console.log('das sind die nutzer daten aus users', docData.docs.map(a => a.data()));
+            let index = otherUsers.indexOf(actualMember);
+            otherUsers[index] = docData.data();
           })
+        }      
       }
-    })
-
-    console.log('das ist otherMembers', this.otherChatMembers);
-    //DIESE FUNKTION KLAPPT SO DASS MAN SICH NEN PRIVAT CHAT HOLEN KANN ABER WENN MEHR ALS 2 LEUTE IM CHAT SIND
-    // DANN FILTERT ER TROTZDEM ALLE NUTZER RAUS UND NICHT QUASI DIE GRUPPEN
-
-
-
+    });
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
       this.channels = [];
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })
-    })
-    // getDocs(this.currentUserChats)
-    //   .then((docData) => {
-    //     this.chats = [];
-    //     docData.docs.forEach((user) => {
-    //       this.chats.push(({ ...(user.data() as object), id: user.id }));
-    //       console.log('chats',this.chats);
-    //     });
-    //   })
+    });    
   }
 
   openDialogAddChannel() {

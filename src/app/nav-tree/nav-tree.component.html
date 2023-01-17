@@ -48,7 +48,10 @@
     </div>
   </div>
   <div *ngIf="openChatsPanel">
-    <mat-list-item *ngFor="let chat of chats">
+    <mat-list-item
+      *ngFor="let chat of chatService.chats"
+      routerLink="/home/chatroom/{{ chat.id }}"
+    >
       <div class="listItem" matListItemTitle>
         <div class="img-container sidenav-shrink">
           <img
@@ -58,8 +61,8 @@
           />
           <div class="dot-sidenav online"></div>
         </div>
-        <span>
-          {{ chat }}
+        <span *ngFor="let otherUser of chat.otherUsers; let last = last">
+          {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
         </span>
       </div>
     </mat-list-item>
