@@ -1,22 +1,44 @@
 <div class="thread-main-container">
-    <div class="title"># Title</div>
-    <div class="thread-content-container">
-        <div class="message">
-            <mat-card class="message-container">
-                <div class="img-container">
-                  <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
-              
-                </div>
-                <div class="message-content">
-                  <div class="">
-                    <strong>Author</strong> time
-                  </div>
-                  <span>
-                    message
-                  </span>
-                </div>
-              </mat-card>
+  <div class="title"># Title</div>
+  <div *ngIf="!this.channel.threadLoading" class="thread-content-container">
+    <div class="message">
+      <div class="message-container">
+        <div class="img-container">
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+
         </div>
+        <div class="message-content">
+          <div class="">
+            <strong>{{ this.channel.threadMessage?.author | titlecase }}</strong> {{
+            this.channel.threadMessage?.timestamp }}
+          </div>
+          <span>
+            {{ this.channel.threadMessage?.msg }}
+          </span>
+        </div>
+      </div>
+      <div *ngFor="let comment of this.channel.allThreadComments, let i=index" class="comment-container">
+        <div class="img-container">
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+        </div>
+        <div class="comment-content">
+          <div class="">
+            <strong>{{ comment?.author | titlecase }}</strong> {{ comment?.timestamp }}
+          </div>
+          <span>
+            {{ comment?.comment }}
+          </span>
+        </div>
+      </div>
     </div>
-    <app-message-box class="message-box"></app-message-box>
+  </div>
+  <app-message-box *ngIf="!this.channel.threadLoading" class="message-box"></app-message-box>
+  <div *ngIf="this.channel.threadLoading" id="loading-container">
+    <div class="lds-ring" id="loading-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
 </div>

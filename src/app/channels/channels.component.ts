@@ -52,7 +52,7 @@ export class ChannelsComponent implements OnInit {
     await getDoc(document)
       .then((doc) => {
         this.currentChannel = doc.data();
-        this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate')
+        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate')
         console.log(this.channel.channelId);
       })
     this.loadMessagesInChannel();
@@ -67,12 +67,12 @@ export class ChannelsComponent implements OnInit {
       snapshot.docs.forEach((doc) => {
         if (!this.allMessages.find(m => m.id == doc.id)) {
           let message = { ...(doc.data() as object), id: doc.id };
-          message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+          message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
           this.allMessages.push(message);
         }
       })
     })
-   
+
     // await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
     //   snapshot.docs.forEach((doc) => {
     //     if (!this.allMessages.find(m => m.id == doc.id)) {
@@ -84,7 +84,7 @@ export class ChannelsComponent implements OnInit {
     //   })
     // })
     // console.log(this.channelId == this.route['params']['_value'].id);
-    
+
   }
 
 
@@ -108,44 +108,21 @@ export class ChannelsComponent implements OnInit {
   }
 
 
-  openDeleteMessageDialog(){
+  openDeleteMessageDialog() {
     this.dialog.open(DialogDeleteMessageComponent);
   }
 
 
-  deleteMessage(){
-    console.log(this.allMessages);  
+  deleteMessage() {
+    console.log(this.allMessages);
   }
 
 
   openThread(id) {
-    console.log('id is:',id)
     this.channel.threadId = id;
     this.channel.threadOpen = true;
-  }
-
-  convertTimestamp(timestamp, type) {
-    let date = timestamp?.toDate();
-    let mm = date?.getMonth();
-    let dd = date?.getDate();
-    let yyyy = date?.getFullYear();
-    let hours = date?.getHours();
-    let minutes = date?.getMinutes();
-    let secondes = date?.getSeconds();
-    if (secondes < 10) {
-      secondes = '0' + secondes
-    }
-    if (hours < 10) {
-      hours = '0' + hours
-    }
-    if (minutes < 10) {
-      minutes = '0' + minutes
-    }
-    let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-    let onlyDate =  dd + '/' + (mm + 1) + '/' + yyyy;
-    if(type =='full') {
-      return fullDate;
-    } else return onlyDate;
+    this.channel.loadCommentsToThread();
+    this.channel.loadMessageToThread();
   }
 
 }

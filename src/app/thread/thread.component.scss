@@ -1,8 +1,9 @@
 .thread-main-container {
     width: 400px;
-    border-left:  1px solid #313337;
+    border-left: 1px solid #313337;
     min-height: calc(100vh - 47px);
-    
+    position: relative;
+
     .title {
         display: flex;
         align-items: center;
@@ -16,12 +17,13 @@
     .thread-content-container {
         .message-container {
             margin-top: 8px;
-            // margin-left: 50px;
-            // margin-right: 50px;
+            padding-bottom: 8px;
+            padding-left: 16px;
             line-height: 24px;
             background-color: transparent;
             color: #D1D2D3;
             display: flex;
+            border-bottom: 1px solid #323438;
 
             .img-container {
                 margin-right: 24px;
@@ -32,10 +34,84 @@
                 flex-direction: column;
             }
         }
+
+        .comment-container {
+            display: flex;
+            padding-left: 30px;
+            margin: 8px 0;
+
+            .comment-content {
+                margin-left: 24px;
+            }
+        }
     }
 
     .message-box {
-        position: sticky;
+        position: fixed;
         bottom: 0;
+    }
+
+    /* loading animation */
+    #loading-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #D1D2D3;
+        ;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #D1D2D3 transparent transparent transparent;
+    }
+
+    .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+
+    .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+    }
+
+    .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+    }
+
+    #loading-ring,
+    #tick {
+        margin-left: 150px;
+    }
+
+    @keyframes lds-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
     }
 }
