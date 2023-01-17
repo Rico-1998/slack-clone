@@ -67,9 +67,9 @@ export class ChannelsComponent implements OnInit {
     await onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach(async (doc) => {
         if (!this.allMessages.find(m => m.id == doc.id)) {
-          // let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-          let message = { ...(doc.data() as object), id: doc.id};
-          // let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+          let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+          // let message = { ...(doc.data() as object), id: doc.id, comments: 4};
+          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
           this.allMessages.push(message);
         }

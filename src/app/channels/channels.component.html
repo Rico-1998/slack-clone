@@ -23,12 +23,12 @@
         </div>
         <div class="message-content">
           <div class="">
-            <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }} comments: {{ message.comments }}
+            <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }}
           </div>
           <span>
             {{ message.msg }}
           </span>
-          <span class="open-thread-link" (click)="openThread(message.id)">Noch keine Antworten</span>
+          <span class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
         </div>
         <!-- <button (click)="openDeleteMessageDialog()" mat-raised-button>
           <mat-icon>delete</mat-icon>
