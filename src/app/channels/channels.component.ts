@@ -53,7 +53,6 @@ export class ChannelsComponent implements OnInit {
       .then((doc) => {
         this.currentChannel = doc.data();
         this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate')
-        console.log(this.channel.channelId);
       })
     this.loadMessagesInChannel();
   }
