@@ -23,6 +23,7 @@ export class CreateChatComponent implements OnInit {
 
   value: any;
   db = getFirestore();
+  textBoxPath: string = 'create-chat';
 
   @ViewChild('usersField') userField: any;
 

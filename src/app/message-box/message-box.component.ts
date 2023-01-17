@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit, ViewChild, Input } from '@angular/core';
 import { addDoc, collection, Firestore, onSnapshot } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -22,6 +22,7 @@ export class MessageBoxComponent implements OnInit {
   @ViewChild('messageInput')
   messageInput: QuillEditorComponent;
   messageForm: FormGroup;
+  @Input() textBoxPath;
 
   modules = {
     'emoji-shortname': true,
@@ -57,18 +58,22 @@ export class MessageBoxComponent implements OnInit {
 
 
   check() {
-    if (this.userService.channelEditor) {
+    if (this.textBoxPath == 'channels') {
       this.channel.postInChannel();
-    } else if (this.userService.chatEditor) {
+    } else if (this.textBoxPath == 'create-chat') {
       this.chatService.createChatRoom();
+    } else if (this.textBoxPath == 'thread') {
+      this.channel.postComment()
     }
     // this.messageInput.quillEditor.setContents([]);
+    
   }
 
 
   checkEditor(event) {
     if (event.event === 'text-change') {
       this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
+      this.channel.newComment = event.html.replace(/<[^>]+>/g, '');
       this.chatService.chatMsg = event.html;
       // if (this.chatService.chatMsg !== null) {
       if (this.messageText !== null) {

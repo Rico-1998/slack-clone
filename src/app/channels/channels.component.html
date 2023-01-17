@@ -20,11 +20,10 @@
       <mat-card class="message-container" *ngFor="let message of allMessages; let i=index" >
         <div class="img-container">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
-      
         </div>
         <div class="message-content">
           <div class="">
-            <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }}
+            <strong>{{ message.author | titlecase}}</strong> {{ message.timestamp }} comments: {{ message.comments }}
           </div>
           <span>
             {{ message.msg }}
@@ -35,7 +34,7 @@
           <mat-icon>delete</mat-icon>
       </button> -->
       </mat-card>
-      <app-message-box class="message-box"></app-message-box>
+      <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
 
     </div>
   </div>

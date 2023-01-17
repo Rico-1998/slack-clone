@@ -1,11 +1,10 @@
 <div class="thread-main-container">
-  <div class="title"># Title</div>
-  <div *ngIf="!this.channel.threadLoading" class="thread-content-container">
+  <div class="title"><span># Title</span><mat-icon class="close" (click)="closeThread()">close</mat-icon></div>
+  <div class="thread-content-container">
     <div class="message">
-      <div class="message-container">
+      <div *ngIf="this.channel.threadMessage" class="message-container">
         <div class="img-container">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
-
         </div>
         <div class="message-content">
           <div class="">
@@ -23,16 +22,16 @@
         </div>
         <div class="comment-content">
           <div class="">
-            <strong>{{ comment?.author | titlecase }}</strong> {{ comment?.timestamp }}
+            <strong>{{ comment.author | titlecase }}</strong> {{ comment.timestamp }}
           </div>
           <span>
-            {{ comment?.comment }}
+            {{ comment.comment }}
           </span>
         </div>
       </div>
     </div>
   </div>
-  <app-message-box *ngIf="!this.channel.threadLoading" class="message-box"></app-message-box>
+  <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
   <div *ngIf="this.channel.threadLoading" id="loading-container">
     <div class="lds-ring" id="loading-ring">
       <div></div>

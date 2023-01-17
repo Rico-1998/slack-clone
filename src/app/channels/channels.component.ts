@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
-import { addDoc, doc, getDoc } from '@angular/fire/firestore';
+import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,6 +23,7 @@ export class ChannelsComponent implements OnInit {
   allMessages: any[] = [];
   newMessage: Message;
   showBtn: boolean = false;
+  textBoxPath: string = 'channels';
 
   constructor(
     public user: UserService,
@@ -64,29 +65,17 @@ export class ChannelsComponent implements OnInit {
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     await onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
+      snapshot.docs.forEach(async (doc) => {
         if (!this.allMessages.find(m => m.id == doc.id)) {
-          let message = { ...(doc.data() as object), id: doc.id };
+          // let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+          let message = { ...(doc.data() as object), id: doc.id};
+          // let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
           this.allMessages.push(message);
         }
       })
     })
-
-    // await onSnapshot(collection(this.db, 'channels', this.channelId, 'messages'), (snapshot) => {
-    //   snapshot.docs.forEach((doc) => {
-    //     if (!this.allMessages.find(m => m.id == doc.id)) {
-    //       const message = { ...(doc.data() as object), id: doc.id };
-    //       message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
-    //       console.log(message['timestamp'])
-    //       this.allMessages.push(message);
-    //     }
-    //   })
-    // })
-    // console.log(this.channelId == this.route['params']['_value'].id);
-
   }
-
 
   postInChannel() {
     this.saveMsg();
@@ -103,7 +92,6 @@ export class ChannelsComponent implements OnInit {
     })
       .then(() => {
         alert('message added to firebase channel')
-        // this.loadMessagesInChannel(); nachrichten werden automatisch geladen
       });
   }
 

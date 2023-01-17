@@ -14,6 +14,7 @@ export class ThreadComponent implements OnInit {
   db = getFirestore();
   message: any;
   allComments: any[] = []
+  public textBoxPath: string = 'thread';
 
   constructor(
     public channel: ChannelService,
@@ -21,22 +22,13 @@ export class ThreadComponent implements OnInit {
 
   ngOnInit(): void {
     this.channel.threadLoading = true;
-    // this.channel.loadCommentsToThread()
-    // this.channel.loadMessageToThread()
   }
 
-  // async loadComments() {
-  //   this.allComments = [];
-  //   const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages', this.channel.threadId, 'comments');
-  //   const q = query(colRef, orderBy('timestamp'));
-  //   await onSnapshot(q, (snapshot) => {
-  //     snapshot.docs.forEach((doc) => {
-  //       let comment = {...(doc.data() as object), id: doc.id};
-  //       comment['timestamp'] = this.channel.convertTimestamp(comment['timestamp'], 'full');
-  //       this.allComments.push(comment);
-  //       console.log(this.allComments)
-  //     })
-  //   })
-  // }
+  closeThread() {
+    this.channel.threadOpen = false;
+    this.channel.allThreadComments = [];
+    this.channel.threadMessage = undefined;
+    this.channel.threadId = undefined;
+  }
 
 }

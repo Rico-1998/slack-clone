@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, timestamp } from 'rxjs';
-import { addDoc, doc, Firestore, getDoc, orderBy, query } from '@angular/fire/firestore';
+import { addDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { MessageBoxComponent } from '../message-box/message-box.component';
@@ -15,6 +15,7 @@ export class ChannelService {
   channelId: string;
   db: any = getFirestore();
   newMessage: Message;
+  newComment: Message;
   threadId: any; // In use 
   threadOpen: boolean = false; // In use
   threadMessage: any; // In Use
@@ -39,15 +40,29 @@ export class ChannelService {
       });
   }
 
+  postComment() {
+    this.threadLoading = true;
+    let timestamp = Timestamp.fromDate(new Date()).toDate();
+    addDoc(collection(this.db, 'channels', this.channelId, 'messages', this.threadId, 'comments'), {
+      author: this.user.currentUser['userName'],
+      timestamp: timestamp,
+      comment: this.newComment
+    })
+      .then(() => {
+        this.threadLoading = false;
+        console.log('message added')
+      })
+  }
+
   async loadMessageToThread() {
     this.threadLoading = true;
     let document = doc(this.db, 'channels', this.channelId, 'messages', this.threadId);
     await getDoc(document)
-    .then((doc) => {
-      this.threadMessage = doc.data();
-      this.threadMessage['timestamp'] = this.convertTimestamp(this.threadMessage['timestamp'], 'onlyDate');
-      this.threadLoading = false;
-    })
+      .then((doc) => {
+        this.threadMessage = doc.data();
+        this.threadMessage['timestamp'] = this.convertTimestamp(this.threadMessage['timestamp'], 'onlyDate');
+        this.threadLoading = false;
+      })
   }
 
   async loadCommentsToThread() {
@@ -55,11 +70,13 @@ export class ChannelService {
     const colRef = collection(this.db, 'channels', this.channelId, 'messages', this.threadId, 'comments');
     const q = query(colRef, orderBy('timestamp'));
     await onSnapshot(q, (snapshot) => {
+      // console.log(snapshot.docs.length)
       snapshot.docs.forEach((doc) => {
-        let comment = {...(doc.data() as object), id: doc.id};
-        comment['timestamp'] = this.convertTimestamp(comment['timestamp'], 'full');
-        this.allThreadComments.push(comment);
-        console.log(this.allThreadComments)
+        if (!this.allThreadComments.find(c => c.id == doc.id)) {
+          let comment = { ...(doc.data() as object), id: doc.id };
+          comment['timestamp'] = this.convertTimestamp(comment['timestamp'], 'full');
+          this.allThreadComments.push(comment);
+        }
       })
     })
   }
@@ -82,8 +99,8 @@ export class ChannelService {
       minutes = '0' + minutes
     }
     let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-    let onlyDate =  dd + '/' + (mm + 1) + '/' + yyyy;
-    if(type =='full') {
+    let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
+    if (type == 'full') {
       return fullDate;
     } else return onlyDate;
   }
