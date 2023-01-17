@@ -16,12 +16,13 @@ export class ChatService {
   chatsRef = collection(this.db, 'chats');
   chatMsg = [];
   chats: any[] = [];
-  
+  currentUser = JSON.parse(localStorage.getItem('user'));
+  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
 
   constructor(public userService: UserService,
     public route: ActivatedRoute,
-    public router: Router) {    
-     }
+    public router: Router) {
+  }
 
   setToChatList(user) {
     // this.selectedUserList.push(this.userService.currentUser);
@@ -66,7 +67,7 @@ export class ChatService {
   saveMsg(roomId) { // Bei add vergibt firebase automatisch eine id
     addDoc(collection(this.db, 'chats', roomId, 'messages'), {
       timestamp: Timestamp.fromDate(new Date()),
-      author: this.userService.currentUser.id,
+      author: this.userService.currentUser.userName,
       msg: this.chatMsg,
     })
       .then(() => {
@@ -99,5 +100,28 @@ export class ChatService {
     // interface chatMessage erstellen mit (timestamp, author, msg)
     // value aus dem texteditor holen
     // format chatMsg bearbeiten (siehe andere Gruppe)
+  }
+
+  getChats() {
+    onSnapshot(this.currentUserChats, async (snapshot) => {
+      this.chats = [];
+      snapshot.docs.forEach((doc) => {
+        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+      });
+      // console.log(this.chats);
+      // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
+      for (let i = 0; i < this.chats.length; i++) {
+        let otherUsers = this.chats[i].otherUsers;
+        for (let i = 0; i < otherUsers.length; i++) {
+          const actualMember = otherUsers[i];
+          await getDoc(doc(this.db, 'users', actualMember))
+            .then((docData) => {
+              let index = otherUsers.indexOf(actualMember);
+              otherUsers[index] = docData.data();
+            })
+        }
+      }
+    });
   }
 }

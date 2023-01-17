@@ -30,33 +30,34 @@ export class NavTreeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    onSnapshot(this.currentUserChats, async (snapshot) => {
-      this.chatService.chats = [];
-      snapshot.docs.forEach((doc) => {
-        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-        this.chatService.chats.push(({...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));   
-      });
-      console.log(this.chatService.chats);
-      // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
-      for (let i = 0; i < this.chatService.chats.length; i++) { 
-        let otherUsers = this.chatService.chats[i].otherUsers;
-        for (let i = 0; i < otherUsers.length; i++) {
-          const actualMember = otherUsers[i];
-          await getDoc(doc(this.db, 'users', actualMember))
-          .then((docData) => {
-            let index = otherUsers.indexOf(actualMember);
-            otherUsers[index] = docData.data();
-          })
-        }      
-      }
-    });
+    // onSnapshot(this.currentUserChats, async (snapshot) => {
+    //   this.chatService.chats = [];
+    //   snapshot.docs.forEach((doc) => {
+    //     let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+    //     this.chatService.chats.push(({ ...(doc.data() as object), chatRoomId: doc.id, otherUsers: otherUsers }));
+    //   });
+    //   console.log(this.chatService.chats);
+    //   // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
+    //   for (let i = 0; i < this.chatService.chats.length; i++) {
+    //     let otherUsers = this.chatService.chats[i].otherUsers;
+    //     for (let i = 0; i < otherUsers.length; i++) {
+    //       const actualMember = otherUsers[i];
+    //       await getDoc(doc(this.db, 'users', actualMember))
+    //         .then((docData) => {
+    //           let index = otherUsers.indexOf(actualMember);
+    //           otherUsers[index] = docData.data();
+    //         })
+    //     }
+    //   }
+    // });
+    this.chatService.getChats();
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
       this.channels = [];
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })
-    });    
+    });
   }
 
   openDialogAddChannel() {

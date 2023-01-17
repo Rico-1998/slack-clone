@@ -15,7 +15,7 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./message-box.component.scss']
 })
 export class MessageBoxComponent implements OnInit {
-  
+
   // db: any = getFirestore();
   messageText: string = '';
   valid: boolean = false;
@@ -50,8 +50,8 @@ export class MessageBoxComponent implements OnInit {
       msgEditor: new FormControl()
     })
   }
-  
-  
+
+
   ngOnInit(): void {
     console.log(this.userService.currentUser$);
   }
@@ -63,10 +63,9 @@ export class MessageBoxComponent implements OnInit {
     } else if (this.textBoxPath == 'create-chat') {
       this.chatService.createChatRoom();
     } else if (this.textBoxPath == 'thread') {
-      this.channel.postComment()
+      this.channel.postComment();
     }
     // this.messageInput.quillEditor.setContents([]);
-    
   }
 
 
@@ -74,7 +73,7 @@ export class MessageBoxComponent implements OnInit {
     if (event.event === 'text-change') {
       this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
       this.channel.newComment = event.html.replace(/<[^>]+>/g, '');
-      this.chatService.chatMsg = event.html;
+      this.chatService.chatMsg = event.html.replace(/<[^>]+>/g, '');
       // if (this.chatService.chatMsg !== null) {
       if (this.messageText !== null) {
         this.valid = true;
