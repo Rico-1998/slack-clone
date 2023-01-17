@@ -4,7 +4,7 @@
       <div class="icon-hover-wrapper">
         <mat-icon>{{
           openChannelPanel ? "arrow_drop_down" : "arrow_right"
-        }}</mat-icon>
+          }}</mat-icon>
       </div>
       <h3>Channels</h3>
     </div>
@@ -14,11 +14,7 @@
   </div>
   <div *ngIf="openChannelPanel">
     <mat-list-item *ngFor="let channel of channels">
-      <div
-        class="listItem"
-        matListItemTitle
-        routerLink="channel/{{ channel.id }}"
-      >
+      <div class="listItem" matListItemTitle routerLink="channel/{{ channel.id }}">
         <div class="hashtag">#</div>
         <span class="channelName">{{ channel.channelName }}</span>
       </div>
@@ -39,7 +35,7 @@
       <div class="icon-hover-wrapper">
         <mat-icon>{{
           openChannelPanel ? "arrow_drop_down" : "arrow_right"
-        }}</mat-icon>
+          }}</mat-icon>
       </div>
       <h3>Chats</h3>
     </div>
@@ -48,17 +44,10 @@
     </div>
   </div>
   <div *ngIf="openChatsPanel">
-    <mat-list-item
-      *ngFor="let chat of chatService.chats"
-      routerLink="/home/chatroom/{{ chat.id }}"
-    >
+    <mat-list-item *ngFor="let chat of chatService.chats" routerLink="/home/chatroom/{{ chat.id }}">
       <div class="listItem" matListItemTitle>
         <div class="img-container sidenav-shrink">
-          <img
-            class="profile-img"
-            src="assets/img/profile-img.jpg"
-            alt="profile-img"
-          />
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
           <div class="dot-sidenav online"></div>
         </div>
         <span *ngFor="let otherUser of chat.otherUsers; let last = last">
