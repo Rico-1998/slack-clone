@@ -149,7 +149,7 @@ export class ChatService {
         let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId };
         timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
         this.currentchatMessages.push(timestampConvertedMsg)
-      })
+      });
     })
   }
 
@@ -159,6 +159,12 @@ export class ChatService {
       timestamp: Timestamp.fromDate(new Date()),
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
-    })
+    }); 
+  }
+
+  showNewestMessage() {
+    let objDiv = document.getElementById("scrollBox");
+    objDiv.scrollTop = objDiv.scrollHeight;
   }
 }
+

@@ -1,5 +1,5 @@
 <div class="chatroomContainer">
-  <mat-toolbar-row>
+  <div class="heading">
     <div class="img-container-chatroom sidenav-shrink">
       <img
         class="profile-img"
@@ -13,9 +13,9 @@
     >
       {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
     </span>
-  </mat-toolbar-row>
+  </div>
 
-  <div class="scroll-box">
+  <div class="scroll-box" #scrollBox>
     <mat-card
       class="message-container"
       *ngFor="let message of chatService.currentchatMessages; let i = index"

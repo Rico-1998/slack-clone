@@ -1,30 +1,21 @@
+@import 'src/modules/_vars';
+
 .main-container {
     display: flex;
     position: relative;
+    height: 100%;
 
     .channels-content-container {
         position: relative;
         width: 100%;
-
-        .title {
-            display: flex;
-            align-items: center;
-            height: 51px;
-            border-bottom: 1px solid #323438;
-            font-size: 16px;
-            font-weight: bold;
-            padding-left: 16px;
-        }
-
-        .scroll-container {
-            max-height: calc(100vh - 98px);
-            overflow-y: scroll;
-            overflow-x: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
             .welcome-card {
                 display: flex;
-                padding-top: 50px;
-                padding-bottom: 50px;
+                padding: 10px 0;
                 background-color: transparent;
                 color: #D1D2D3;
 
@@ -46,50 +37,7 @@
                 color: #1D9BD1;
                 font-weight: bold;
             }
-
-            .message-container {
-                margin-top: 8px;
-                // margin-left: 50px;
-                // margin-right: 50px;
-                line-height: 24px;
-                background-color: transparent;
-                color: #D1D2D3;
-                display: flex;
-
-                button{
-                    display: none;
-                }
-
-                &:hover{
-                    background-color: rgba(0, 0, 0, 0.2);
-
-                button{
-                    display: block;
-                }
-                }
-
-                .img-container {
-                    margin-right: 24px;
-                }
-
-                .message-content {
-                    display: flex;
-                    flex-direction: column;
-
-                    .open-thread-link {
-                        cursor: pointer;
-                        color: #1D9BD1;
-                        font-weight: bold;
-                    }
-                }
-            }
-
         }
-
-        .message-box {
-            position: sticky;
-            bottom: 0;
-        }
-    }
+    
 
 }

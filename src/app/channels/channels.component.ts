@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
@@ -8,6 +8,7 @@ import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
+import { ChatService } from '../services/chat.service';
 // import { query } from '@angular/animations';
 
 
@@ -17,6 +18,7 @@ import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete
   styleUrls: ['./channels.component.scss']
 })
 export class ChannelsComponent implements OnInit {
+  @ViewChild('scrollBox') private scrollBox: ElementRef;
   db = getFirestore();
   channelId: any;
   currentChannel: any;
@@ -41,8 +43,16 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.user.channelEditor = true;
     this.user.chatEditor = false;
+    this.scrollToBottom();        
   }
 
+  ngAfterViewChecked() {        
+    this.scrollToBottom();        
+  } 
+  
+  scrollToBottom(): void {
+    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;                
+   }
 
   async getChannelRoom() {
     this.route.params.subscribe((params) => {
@@ -71,8 +81,8 @@ export class ChannelsComponent implements OnInit {
           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
           this.allMessages.push(message);
         }
-      })
-    })
+      });
+    });
   }
 
 

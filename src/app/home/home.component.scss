@@ -20,13 +20,7 @@ mat-drawer-container, mat-drawer {
         align-items: center;
     }
 
-    .workspace {
-        height: $height-headers;
-        display: flex;
-        align-items: center;
-        gap: $gap-primary;
-        padding: $padding-sidenav-header;
-        border-bottom: $border-primary;
+    .workspace {        
         
         h1 {
             margin: 0;
