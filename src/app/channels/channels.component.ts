@@ -41,7 +41,6 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.user.channelEditor = true;
     this.user.chatEditor = false;
-    this.getChannelRoom();
   }
 
 
@@ -54,7 +53,6 @@ export class ChannelsComponent implements OnInit {
       .then((doc) => {
         this.currentChannel = doc.data();
         this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate')
-        console.log(this.channel.channelId);
       })
     this.loadMessagesInChannel();
   }
@@ -75,24 +73,6 @@ export class ChannelsComponent implements OnInit {
         }
       })
     })
-  }
-
-  postInChannel() {
-    this.saveMsg();
-  }
-
-
-  saveMsg() {
-    // let timestamp = Timestamp.fromDate(new Date()).toDate();
-    let timestamp = serverTimestamp();
-    addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
-      author: this.user.currentUser['userName'],
-      timestamp: timestamp,
-      msg: this.newMessage
-    })
-      .then(() => {
-        alert('message added to firebase channel')
-      });
   }
 
 

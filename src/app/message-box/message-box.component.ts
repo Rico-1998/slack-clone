@@ -58,6 +58,7 @@ export class MessageBoxComponent implements OnInit {
 
 
   check() {
+    var quillEditorTextfield = document.getElementsByClassName("ql-editor");
     if (this.textBoxPath == 'channels') {
       this.channel.postInChannel();
       this.messageForm.reset();
@@ -71,7 +72,7 @@ export class MessageBoxComponent implements OnInit {
       this.chatService.addMessage();
       this.messageForm.reset();
     }
-    // this.messageInput.quillEditor.setContents([]);
+    quillEditorTextfield[0].innerHTML = "";
   }
 
 
