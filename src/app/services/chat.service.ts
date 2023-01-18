@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
+import { ChannelService } from './channel.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -18,10 +19,14 @@ export class ChatService {
   chats: any[] = [];
   currentUser = JSON.parse(localStorage.getItem('user'));
   currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  currentchatMessages = [];
+
 
   constructor(public userService: UserService,
     public route: ActivatedRoute,
-    public router: Router) {
+    public router: Router,
+    public channelService: ChannelService,
+  ) {
   }
 
   setToChatList(user) {
@@ -129,5 +134,26 @@ export class ChatService {
         }
       }      
     });
+  }
+
+  getChatRoom(chatroomId) {
+    let colRef = query(collection(this.db, 'chats', chatroomId['id'], 'messages'), orderBy('timestamp', 'asc'));
+    onSnapshot(colRef, (snapshot) => {
+      this.currentchatMessages = [];
+      snapshot.docs.forEach((document) => {
+        let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId };
+        timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+        this.currentchatMessages.push(timestampConvertedMsg)
+      })
+    })
+  }
+
+  addMessage() {
+    let colRef = collection(this.db, 'chats', this.currentchatMessages[0].id.id, 'messages');
+    addDoc(colRef, {
+      timestamp: Timestamp.fromDate(new Date()),
+      author: this.userService.currentUser.userName,
+      msg: this.chatMsg
+    })
   }
 }

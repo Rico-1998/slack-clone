@@ -11,7 +11,7 @@
 
   <div class="scroll-box">
 
-    <mat-card class="message-container" *ngFor="let message of chatMessages; let i=index">
+    <mat-card class="message-container" *ngFor="let message of chatService.currentchatMessages; let i=index">
       <div class="img-container">
         <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
       </div>
@@ -28,5 +28,5 @@
 
   </div>
 
-  <app-message-box></app-message-box>
+  <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
 </div>
