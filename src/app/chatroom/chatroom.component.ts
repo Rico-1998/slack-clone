@@ -12,8 +12,6 @@ import { ChannelService } from '../services/channel.service';
   styleUrls: ['./chatroom.component.scss']
 })
 export class ChatroomComponent implements OnInit {
-  currentChat: any;
-  currentChatMembers: any;
   // currentchatMessages = [];
   textBoxPath: string = 'chatroom';
 

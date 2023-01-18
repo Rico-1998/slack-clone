@@ -19,6 +19,8 @@ export class ChatService {
   chats: any[] = [];
   currentUser = JSON.parse(localStorage.getItem('user'));
   currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  currentChat: any;
+  currentChatMembers: any;
   currentchatMessages = [];
 
 
@@ -137,6 +139,9 @@ export class ChatService {
   }
 
   getChatRoom(chatroomId) {
+    let chatId = chatroomId['id'];
+    this.currentChat = this.chats.filter(a => a.id == chatId);
+    this.currentChatMembers = this.currentChat[0]['otherUsers'];
     let colRef = query(collection(this.db, 'chats', chatroomId['id'], 'messages'), orderBy('timestamp', 'asc'));
     onSnapshot(colRef, (snapshot) => {
       this.currentchatMessages = [];
