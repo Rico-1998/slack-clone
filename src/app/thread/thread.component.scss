@@ -8,13 +8,18 @@
     flex-direction: column;
     justify-content: space-between;
 
-    .close {
-        cursor: pointer;
+    .heading {
+        justify-content: space-between;
+     
+        .close {
+            cursor: pointer;
+        }
     }
 
     .thread-content-container {
         height: 100%;
         overflow: hidden;
+
 
         .scroll-box {
             
