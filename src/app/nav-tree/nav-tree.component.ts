@@ -50,7 +50,7 @@ export class NavTreeComponent implements OnInit {
     //     }
     //   }
     // });
-    this.chatService.getChats();
+    // this.chatService.getChats();
 
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
       this.channels = [];

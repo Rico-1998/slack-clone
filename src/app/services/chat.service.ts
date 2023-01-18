@@ -107,21 +107,27 @@ export class ChatService {
       this.chats = [];
       snapshot.docs.forEach((doc) => {
         let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+        let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+        if(otherUsers.length == 0) {
+          const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
+        } else {
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+        }
       });
       // console.log(this.chats);
       // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
       for (let i = 0; i < this.chats.length; i++) {
         let otherUsers = this.chats[i].otherUsers;
         for (let i = 0; i < otherUsers.length; i++) {
-          const actualMember = otherUsers[i];
+          let actualMember = otherUsers[i];        
           await getDoc(doc(this.db, 'users', actualMember))
             .then((docData) => {
               let index = otherUsers.indexOf(actualMember);
-              otherUsers[index] = docData.data();
+              otherUsers[index] = docData.data(); 
             })
         }
-      }
+      }      
     });
   }
 }

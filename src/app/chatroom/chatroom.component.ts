@@ -34,7 +34,10 @@ export class ChatroomComponent implements OnInit {
 
   getChatRoom(chatroomId) {
     this.chatMessages = [];
-    let colRef = collection(this.chatService.db, 'chats', chatroomId['id'], 'messages');
+    let chatId = chatroomId['id'];
+    this.currentChat = this.chatService.chats.filter(a => a.id == chatId);
+    this.currentChatMembers = this.currentChat[0]['otherUsers'];
+    let colRef = collection(this.chatService.db, 'chats', chatId, 'messages');
     onSnapshot(colRef, (snapshot) => {
       snapshot.docs.forEach((document) => {
         let timestampConvertedMsg = { ...(document.data() as object), id: document.id };
