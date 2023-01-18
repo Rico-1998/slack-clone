@@ -14,34 +14,20 @@ import { ChannelService } from '../services/channel.service';
 export class ChatroomComponent implements OnInit {
   currentChat: any;
   currentChatMembers: any;
-  chatMessages = [];
+  // currentchatMessages = [];
+  textBoxPath: string = 'chatroom';
+
 
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
-    public channelService: ChannelService,
   ) {
   }
 
   ngOnInit(): void {
-    this.chatService.getChats();
-    setTimeout(() => {
-      this.route.params.subscribe(chatroomId => {
-        this.getChatRoom(chatroomId);
-      });
-    }, 1500);
-  }
-
-  getChatRoom(chatroomId) {
-    this.chatMessages = [];
-    let colRef = collection(this.chatService.db, 'chats', chatroomId['id'], 'messages');
-    onSnapshot(colRef, (snapshot) => {
-      snapshot.docs.forEach((document) => {
-        let timestampConvertedMsg = { ...(document.data() as object), id: document.id };
-        timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-        this.chatMessages.push(timestampConvertedMsg)
-      })
-    })
+    this.route.params.subscribe(chatroomId => {
+      this.chatService.getChatRoom(chatroomId);
+    });
   }
 
 }

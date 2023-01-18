@@ -65,6 +65,6 @@
 
     .scroll-box {
         height: calc(100% - 50px - 137.5px);
-
+        overflow-y: auto;
     }
 }

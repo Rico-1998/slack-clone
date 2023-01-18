@@ -60,22 +60,28 @@ export class MessageBoxComponent implements OnInit {
   check() {
     if (this.textBoxPath == 'channels') {
       this.channel.postInChannel();
+      this.messageForm.reset();
     } else if (this.textBoxPath == 'create-chat') {
       this.chatService.createChatRoom();
+      this.messageForm.reset();
     } else if (this.textBoxPath == 'thread') {
       this.channel.postComment();
+      this.messageForm.reset();
+    } else if (this.textBoxPath == 'chatroom') {
+      this.chatService.addMessage();
+      this.messageForm.reset();
     }
     // this.messageInput.quillEditor.setContents([]);
   }
 
 
-  checkEditor(event) {
+  checkEditor(event: any) {
     if (event.event === 'text-change') {
-      this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
-      this.channel.newComment = event.html.replace(/<[^>]+>/g, '');
-      this.chatService.chatMsg = event.html.replace(/<[^>]+>/g, '');
-      // if (this.chatService.chatMsg !== null) {
-      if (this.messageText !== null) {
+      let text = event.html;
+      if (text !== null) {
+        this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
+        this.channel.newComment = event.html.replace(/<[^>]+>/g, '');
+        this.chatService.chatMsg = event.html.replace(/<[^>]+>/g, '');
         this.valid = true;
       } else {
         this.valid = false;
