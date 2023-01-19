@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
+import { ChannelService } from './channel.service';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -15,10 +16,20 @@ export class ChatService {
   db = getFirestore();
   chatsRef = collection(this.db, 'chats');
   chatMsg = [];
+  chats: any[] = [];
+  currentUser = JSON.parse(localStorage.getItem('user'));
+  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  currentChat: any;
+  currentChatMembers: any;
+  currentchatMessages = [];
+
 
   constructor(public userService: UserService,
     public route: ActivatedRoute,
-    public router: Router) { }
+    public router: Router,
+    public channelService: ChannelService,
+  ) {
+  }
 
   setToChatList(user) {
     // this.selectedUserList.push(this.userService.currentUser);
@@ -63,7 +74,7 @@ export class ChatService {
   saveMsg(roomId) { // Bei add vergibt firebase automatisch eine id
     addDoc(collection(this.db, 'chats', roomId, 'messages'), {
       timestamp: Timestamp.fromDate(new Date()),
-      author: this.userService.currentUser.id,
+      author: this.userService.currentUser.userName,
       msg: this.chatMsg,
     })
       .then(() => {
@@ -85,7 +96,6 @@ export class ChatService {
     // this.foundedUsers = [];    
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
-    debugger
     if (!((await chatRoomExists).data())) {
       this.setChatRoom(roomId);
       this.saveMsg(roomId);
@@ -98,4 +108,63 @@ export class ChatService {
     // value aus dem texteditor holen
     // format chatMsg bearbeiten (siehe andere Gruppe)
   }
+
+  getChats() {
+    onSnapshot(this.currentUserChats, async (snapshot) => {
+      this.chats = [];
+      snapshot.docs.forEach((doc) => {
+        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+        if(otherUsers.length == 0) {
+          const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
+        } else {
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+        }
+      });
+      // console.log(this.chats);
+      // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
+      for (let i = 0; i < this.chats.length; i++) {
+        let otherUsers = this.chats[i].otherUsers;
+        for (let i = 0; i < otherUsers.length; i++) {
+          let actualMember = otherUsers[i];        
+          await getDoc(doc(this.db, 'users', actualMember))
+            .then((docData) => {
+              let index = otherUsers.indexOf(actualMember);
+              otherUsers[index] = docData.data(); 
+            })
+        }
+      }      
+    });
+  }
+
+  getChatRoom(chatroomId) {
+    let chatId = chatroomId['id'];
+    this.currentChat = this.chats.filter(a => a.id == chatId);
+    this.currentChatMembers = this.currentChat[0]['otherUsers'];
+    let colRef = query(collection(this.db, 'chats', chatroomId['id'], 'messages'), orderBy('timestamp', 'asc'));
+    onSnapshot(colRef, (snapshot) => {
+      this.currentchatMessages = [];
+      snapshot.docs.forEach((document) => {
+        let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId };
+        timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+        this.currentchatMessages.push(timestampConvertedMsg)
+      });
+    })
+  }
+
+  addMessage() {
+    let colRef = collection(this.db, 'chats', this.currentchatMessages[0].id.id, 'messages');
+    addDoc(colRef, {
+      timestamp: Timestamp.fromDate(new Date()),
+      author: this.userService.currentUser.userName,
+      msg: this.chatMsg
+    }); 
+  }
+
+  showNewestMessage() {
+    let objDiv = document.getElementById("scrollBox");
+    objDiv.scrollTop = objDiv.scrollHeight;
+  }
 }
+

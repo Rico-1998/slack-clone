@@ -1,61 +1,41 @@
+@import 'src/modules/_vars';
+
 .thread-main-container {
-    width: 400px;
-    border-left: 1px solid #313337;
-    min-height: calc(100vh - 47px);
-    position: relative;
+    width: 300px;
+    border-left: 1px solid $border-clr;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    .title {
-        display: flex;
-        align-items: center;
+    .heading {
         justify-content: space-between;
-        height: 51px;
-        border-bottom: 1px solid #323438;
-        font-size: 16px;
-        font-weight: bold;
-        padding-left: 16px;
-        padding-right: 16px;
-
+     
         .close {
             cursor: pointer;
         }
     }
 
     .thread-content-container {
-        .message-container {
-            margin-top: 8px;
-            padding-bottom: 8px;
-            padding-left: 16px;
-            line-height: 24px;
-            background-color: transparent;
-            color: #D1D2D3;
-            display: flex;
-            border-bottom: 1px solid #323438;
+        height: 100%;
+        overflow: hidden;
 
-            .img-container {
-                margin-right: 24px;
-            }
 
-            .message-content {
-                display: flex;
-                flex-direction: column;
-            }
-        }
-
-        .comment-container {
-            display: flex;
-            padding-left: 30px;
-            margin: 10px 0;
-
-            .comment-content {
-                margin-left: 24px;
+        .scroll-box {
+            
+            .comment-container {
+                background-color: transparent;
+                color: #D1D2D3;
+                display: flex !important;
+                gap: 25px;
+                border-bottom: 1px solid $border-clr;
+                
+                .comment-content {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                }
             }
         }
+        } 
     }
-
-    .message-box {
-        position: fixed;
-        bottom: 0;
-    }
-
- 
-}

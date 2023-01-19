@@ -1,18 +1,13 @@
 @import 'src/modules/_vars';
 
 
-:host {
+.chatroomContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 100%;
-}
 
-
-mat-toolbar-row {
-    padding: 0 16px;
-    border: 1px solid #313438;
-    height: 50px;
-    font-size: 18px;
-
-    .img-container-chatroom {
+        .img-container-chatroom {
         position: relative;
         height: $size-profile-img-chatroom;
         aspect-ratio: 1;
@@ -24,7 +19,8 @@ mat-toolbar-row {
             border-radius: $br-primary;
         }
 
-        .sidenav-shrink {}
+        }
+    
 
-    }
+    
 }
