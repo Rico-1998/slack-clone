@@ -41,7 +41,7 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.user.channelEditor = true;
     this.user.chatEditor = false;
-    this.getChannelRoom();
+    // this.getChannelRoom();
   }
 
 
