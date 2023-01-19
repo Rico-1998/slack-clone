@@ -2,7 +2,7 @@
   <div class="channels-content-container">
     <div class="heading"># {{ currentChannel?.channelName }}</div>
     <div class="scroll-box" #scrollBox>
-      <!-- <mat-card class="welcome-card">
+      <mat-card class="welcome-card">
         <div class="leftframe">
           <span class="material-symbols-outlined"> tag </span>
         </div>
@@ -22,7 +22,7 @@
             ></span
           >
         </mat-card-content>
-      </mat-card> -->
+      </mat-card>
       <mat-card
         class="message-container"
         *ngFor="let message of allMessages; let i = index"
@@ -39,9 +39,7 @@
             <strong>{{ message.author | titlecase }}</strong>
             {{ message.timestamp }}
           </div>
-          <span>
-            {{ message.msg }}
-          </span>
+          <span [innerHTML]="message.msg"></span>
           <span class="open-thread-link" (click)="openThread(message.id)"
             >{{ message.comments }} Antworten</span
           >

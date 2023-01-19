@@ -20,9 +20,7 @@
             }}</strong>
             {{ this.channel.threadMessage?.timestamp }}
           </div>
-          <span>
-            {{ this.channel.threadMessage?.msg }}
-          </span>
+          <span [innerHTML]="this.channel.threadMessage?.msg"></span>
         </div>
       </mat-card>
     </div>
