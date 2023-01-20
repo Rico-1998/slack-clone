@@ -53,7 +53,7 @@ export class MessageBoxComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.userService.currentUser$);
+    // console.log(this.userService.currentUser$);
   }
 
 

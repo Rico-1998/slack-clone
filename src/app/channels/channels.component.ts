@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
-import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
 import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
@@ -9,6 +8,7 @@ import { timestamp } from 'rxjs';
 import { MatDialog} from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
 // import { query } from '@angular/animations';
 
 
@@ -33,22 +33,21 @@ export class ChannelsComponent implements OnInit {
   messageEditable: boolean = false;
 
   constructor(
-    public user: UserService,
+    public userService : UserService,
     private route: ActivatedRoute,
     public channel: ChannelService,
     public router: Router,
     public dialog: MatDialog,
-  ) {
-    route.params.subscribe(val => {
-      this.getChannelRoom();
-    });
-  }
-
-
-  ngOnInit() {
-    this.user.channelEditor = true;
-    this.user.chatEditor = false;
-    this.user.currentUser = this.currentUserName;
+    ) {
+      route.params.subscribe(val => {
+        this.getChannelRoom();
+      });
+    }
+    
+    
+    ngOnInit() {
+      this.userService.channelEditor = true;
+      this.userService.chatEditor = false;
     setTimeout(() => {
       this.scrollToBottom();
     }, 0);
@@ -70,7 +69,7 @@ export class ChannelsComponent implements OnInit {
     await getDoc(document)
       .then((doc) => {
         this.currentChannel = doc.data();
-        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');
+        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');        
       })
       this.loadMessagesInChannel();
   }
@@ -78,6 +77,7 @@ export class ChannelsComponent implements OnInit {
 
   async loadMessagesInChannel() {
     this.allMessages = [];
+    this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     await onSnapshot(q, (snapshot) => {
@@ -88,21 +88,11 @@ export class ChannelsComponent implements OnInit {
           let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
           this.allMessages.push(message);
+          this.channel.allMessages.push(message);
         }
       });
     });
   }
-
-
-  openDeleteMessageDialog() {
-    this.dialog.open(DialogDeleteMessageComponent);
-  }
-
-
-  deleteMessage() {
-    console.log(this.allMessages);
-  }
-
 
   openThread(id) {
     this.channel.threadId = id;
@@ -111,28 +101,4 @@ export class ChannelsComponent implements OnInit {
     this.channel.loadMessageToThread();
   }
 
-  checkIfUserIsAuthor(i){ // function to check if logged User is Author of the message. If so, the edit and delete Message in menu will be enabled
-    if(this.user.currentUser$ == this.allMessages[i].author) {
-      this.messageEditable = true;
-    }
-  }
-
-  editMessage(i){// Funktion zum editieren der NAchricht
-  }
-
-
-  openDialogDeleteMessage(i){//funktion zum öffnen eines Dialogs; Nachfrage ob wirklich gelöscht werden soll
-
-  }
-
 }
-
-
-// <mat-menu #msgMenu="matMenu">
-//             <button class="btnAfterMenu" (click)="editMessage(i)" mat-menu-item>
-//               edit message
-//             </button>
-//             <button class="btnAfterMenu" (click)="openDialog()" mat-button color="warn">
-//               delete message
-//             </button>
-//           </mat-menu>
