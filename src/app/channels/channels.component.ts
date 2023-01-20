@@ -6,7 +6,7 @@ import { ChannelService } from '../services/channel.service';
 import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog} from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
 // import { query } from '@angular/animations';
@@ -20,12 +20,17 @@ import { ChatService } from '../services/chat.service';
 export class ChannelsComponent implements OnInit {
   @ViewChild('scrollBox') private scrollBox: ElementRef;
   db = getFirestore();
+  public displayEditMenu;
+  messageToEdit: any;
   channelId: any;
   currentChannel: any;
+  currentUserName: any;
   allMessages: any[] = [];
   newMessage: Message;
   showBtn: boolean = false;
   textBoxPath: string = 'channels';
+  currentMessage: any;
+  messageEditable: boolean = false;
 
   constructor(
     public user: UserService,
@@ -43,7 +48,8 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.user.channelEditor = true;
     this.user.chatEditor = false;
-    this.scrollToBottom();        
+    this.scrollToBottom();
+    this.user.currentUser = this.currentUserName;
   }
 
   ngAfterViewChecked() {        
@@ -62,9 +68,9 @@ export class ChannelsComponent implements OnInit {
     await getDoc(document)
       .then((doc) => {
         this.currentChannel = doc.data();
-        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate')
+        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');
       })
-    this.loadMessagesInChannel();
+      this.loadMessagesInChannel();
   }
 
 
@@ -103,4 +109,28 @@ export class ChannelsComponent implements OnInit {
     this.channel.loadMessageToThread();
   }
 
+  checkIfUserIsAuthor(i){ // function to check if logged User is Author of the message. If so, the edit and delete Message in menu will be enabled
+    if(this.user.currentUser$ == this.allMessages[i].author) {
+      this.messageEditable = true;
+    }
+  }
+
+  editMessage(i){// Funktion zum editieren der NAchricht
+  }
+
+
+  openDialogDeleteMessage(i){//funktion zum öffnen eines Dialogs; Nachfrage ob wirklich gelöscht werden soll
+
+  }
+
 }
+
+
+// <mat-menu #msgMenu="matMenu">
+//             <button class="btnAfterMenu" (click)="editMessage(i)" mat-menu-item>
+//               edit message
+//             </button>
+//             <button class="btnAfterMenu" (click)="openDialog()" mat-button color="warn">
+//               delete message
+//             </button>
+//           </mat-menu>

@@ -120,6 +120,7 @@ body {
         display: flex !important;
         gap: 25px;
         border-bottom: 1px solid $border-clr;
+        position: relative;
         
         .message-content {
             display: flex;

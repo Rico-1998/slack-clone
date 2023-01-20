@@ -38,6 +38,38 @@
                 font-weight: bold;
             }
         }
-    
-
 }
+
+.btnAfterMenuDisabled{
+    opacity: 0.2;
+    pointer-events:none;
+}
+
+.btnAfterMenuEnabled{
+    opacity: 1;
+    cursor: pointer;
+    pointer-events:all;
+}
+
+
+.showMenuBtn {
+    opacity: 0;
+    z-index: 2;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+  
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .opacity1 {
+    opacity: 1 !important;
+  }
