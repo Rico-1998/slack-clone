@@ -32,9 +32,7 @@
           <strong>{{ message.author | titlecase }}</strong>
           {{ message.timestamp }}
         </div>
-        <span>
-          {{ message.msg }}
-        </span>
+        <span [innerHTML]="message.msg"></span>
         <span class="open-thread-link">{{ message.comments }} Antworten</span>
       </div>
     </mat-card>

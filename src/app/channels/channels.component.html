@@ -2,7 +2,7 @@
   <div class="channels-content-container">
     <div class="heading"># {{ currentChannel?.channelName }}</div>
     <div class="scroll-box" #scrollBox>
-      <!-- <mat-card class="welcome-card">
+      <mat-card class="welcome-card">
         <div class="leftframe">
           <span class="material-symbols-outlined"> tag </span>
         </div>
@@ -22,39 +22,69 @@
             ></span
           >
         </mat-card-content>
-      </mat-card> -->
-      <mat-card class="message-container" *ngFor="let message of allMessages; let i = index" 
-      (mouseover)="displayEditMenu = i" (mouseleave)="displayEditMenu = -1">
+      </mat-card>
+      <mat-card
+        class="message-container"
+        *ngFor="let message of allMessages; let i = index"
+        (mouseover)="displayEditMenu = i"
+        (mouseleave)="displayEditMenu = -1"
+      >
         <div class="img-container">
-          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+          <img
+            class="profile-img"
+            src="assets/img/profile-img.jpg"
+            alt="profile-img"
+          />
         </div>
         <div class="message-content">
           <div class="">
             <strong>{{ message.author | titlecase }}</strong>
             {{ message.timestamp }}
           </div>
-          <span>
-            {{ message.msg }}
-          </span>
-          <span class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
+          <span [innerHTML]="message.msg"></span>
+          <span class="open-thread-link" (click)="openThread(message.id)"
+            >{{ message.comments }} Antworten</span
+          >
         </div>
-        <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
-          <button class="menuBtn" mat-button [matMenuTriggerFor]="msgMenu" (click)="checkIfUserIsAuthor(i)">
+        <div
+          *ngIf="messageToEdit !== i"
+          [class.opacity1]="displayEditMenu == i"
+          class="showMenuBtn"
+        >
+          <button
+            class="menuBtn"
+            mat-button
+            [matMenuTriggerFor]="msgMenu"
+            (click)="checkIfUserIsAuthor(i)"
+          >
             <mat-icon fontIcon="more_vert"></mat-icon>
           </button>
           <mat-menu #msgMenu="matMenu">
-              <button [ngClass]="{'btnAfterMenuEnabled' : messageEditable}" class="btnAfterMenuDisabled" (click)="editMessage(i)" mat-menu-item>
-                edit message
-              </button>
-            <button [ngClass]="{'btnAfterMenuEnabled' : messageEditable}" class="btnAfterMenuDisabled" (click)="openDialogDeleteMessage(i)" mat-button color="warn">
+            <button
+              [ngClass]="{ btnAfterMenuEnabled: messageEditable }"
+              class="btnAfterMenuDisabled"
+              (click)="editMessage(i)"
+              mat-menu-item
+            >
+              edit message
+            </button>
+            <button
+              [ngClass]="{ btnAfterMenuEnabled: messageEditable }"
+              class="btnAfterMenuDisabled"
+              (click)="openDialogDeleteMessage(i)"
+              mat-button
+              color="warn"
+            >
               delete message
             </button>
           </mat-menu>
-
         </div>
       </mat-card>
     </div>
-    <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
+    <app-message-box
+      class="message-box"
+      [textBoxPath]="textBoxPath"
+    ></app-message-box>
   </div>
   <app-thread *ngIf="channel.threadOpen"></app-thread>
 </div>

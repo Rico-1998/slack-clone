@@ -48,8 +48,10 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.user.channelEditor = true;
     this.user.chatEditor = false;
-    this.scrollToBottom();
     this.user.currentUser = this.currentUserName;
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 0);
   }
 
   ngAfterViewChecked() {        
