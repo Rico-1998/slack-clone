@@ -21,6 +21,9 @@ export class ChannelService {
   threadMessage: any; // In Use
   threadLoading: boolean = false;
   allThreadComments: any = [];
+  allMessages: any[] = [];
+  messageId: string;
+  currentMessage: any;
 
   constructor(
     public user: UserService,
@@ -38,6 +41,8 @@ export class ChannelService {
       .then(() => {
         // alert('message added to firebase channel')
       });
+    console.log('daten aus dem service', this.user.currentUser['userName']);
+
   }
 
   postComment() {
@@ -79,6 +84,35 @@ export class ChannelService {
         }
       })
     })
+  }
+
+  getCurrentMessage(id: string) {
+    this.messageId = id;
+    console.log(this.messageId);
+    return this.allMessages.find(item => item.id === id);
+  }
+
+  checkIfUserIsAuthor(id) { // function to check if logged User is Author of the message. If so, the edit and delete Message in menu will be enabled
+    this.getCurrentMessage(id);
+    this.currentMessage = this.getCurrentMessage(this.messageId);
+    if (this.user.currentUser['userName'] === this.currentMessage.author) {
+      document.getElementById('btnEdit').classList.remove('btnAfterMenuDisabled');
+      document.getElementById('btnOpenDialog').classList.remove('btnAfterMenuDisabled');
+    }
+
+  }
+
+  editMessage() {
+
+  }
+
+  openDeleteMessageDialog() {
+
+  }
+
+
+  deleteMessage() {
+    console.log(this.allMessages);
   }
 
   convertTimestamp(timestamp, type) {

@@ -9,32 +9,17 @@
         <mat-card-content class="welcome-content">
           <span>
             Thats the beginning of this channel
-            <span class="highlight"
-              >#{{ currentChannel?.channelName }}</span
-            > </span
-          ><br />
-          <span>This Channel was created at: {{ currentChannel?.created }}</span
-          ><br />
-          <span
-            >Channeldescription:
-            <span class="highlight"
-              >#{{ currentChannel?.channelDescription }}</span
-            ></span
-          >
+            <span class="highlight">#{{ currentChannel?.channelName }}</span> </span><br />
+          <span>This Channel was created at: {{ currentChannel?.created }}</span><br />
+          <span>Channeldescription:
+            <span class="highlight">#{{ currentChannel?.channelDescription }}</span></span>
         </mat-card-content>
       </mat-card>
-      <mat-card
-        class="message-container"
-        *ngFor="let message of allMessages; let i = index"
-        (mouseover)="displayEditMenu = i"
-        (mouseleave)="displayEditMenu = -1"
-      >
+      <mat-card class="message-container" *ngFor="let message of allMessages; let i = index"
+        (mouseover)="displayEditMenu = i" (mouseleave)="displayEditMenu = -1"
+        (click)="channel.getCurrentMessage(message.id)">
         <div class="img-container">
-          <img
-            class="profile-img"
-            src="assets/img/profile-img.jpg"
-            alt="profile-img"
-          />
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
         </div>
         <div class="message-content">
           <div class="">
@@ -42,49 +27,26 @@
             {{ message.timestamp }}
           </div>
           <span [innerHTML]="message.msg"></span>
-          <span class="open-thread-link" (click)="openThread(message.id)"
-            >{{ message.comments }} Antworten</span
-          >
+          <span class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
         </div>
-        <div
-          *ngIf="messageToEdit !== i"
-          [class.opacity1]="displayEditMenu == i"
-          class="showMenuBtn"
-        >
-          <button
-            class="menuBtn"
-            mat-button
-            [matMenuTriggerFor]="msgMenu"
-            (click)="checkIfUserIsAuthor(i)"
-          >
+        <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
+          <button class="menuBtn" mat-button [matMenuTriggerFor]="msgMenu" (click)="channel.checkIfUserIsAuthor(message.id)">
             <mat-icon fontIcon="more_vert"></mat-icon>
           </button>
           <mat-menu #msgMenu="matMenu">
-            <button
-              [ngClass]="{ btnAfterMenuEnabled: messageEditable }"
-              class="btnAfterMenuDisabled"
-              (click)="editMessage(i)"
-              mat-menu-item
-            >
+            <button #editBtn id="btnEdit" class="btnAfterMenuDisabled"
+              (click)="channel.editMessage()" mat-menu-item>
               edit message
             </button>
-            <button
-              [ngClass]="{ btnAfterMenuEnabled: messageEditable }"
-              class="btnAfterMenuDisabled"
-              (click)="openDialogDeleteMessage(i)"
-              mat-button
-              color="warn"
-            >
+            <button id="btnOpenDialog" class="btnAfterMenuDisabled"
+              (click)="channel.openDeleteMessageDialog()" mat-button color="warn">
               delete message
             </button>
           </mat-menu>
         </div>
       </mat-card>
     </div>
-    <app-message-box
-      class="message-box"
-      [textBoxPath]="textBoxPath"
-    ></app-message-box>
+    <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
   </div>
   <app-thread *ngIf="channel.threadOpen"></app-thread>
 </div>

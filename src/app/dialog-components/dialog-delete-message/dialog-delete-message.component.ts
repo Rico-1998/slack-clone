@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChannelsComponent } from 'src/app/channels/channels.component';
-import { Firestore } from '@angular/fire/firestore';
-import { MatDialogRef } from '@angular/material/dialog';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { ChannelService } from 'src/app/services/channel.service';
 
 @Component({
   selector: 'app-dialog-delete-message',
@@ -13,7 +10,7 @@ export class DialogDeleteMessageComponent implements OnInit {
   messageId: any;
 
   constructor(
-    public channel: ChannelsComponent,
+    public channel: ChannelService,
   ) { }
 
   ngOnInit(): void {
