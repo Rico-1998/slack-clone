@@ -99,7 +99,7 @@ export class AuthService {
     signOut(this.auth)
       .then(() => {
         localStorage.removeItem('user');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);

@@ -1,0 +1,37 @@
+<div class="main-content">
+
+    <mat-card>
+        <div class="user-info-box">
+
+            <div class="img-container">
+                <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+            </div>
+
+            <div class="user-info">
+
+                <mat-card-title *ngIf="userService.currentUser$ | async as currentUser">
+                    {{currentUser.userName}}
+                </mat-card-title>
+
+                <div class="online-status">
+                    <div class="dot-sidenav online"></div>
+                    <span>Aktiv</span>
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <mat-selection-list [multiple]="false">
+            <mat-list-item>
+                <div matListItemTitle>
+                    <span (click)="logout()">Logout</span>
+                </div>
+            </mat-list-item>
+
+        </mat-selection-list>
+
+    </mat-card>
+
+</div>

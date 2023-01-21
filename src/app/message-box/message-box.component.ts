@@ -34,8 +34,8 @@ export class MessageBoxComponent implements OnInit {
       ['blockquote', 'code-block'],
       [{ 'list': 'ordered' },
       { 'list': 'bullet' }],
-      ['link'],
-      ['emoji']                      // link and image, video
+      ['link', 'image'],
+      ['emoji']                   // link and image, video
     ]
   };
 

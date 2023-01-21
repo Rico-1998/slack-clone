@@ -20,23 +20,27 @@ export class ChatroomComponent implements OnInit {
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     setTimeout(() => {
-    this.route.params.subscribe(chatroomId => {
-      this.chatService.getChatRoom(chatroomId);
-    });
+      this.route.params.subscribe(chatroomId => {
+        this.chatService.getChatRoom(chatroomId);
+      });
       this.scrollToBottom();
-    }, 1500);      
+    }, 1500);
   }
 
-  ngAfterViewChecked() {        
-    this.scrollToBottom();        
-  } 
-  
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
   scrollToBottom(): void {
-   this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;                
+    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+  }
+
+  deleteMessage(message: any) {
+    console.log(message);
   }
 
 }

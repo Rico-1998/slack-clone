@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, limit, onSnapshot, orderBy } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { collection, getDocs, getFirestore, query } from '@firebase/firestore';
+import { ChatService } from '../services/chat.service';
+import { UserService } from '../services/user.service';
+import { UserSettingsComponent } from '../user-settings/user-settings.component';
 
 @Component({
   selector: 'app-searchbar',
@@ -13,7 +17,10 @@ export class SearchbarComponent implements OnInit {
   colref: any = collection(this.db, 'users');
   sortedUser: any = query(this.colref, orderBy('name'), limit(5));
 
-  constructor(private firestore: Firestore) { }
+  constructor(
+    public chatService: ChatService,
+    public dialog: MatDialog,
+    public userService: UserService) { }
 
   ngOnInit(): void {
     let data = [];
@@ -29,10 +36,8 @@ export class SearchbarComponent implements OnInit {
     }));
   }
 
-  createChat(id: string) {
-    console.log(id);
-
+  openSettings() {
+    this.dialog.open(UserSettingsComponent, { panelClass: 'custom-dialog-container' })
   }
-
 
 }

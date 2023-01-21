@@ -19,6 +19,10 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+.custom-dialog-container .mat-dialog-container {
+    padding: unset;
+}
+
 #emoji-palette {
     top: -165px !important;
     left: 0px !important;
@@ -111,33 +115,34 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    height: 100%; 
+    height: 100%;
     overflow-y: auto;
 }
-    .message-container {
-        background-color: transparent;
-        color: #D1D2D3;
-        display: flex !important;
-        gap: 25px;
-        border-bottom: 1px solid $border-clr;
-        position: relative;
-        
-        .message-content {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            
-            .open-thread-link {
-                cursor: pointer;
-                color: $txt-clr-link;
-                
-                &:hover {
+
+.message-container {
+    background-color: transparent;
+    color: #D1D2D3;
+    display: flex !important;
+    gap: 25px;
+    border-bottom: 1px solid $border-clr;
+    position: relative;
+
+    .message-content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        .open-thread-link {
+            cursor: pointer;
+            color: $txt-clr-link;
+
+            &:hover {
                 text-decoration: underline;
                 filter: brightness(1.2);
             }
         }
     }
-    
+
 }
 
 
@@ -156,80 +161,88 @@ body {
 //Scollbar Styling /* width */
 ::-webkit-scrollbar {
     width: 5px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
+}
+
+/* Track */
+::-webkit-scrollbar-track {
     background: transparent;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: #ABABAD;
     -webkit-border-radius: 5px;
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
     background: #cacacc;
-    
-  }
 
-     /* loading animation */
-     #loading-container {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+}
+
+/* loading animation */
+#loading-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #D1D2D3;
+    ;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #D1D2D3 transparent transparent transparent;
+}
+
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
     }
 
-    .lds-ring {
-        display: inline-block;
-        position: relative;
-        width: 80px;
-        height: 80px;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+    100% {
+        transform: rotate(360deg);
     }
+}
 
-    .lds-ring div {
-        box-sizing: border-box;
-        display: block;
-        position: absolute;
-        width: 64px;
-        height: 64px;
-        margin: 8px;
-        border: 8px solid #D1D2D3;
-        ;
-        border-radius: 50%;
-        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        border-color: #D1D2D3 transparent transparent transparent;
-    }
-
-    .lds-ring div:nth-child(1) {
-        animation-delay: -0.45s;
-    }
-
-    .lds-ring div:nth-child(2) {
-        animation-delay: -0.3s;
-    }
-
-    .lds-ring div:nth-child(3) {
-        animation-delay: -0.15s;
-    }
-
-    @keyframes lds-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
+.del-menu {
+    position: absolute;
+    right: 50px;
+    top: -45px;
+    background-color: $bgClr-newChat;
+    border: $border-primary;
+}

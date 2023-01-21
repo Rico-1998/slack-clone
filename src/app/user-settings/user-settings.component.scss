@@ -1,0 +1,69 @@
+@import 'src/modules/_vars';
+
+.main-content {
+    padding: unset;
+
+    mat-card {
+        width: 300px;
+        background-color: #333333;
+        padding: unset;
+        position: absolute;
+        top: 47px;
+        right: 15px;
+        border-radius: $br-secondary;
+        padding: 25px 0;
+
+        .user-info-box {
+            display: flex;
+            align-items: center;
+            color: $txt-clr-primary;
+            gap: 15px;
+            padding: 0 25px;
+
+            mat-card-title {
+                font-size: $fs-m;
+                margin: unset;
+            }
+
+            .user-info {
+                display: flex;
+                flex-direction: column;
+
+                .online-status {
+                    display: flex;
+                    align-items: center;
+                    gap: $gap-primary
+                }
+
+                .dot-sidenav {
+                    position: unset;
+                    outline: none;
+                }
+            }
+        }
+
+
+        mat-list-item {
+            height: 30px !important;
+            color: $txt-clr-primary;
+            transition: $transition-hover;
+            padding: 0 25px;
+
+            &:hover {
+                background-color: $txt-clr-link;
+            }
+
+            .listItem {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: $gap-primary;
+                padding: $padding-sidenav-content;
+                font-size: $fs-m;
+            }
+
+        }
+    }
+
+}
