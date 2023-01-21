@@ -30,8 +30,8 @@
           <span class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
         </div>
         <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
-          <button class="menuBtn" mat-button [matMenuTriggerFor]="msgMenu" (click)="channel.checkIfUserIsAuthor(message.id)">
-            <mat-icon fontIcon="more_vert"></mat-icon>
+          <button mat-mini-fab color="basic" [matMenuTriggerFor]="msgMenu" (click)="channel.checkIfUserIsAuthor(message.id)">
+            <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #msgMenu="matMenu">
             <button id="btnEdit" class="btnAfterMenuDisabled"
