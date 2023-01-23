@@ -31,7 +31,6 @@ export class AuthService {
   ) {
     this.isLoggedIn();
     onAuthStateChanged(this.auth, (user) => {
-      // console.log('user status changed:', user);
       if (user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
@@ -83,7 +82,7 @@ export class AuthService {
         setDoc(doc(this.colRef, cred.user.uid), {
           userName: name,
           id: cred.user.uid,
-          email: email
+          email: email,
         });
         this.dialog.open(DialogSuccessMessageComponent);
         form.reset();
@@ -110,10 +109,6 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
-        // getDoc(doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid))
-        //   .then((data) => {
-        //     console.log(data.data());
-        //   })
         console.log('user logged in:', cred.user)
         this.loggedIn = true;
         this.router.navigate(['/home']);

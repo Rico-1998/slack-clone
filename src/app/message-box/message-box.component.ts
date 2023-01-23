@@ -74,6 +74,8 @@ export class MessageBoxComponent implements OnInit {
     } else if (this.textBoxPath == 'chat-thread') {
       this.chatService.msgToChatThread();
       this.messageForm.reset();
+    } else if (this.textBoxPath == 'edit') {
+      this.chatService.editMsg(this.chatService.chatMsg);
     }
     quillEditorTextfield[0].innerHTML = "";
   }

@@ -20,6 +20,7 @@ export class UserSettingsComponent implements OnInit {
   logout() {
     this.dialogRef.close()
     this.auth.logout();
+    this.auth.loggedIn = false;
   }
 
 }

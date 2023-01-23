@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-start-screen',
@@ -22,4 +23,6 @@ export class StartScreenComponent implements OnInit {
   openSignUp() {
     this.dialog.open(RegisterComponent);
   }
+
+
 }

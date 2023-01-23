@@ -27,11 +27,12 @@ export class UserService {
     })
 
     this.authService.loggedUser?.subscribe((user$) => {
-      getDoc(doc(this.userRef, user$.uid as string))
-        .then((user) => {
-          this.currentUser = user.data();
-          console.log(this.currentUser);
-        })
+      if (user$) {
+        getDoc(doc(this.userRef, user$.uid as string))
+          .then((user) => {
+            this.currentUser = user.data();
+          })
+      }
     })
 
     this.currentUser$ = this.authService.loggedUser.pipe(
