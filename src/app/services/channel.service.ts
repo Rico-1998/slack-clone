@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, timestamp } from 'rxjs';
-import { addDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
-import { MessageBoxComponent } from '../message-box/message-box.component';
 import { Message } from 'src/modules/messages.class';
-import { ChannelsComponent } from '../channels/channels.component';
+import { MatDialog, MatDialogRef, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
+import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +20,14 @@ export class ChannelService {
   threadMessage: any; // In Use
   threadLoading: boolean = false;
   allThreadComments: any = [];
+  allMessages: any[] = [];
+  messageId: string;
+  currentMessage: any;
 
   constructor(
     public user: UserService,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
   ) { }
 
 
@@ -36,7 +39,6 @@ export class ChannelService {
       msg: this.newMessage
     })
       .then(() => {
-        // alert('message added to firebase channel')
       });
   }
 
@@ -80,6 +82,30 @@ export class ChannelService {
       })
     })
   }
+
+  getCurrentMessage(id: string) {
+    this.messageId = id;
+    return this.allMessages.find(item => item.id === id);
+  }
+
+  checkIfUserIsAuthor(id) {
+    this.getCurrentMessage(id);
+    this.currentMessage = this.getCurrentMessage(this.messageId);
+    if (this.user.currentUser['userName'] === this.currentMessage.author) {
+      document.getElementById('btnEdit').classList.remove('btnAfterMenuDisabled');
+      document.getElementById('btnOpenDialog').classList.remove('btnAfterMenuDisabled');
+    }
+
+  }
+
+  editMessage() {
+
+  }
+
+  openDeleteMessageDialog() {
+    this.dialog.open(DialogDeleteMessageComponent)
+  }
+
 
   convertTimestamp(timestamp, type) {
     let date = timestamp?.toDate();

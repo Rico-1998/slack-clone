@@ -53,7 +53,7 @@ export class MessageBoxComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.userService.currentUser$);
+    // console.log(this.userService.currentUser$);
   }
 
 
@@ -80,9 +80,9 @@ export class MessageBoxComponent implements OnInit {
     if (event.event === 'text-change') {
       let text = event.html;
       if (text !== null) {
-        this.channel.newMessage = event.html.replace(/<[^>]+>/g, '');
-        this.channel.newComment = event.html.replace(/<[^>]+>/g, '');
-        this.chatService.chatMsg = event.html.replace(/<[^>]+>/g, '');
+        this.channel.newMessage = event.html;
+        this.channel.newComment = event.html;
+        this.chatService.chatMsg = event.html;
         this.valid = true;
       } else {
         this.valid = false;

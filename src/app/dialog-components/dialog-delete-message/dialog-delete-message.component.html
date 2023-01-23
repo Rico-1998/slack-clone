@@ -3,15 +3,13 @@
     <h2>Delete message</h2>
     <p>Do you really want to delete this message? This cannot be undone.</p>
   
-    <mat-card *ngFor="let message of channel.allMessages" class="message_card">
+    <mat-card class="message_card">
       <mat-card-header>
         <mat-card-title>
-  
-          <h3>{{ message.author }}</h3>
-          <span class="time">{{ message.timestamp }}</span>
-  
+            <span>{{ channel.currentMessage.author }}</span>
+            <span>{{ channel.currentMessage.timestamp }}</span>
         </mat-card-title>
-        <mat-card-subtitle [innerHTML]="message.message.messageText">{{ message.message.messageText }}</mat-card-subtitle>
+        <mat-card-subtitle [innerHTML]="channel.currentMessage.msg">{{ channel.currentMessage.msg }}</mat-card-subtitle>
       </mat-card-header>
   
     </mat-card>
@@ -21,6 +19,6 @@
   <mat-dialog-actions class="button_container">
   
     <button mat-raised-button mat-dialog-close>cancel</button>
-    <button mat-raised-button (click)="channel.deleteMessage()" color="warn">delete</button>
+    <button mat-raised-button (click)="deleteMessage()" color="warn">delete</button>
   
   </mat-dialog-actions>

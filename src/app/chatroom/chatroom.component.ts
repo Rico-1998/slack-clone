@@ -23,10 +23,12 @@ export class ChatroomComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    setTimeout(() => {
     this.route.params.subscribe(chatroomId => {
       this.chatService.getChatRoom(chatroomId);
     });
-    this.scrollToBottom();        
+      this.scrollToBottom();
+    }, 1500);      
   }
 
   ngAfterViewChecked() {        
