@@ -1,6 +1,8 @@
+@import 'src/modules/_vars';
 .dialog-container{
     width: 400px;
     height: 500px;
+    background-color: $bgClr-newChat;
     // border-radius: 10px;
 
     h1{

@@ -6,6 +6,7 @@ import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
@@ -23,7 +24,7 @@ export class ChannelsComponent implements OnInit {
   public displayEditMenu;
   messageToEdit: any;
   channelId: any;
-  currentChannel: any;
+  // currentChannel: any;
   currentUserName: any;
   allMessages: any[] = [];
   newMessage: Message;
@@ -68,27 +69,30 @@ export class ChannelsComponent implements OnInit {
     let document = doc(this.db, 'channels', this.channel.channelId);
     await getDoc(document)
       .then((doc) => {
-        this.currentChannel = doc.data();
-        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');
+        this.channel.currentChannel = doc.data();
+        this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
       })
     this.loadMessagesInChannel();
   }
 
 
   async loadMessagesInChannel() {
-    this.allMessages = [];
+    // this.allMessages = [];
     this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
-    await onSnapshot(q, (snapshot) => {
+    onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach(async (doc) => {
-        if (!this.allMessages.find(m => m.id == doc.id)) {
-          let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-          // let message = { ...(doc.data() as object), id: doc.id, comments: 4};
-          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-          message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-          this.allMessages.push(message);
-          this.channel.allMessages.push(message);
+        if (!this.channel.allMessages.find(m => m.id == doc.id)) {
+          let docdata = doc.data();//
+          let commentsLenght = 0;
+          onSnapshot(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments'), (snapshot) => {
+            commentsLenght = snapshot.docs.length;
+            let message = { ...(docdata as object), id: doc.id, comments: commentsLenght };
+            message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+            // this.allMessages.push(message);
+            this.channel.allMessages.push(message);
+          });
         }
       });
     });

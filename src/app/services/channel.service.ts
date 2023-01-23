@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, timestamp } from 'rxjs';
-import { addDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
-import { MessageBoxComponent } from '../message-box/message-box.component';
 import { Message } from 'src/modules/messages.class';
-import { ChannelsComponent } from '../channels/channels.component';
+import { MatDialog, MatDialogRef, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
+import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +23,12 @@ export class ChannelService {
   allMessages: any[] = [];
   messageId: string;
   currentMessage: any;
+  currentChannel: any;
 
   constructor(
     public user: UserService,
     private route: ActivatedRoute,
+    public dialog: MatDialog,
   ) { }
 
 
@@ -39,10 +40,7 @@ export class ChannelService {
       msg: this.newMessage
     })
       .then(() => {
-        // alert('message added to firebase channel')
       });
-    console.log('daten aus dem service', this.user.currentUser['userName']);
-
   }
 
   postComment() {
@@ -55,7 +53,7 @@ export class ChannelService {
     })
       .then(() => {
         this.threadLoading = false;
-        console.log('message added')
+        console.log('comment added')
       })
   }
 
@@ -88,11 +86,10 @@ export class ChannelService {
 
   getCurrentMessage(id: string) {
     this.messageId = id;
-    console.log(this.messageId);
     return this.allMessages.find(item => item.id === id);
   }
 
-  checkIfUserIsAuthor(id) { // function to check if logged User is Author of the message. If so, the edit and delete Message in menu will be enabled
+  checkIfUserIsAuthor(id) {
     this.getCurrentMessage(id);
     this.currentMessage = this.getCurrentMessage(this.messageId);
     if (this.user.currentUser['userName'] === this.currentMessage.author) {
@@ -107,13 +104,9 @@ export class ChannelService {
   }
 
   openDeleteMessageDialog() {
-
+    this.dialog.open(DialogDeleteMessageComponent)
   }
 
-
-  deleteMessage() {
-    console.log(this.allMessages);
-  }
 
   convertTimestamp(timestamp, type) {
     let date = timestamp?.toDate();
