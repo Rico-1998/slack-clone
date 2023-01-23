@@ -22,6 +22,12 @@ export class ChatService {
   currentChat: any;
   currentChatMembers: any;
   currentchatMessages = [];
+  loading: boolean = false;
+  threadOpen: boolean = false;
+  threadComments: any[] = [];
+  thread: any;
+  threadMessage;
+
 
 
   constructor(public userService: UserService,
@@ -115,7 +121,7 @@ export class ChatService {
       snapshot.docs.forEach((doc) => {
         let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
         let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
-        if(otherUsers.length == 0) {
+        if (otherUsers.length == 0) {
           const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
           this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
         } else {
@@ -127,14 +133,14 @@ export class ChatService {
       for (let i = 0; i < this.chats.length; i++) {
         let otherUsers = this.chats[i].otherUsers;
         for (let i = 0; i < otherUsers.length; i++) {
-          let actualMember = otherUsers[i];        
+          let actualMember = otherUsers[i];
           await getDoc(doc(this.db, 'users', actualMember))
             .then((docData) => {
               let index = otherUsers.indexOf(actualMember);
-              otherUsers[index] = docData.data(); 
+              otherUsers[index] = docData.data();
             })
         }
-      }      
+      }
     });
   }
 
@@ -146,7 +152,7 @@ export class ChatService {
     onSnapshot(colRef, (snapshot) => {
       this.currentchatMessages = [];
       snapshot.docs.forEach((document) => {
-        let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId };
+        let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId, documentId: document.id };
         timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
         this.currentchatMessages.push(timestampConvertedMsg)
       });
@@ -159,12 +165,48 @@ export class ChatService {
       timestamp: Timestamp.fromDate(new Date()),
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
-    }); 
+    });
   }
 
   showNewestMessage() {
     let objDiv = document.getElementById("scrollBox");
     objDiv.scrollTop = objDiv.scrollHeight;
+  }
+
+  async getCurrentThread() {
+    this.threadComments = [];
+    let colRef = query(collection(this.db, 'chats', this.currentchatMessages[0].id.id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
+    await onSnapshot(colRef, async (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (!this.threadComments.find(c => c.id == doc.id)) {
+          let timestampConvertedMsg = { ...(doc.data() as object), id: doc.id };
+          timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+          this.threadComments.push(timestampConvertedMsg)
+        }
+      })
+    })
+  }
+
+  async loadMessageToThread() {
+    this.loading = true;
+    let document = doc(this.db, 'chats', this.currentchatMessages[0].id.id, 'messages', this.thread.documentId);
+    await getDoc(document)
+      .then((doc) => {
+        this.threadMessage = doc.data();
+        this.threadMessage['timestamp'] = this.channelService.convertTimestamp(this.threadMessage['timestamp'], 'onlyDate');
+        this.loading = false;
+      })
+  }
+
+  msgToChatThread() {
+    this.loading = true;
+    let colRef = collection(this.db, 'chats', this.currentchatMessages[0].id.id, 'messages', this.thread.documentId, 'comments');
+    addDoc(colRef, {
+      timestamp: Timestamp.fromDate(new Date()),
+      author: this.userService.currentUser.userName,
+      msg: this.chatMsg
+    });
+    this.loading = false;
   }
 }
 

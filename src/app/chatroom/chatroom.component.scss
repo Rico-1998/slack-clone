@@ -1,11 +1,17 @@
 @import 'src/modules/_vars';
 
+:host {
+    display: flex;
+    height: 100%;
+}
+
 
 .chatroomContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+    width: 100%;
 
     .img-container-chatroom {
         position: relative;
@@ -28,7 +34,7 @@
             background-color: $bgClr-newChat;
 
             .option-box {
-                // opacity: 1;
+                opacity: 1;
             }
         }
 
@@ -41,7 +47,7 @@
             border-radius: $br-secondary;
             background-color: $bgClr-primary;
             border: $border-primary;
-            // opacity: 0;
+            opacity: 0;
 
             .option {
                 padding: 5px;

@@ -18,7 +18,7 @@
           <mat-icon matTooltip="Reaktion hinzufügen"> add_reaction </mat-icon>
         </div>
         <div class="option">
-          <mat-icon matTooltip="Im Thread antworten"> comment </mat-icon>
+          <mat-icon matTooltip="Im Thread antworten" (click)="openThread(message)"> comment </mat-icon>
         </div>
         <div class="option">
           <mat-icon matTooltip="Lesezeichen hinzufügen"> bookmark </mat-icon>
@@ -30,8 +30,11 @@
 
         <mat-menu #menu="matMenu" class="del-menu">
           <div class="menu-options">
-            <button mat-menu-item>Nachricht bearbeiten</button>
-            <button mat-menu-item class="delete" (click)="deleteMessage(message)">Nachricht löschen</button>
+            <button mat-menu-item *ngIf="userService.currentUser.userName == message.author">Nachricht
+              bearbeiten</button>
+            <button mat-menu-item class="delete" (click)="deleteMessage(message)"
+              *ngIf="userService.currentUser.userName == message.author">Nachricht löschen</button>
+            <button mat-menu-item>Link kopieren</button>
           </div>
         </mat-menu>
       </div>
@@ -47,12 +50,16 @@
         </div>
 
         <span [innerHTML]="message.msg"></span>
-        <span class="open-thread-link">{{ message.comments }} Antworten</span>
+        <!-- <span class="open-thread-link">{{ message.comments }} Antworten</span> -->
 
       </div>
 
     </mat-card>
   </div>
 
-  <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
+  <div>
+    <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
+  </div>
+
 </div>
+<app-chat-thread *ngIf="chatService.threadOpen"></app-chat-thread>

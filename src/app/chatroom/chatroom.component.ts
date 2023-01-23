@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, doc, onSnapshot } from '@angular/fire/firestore';
+import { collection, deleteDoc, doc, onSnapshot } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { getDoc } from '@firebase/firestore';
 import { ChatService } from '../services/chat.service';
 import { ChannelService } from '../services/channel.service';
+import { UserService } from '../services/user.service';
+import { map } from 'rxjs';
 
 
 @Component({
@@ -20,6 +22,7 @@ export class ChatroomComponent implements OnInit {
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
+    public userService: UserService
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +32,7 @@ export class ChatroomComponent implements OnInit {
       });
       this.scrollToBottom();
     }, 1500);
+
   }
 
   ngAfterViewChecked() {
@@ -39,8 +43,15 @@ export class ChatroomComponent implements OnInit {
     this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
   }
 
-  deleteMessage(message: any) {
-    console.log(message);
+  async deleteMessage(message: any) {
+    let actualMsg = doc(this.chatService.db, 'chats', message.id.id, 'messages', message.documentId);
+    await deleteDoc(actualMsg);
+  }
+
+  openThread(message) {
+    this.chatService.thread = message;
+    this.chatService.threadOpen = true;
+    this.chatService.getCurrentThread();
   }
 
 }

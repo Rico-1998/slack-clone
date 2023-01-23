@@ -5,7 +5,7 @@ import { ChannelService } from '../services/channel.service';
 import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
-import { MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
@@ -33,33 +33,33 @@ export class ChannelsComponent implements OnInit {
   messageEditable: boolean = false;
 
   constructor(
-    public userService : UserService,
+    public userService: UserService,
     private route: ActivatedRoute,
     public channel: ChannelService,
     public router: Router,
     public dialog: MatDialog,
-    ) {
-      route.params.subscribe(val => {
-        this.getChannelRoom();
-      });
-    }
-    
-    
-    ngOnInit() {
-      this.userService.channelEditor = true;
-      this.userService.chatEditor = false;
+  ) {
+    route.params.subscribe(val => {
+      this.getChannelRoom();
+    });
+  }
+
+
+  ngOnInit() {
+    this.userService.channelEditor = true;
+    this.userService.chatEditor = false;
     setTimeout(() => {
       this.scrollToBottom();
     }, 0);
   }
 
-  ngAfterViewChecked() {        
-    this.scrollToBottom();        
-  } 
-  
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
   scrollToBottom(): void {
-    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;                
-   }
+    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+  }
 
   async getChannelRoom() {
     this.route.params.subscribe((params) => {
@@ -69,9 +69,9 @@ export class ChannelsComponent implements OnInit {
     await getDoc(document)
       .then((doc) => {
         this.currentChannel = doc.data();
-        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');        
+        this.currentChannel.created = this.channel.convertTimestamp(this.currentChannel.created, 'onlyDate');
       })
-      this.loadMessagesInChannel();
+    this.loadMessagesInChannel();
   }
 
 
