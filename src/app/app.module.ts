@@ -56,6 +56,8 @@ import { DialogAddChannelComponent } from './dialog-components/dialog-add-channe
 import { ChatroomComponent } from './chatroom/chatroom.component';
 import { ThreadComponent } from './thread/thread.component';
 import { DialogDeleteMessageComponent } from './dialog-components/dialog-delete-message/dialog-delete-message.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
+import { ChatThreadComponent } from './chat-thread/chat-thread.component';
 
 
 
@@ -77,7 +79,9 @@ import { DialogDeleteMessageComponent } from './dialog-components/dialog-delete-
     DialogAddChannelComponent,
     ChatroomComponent,
     ThreadComponent,
-    DialogDeleteMessageComponent
+    DialogDeleteMessageComponent,
+    UserSettingsComponent,
+    ChatThreadComponent,
   ],
   imports: [
     BrowserModule,

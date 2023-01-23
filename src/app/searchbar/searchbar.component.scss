@@ -16,7 +16,7 @@ mat-toolbar {
         align-items: center;
 
         .searchbar {
-            width: clamp(170px, 55vw, 500px);    
+            width: clamp(170px, 55vw, 500px);
             height: 30px;
             border-radius: 5px;
             outline: none;
@@ -24,14 +24,16 @@ mat-toolbar {
             padding: 0 8px;
             border: 1px solid $border-clr-input;
 
-            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            &::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
                 color: $txt-clr-secondary;
-                opacity: 1; /* Firefox */
-              }
+                opacity: 1;
+                /* Firefox */
+            }
         }
     }
-    
-    
+
+
     .settings {
         position: absolute;
         right: 15px;
@@ -42,15 +44,16 @@ mat-toolbar {
 
         .material-symbols-outlined {
             font-variation-settings:
-            'FILL' 0,
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 40
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 40
         }
 
-        
+        &:hover {
+            cursor: pointer;
+        }
+
+
     }
 }
-
-
-

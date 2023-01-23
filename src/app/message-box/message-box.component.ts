@@ -34,8 +34,8 @@ export class MessageBoxComponent implements OnInit {
       ['blockquote', 'code-block'],
       [{ 'list': 'ordered' },
       { 'list': 'bullet' }],
-      ['link'],
-      ['emoji']                      // link and image, video
+      ['link', 'image'],
+      ['emoji']                   // link and image, video
     ]
   };
 
@@ -70,6 +70,9 @@ export class MessageBoxComponent implements OnInit {
       this.messageForm.reset();
     } else if (this.textBoxPath == 'chatroom') {
       this.chatService.addMessage();
+      this.messageForm.reset();
+    } else if (this.textBoxPath == 'chat-thread') {
+      this.chatService.msgToChatThread();
       this.messageForm.reset();
     }
     quillEditorTextfield[0].innerHTML = "";

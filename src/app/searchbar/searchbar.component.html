@@ -1,11 +1,6 @@
 <mat-toolbar>
   <div class="searchbar-container">
-    <input
-      class="searchbar"
-      type="text"
-      [matAutocomplete]="users"
-      placeholder="Developer Akademie durchsuchen"
-    />
+    <input class="searchbar" type="text" [matAutocomplete]="users" placeholder="Developer Akademie durchsuchen" />
   </div>
   <mat-autocomplete #users="matAutocomplete">
     <mat-option *ngFor="let user of allUsers">
@@ -14,12 +9,9 @@
   </mat-autocomplete>
   <div class="settings">
     <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon>
-    <div class="img-container">
-      <img
-        class="profile-img"
-        src="assets/img/profile-img.jpg"
-        alt="profile-img"
-      />
+    <div class="img-container" (click)="openSettings()" matTooltip="{{currentUser.userName}}"
+      *ngIf="userService.currentUser$ | async as currentUser">
+      <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
       <div class="dot-nav absent"></div>
     </div>
   </div>

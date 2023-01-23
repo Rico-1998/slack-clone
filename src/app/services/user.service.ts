@@ -26,7 +26,7 @@ export class UserService {
       })
     })
 
-    this.authService.loggedUser.subscribe((user$) => {
+    this.authService.loggedUser?.subscribe((user$) => {
       getDoc(doc(this.userRef, user$.uid as string))
         .then((user) => {
           this.currentUser = user.data();
