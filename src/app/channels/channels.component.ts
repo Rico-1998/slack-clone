@@ -6,7 +6,6 @@ import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
