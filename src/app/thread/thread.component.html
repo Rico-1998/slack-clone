@@ -1,6 +1,6 @@
 <div class="thread-main-container">
   <div class="heading">
-    <span># Title</span
+    <span># Thread {{ this.channel.currentChannel.channelName }}</span
     ><mat-icon class="close" (click)="closeThread()">close</mat-icon>
   </div>
   <div class="thread-content-container">
@@ -41,8 +41,7 @@
             <strong>{{ comment.author | titlecase }}</strong>
             {{ comment.timestamp }}
           </div>
-          <span>
-            {{ comment.comment }}
+          <span [innerHTML]="comment.comment">
           </span>
         </div>
       </mat-card>

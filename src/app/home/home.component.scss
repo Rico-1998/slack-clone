@@ -9,6 +9,7 @@ mat-drawer-container, mat-drawer {
     background-color: $bgClr-primary !important;
     color: $txt-clr-primary;
     border: $border-primary;
+    border-top: none !important;
 }
 
 .content-container {

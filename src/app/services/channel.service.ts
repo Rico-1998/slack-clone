@@ -23,6 +23,7 @@ export class ChannelService {
   allMessages: any[] = [];
   messageId: string;
   currentMessage: any;
+  currentChannel: any;
 
   constructor(
     public user: UserService,
@@ -52,7 +53,7 @@ export class ChannelService {
     })
       .then(() => {
         this.threadLoading = false;
-        console.log('message added')
+        console.log('comment added')
       })
   }
 

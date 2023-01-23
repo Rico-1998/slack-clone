@@ -98,7 +98,8 @@ body {
 }
 
 .heading {
-    height: $height-headers;
+    min-height: $height-headers !important;
+    max-height: $height-headers !important;
     display: flex;
     align-items: center;
     gap: $gap-primary;

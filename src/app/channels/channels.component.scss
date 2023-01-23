@@ -15,16 +15,22 @@
 
             .welcome-card {
                 display: flex;
-                padding: 10px 0;
+                padding: $padding-messages;
                 background-color: transparent;
                 color: #D1D2D3;
 
                 .leftframe {
                     span {
-                        background-color: #ABABAD;
-                        padding: 6px;
+                        background-color: $txt-clr-primary;
                         border-radius: 5px;
-                        color: #1B1D21;
+                        padding-left: 2px;
+                        color: $bgClr-primary;
+                        height: 30px;
+                        width: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-items: center;
+                        font-size: 25px;
                     }
                 }
 
@@ -32,6 +38,8 @@
                     margin-left: 24px;
                 }
             }
+
+
 
             .highlight {
                 color: #1D9BD1;
