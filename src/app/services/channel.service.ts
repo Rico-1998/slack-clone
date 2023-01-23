@@ -53,7 +53,7 @@ export class ChannelService {
     })
       .then(() => {
         this.threadLoading = false;
-        console.log('comment added')
+        console.log('comment added');
       })
   }
 

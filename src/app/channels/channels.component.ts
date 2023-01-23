@@ -77,22 +77,33 @@ export class ChannelsComponent implements OnInit {
 
   async loadMessagesInChannel() {
     // this.allMessages = [];
-    this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     onSnapshot(q, (snapshot) => {
+      this.channel.allMessages = [];
       snapshot.docs.forEach(async (doc) => {
         if (!this.channel.allMessages.find(m => m.id == doc.id)) {
-          let docdata = doc.data();//
-          let commentsLenght = 0;
-          onSnapshot(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments'), (snapshot) => {
-            commentsLenght = snapshot.docs.length;
-            let message = { ...(docdata as object), id: doc.id, comments: commentsLenght };
+
+          if (!this.allMessages.find(m => m.id == doc.id)) {
+            let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+            // let message = { ...(doc.data() as object), id: doc.id, comments: 4};
+            let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
             message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-            // this.allMessages.push(message);
-            this.channel.allMessages.push(message);
-          });
-        }
+            this.allMessages.push(message);
+            this.channel.allMessages.push(message);}
+
+          // let docdata = doc.data();//
+          // console.log(doc.data())
+          // let commentsLenght = 0;
+          // await onSnapshot(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments'), async (snapshot) => {
+          //   this.channel.allMessages = [];
+          //   commentsLenght = snapshot.docs.length;
+          //   let message = { ...(docdata as object), id: doc.id, comments: commentsLenght };
+          //   message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+          //   // this.allMessages.push(message);
+          //   this.channel.allMessages.push(message);
+          // });
+         }
       });
     });
   }

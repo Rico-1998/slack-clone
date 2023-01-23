@@ -40,7 +40,9 @@ export class NavTreeComponent implements OnInit {
   }
 
   openDialogAddChannel() {
-    this.dialog.open(DialogAddChannelComponent);
+    this.dialog.open(DialogAddChannelComponent, {
+      panelClass: 'add-channel',
+    });
   }
 
 }
