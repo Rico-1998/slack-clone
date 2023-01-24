@@ -23,9 +23,9 @@ export class DialogDeleteMessageComponent implements OnInit {
 
 
   deleteMessage() {
-    deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
-    this.dialogRef.close();
-    location.reload();
+    // deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
+    // this.dialogRef.close();
+    // location.reload();
   }
 
 }

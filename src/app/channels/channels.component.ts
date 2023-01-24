@@ -84,7 +84,6 @@ export class ChannelsComponent implements OnInit {
             let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
             let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
             message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-            // this.allMessages.push(message);
             this.channel.allMessages.push(message);}
       });
     });
