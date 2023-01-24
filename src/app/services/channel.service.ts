@@ -52,6 +52,8 @@ export class ChannelService {
       comment: this.newComment
     })
       .then(() => {
+        let message = this.allMessages.find(m => m.id == this.threadId)['comments']++;
+        console.log(message, 'message')
         this.threadLoading = false;
         console.log('comment added');
       })
