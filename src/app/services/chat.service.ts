@@ -1,6 +1,6 @@
 import { IfStmt } from '@angular/compiler';
 import { Injectable } from '@angular/core';
-import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
 import { ChannelService } from './channel.service';
@@ -26,7 +26,8 @@ export class ChatService {
   threadOpen: boolean = false;
   threadComments: any[] = [];
   thread: any;
-  threadMessage;
+  threadMessage: any;
+  msgToEdit: object;
 
 
 
@@ -49,6 +50,10 @@ export class ChatService {
     } else if (this.selectedUserList.length == 0) {
       this.visibleTextEditor = false;
     }
+  }
+
+  spliceUser(index) {
+    this.selectedUserList.splice(index, 1);
   }
 
   createRoomId() {
@@ -149,7 +154,7 @@ export class ChatService {
     this.currentChat = this.chats.filter(a => a.id == chatId);
     this.currentChatMembers = this.currentChat[0]['otherUsers'];
     let colRef = query(collection(this.db, 'chats', chatroomId['id'], 'messages'), orderBy('timestamp', 'asc'));
-    onSnapshot(colRef, (snapshot) => {
+    onSnapshot(colRef, async (snapshot) => {
       this.currentchatMessages = [];
       snapshot.docs.forEach((document) => {
         let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId, documentId: document.id };
@@ -208,5 +213,13 @@ export class ChatService {
     });
     this.loading = false;
   }
+
+  async editMsg(msg) {
+    let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id']['id'], 'messages', this.msgToEdit['documentId']);
+    await updateDoc(docToUpdate, {
+      msg: msg
+    })
+  }
+
 }
 

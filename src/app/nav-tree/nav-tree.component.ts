@@ -6,6 +6,8 @@ import { doc, docData, Firestore, getDoc, getDocs, query, where } from '@angular
 import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
+import { AuthService } from '../services/auth.service';
+
 
 
 
@@ -24,9 +26,9 @@ export class NavTreeComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private userService: UserService,
+    public userService: UserService,
     public chatService: ChatService,
-
+    public auth: AuthService
   ) { }
 
   ngOnInit(): void {

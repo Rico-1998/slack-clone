@@ -16,6 +16,7 @@ import { map } from 'rxjs';
 export class ChatroomComponent implements OnInit {
   // currentchatMessages = [];
   textBoxPath: string = 'chatroom';
+  textBoxPathEdit: string = 'edit';
   @ViewChild('scrollBox') private scrollBox: ElementRef;
 
 
@@ -36,7 +37,7 @@ export class ChatroomComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }
 
   scrollToBottom(): void {
@@ -52,6 +53,11 @@ export class ChatroomComponent implements OnInit {
     this.chatService.thread = message;
     this.chatService.threadOpen = true;
     this.chatService.getCurrentThread();
+    this.chatService.loadMessageToThread();
+  }
+
+  changePath(message) {
+    this.chatService.msgToEdit = message;
   }
 
 }

@@ -31,9 +31,7 @@
                         </strong>
                         {{ comment.timestamp }}
                     </div>
-                    <span>
-                        {{ comment.msg }}
-                    </span>
+                    <span [innerHTML]="comment.msg"></span>
                 </div>
             </mat-card>
         </div>

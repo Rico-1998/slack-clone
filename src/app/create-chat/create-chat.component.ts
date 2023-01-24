@@ -24,13 +24,10 @@ export class CreateChatComponent implements OnInit {
   value: any;
   db = getFirestore();
   textBoxPath: string = 'create-chat';
-
   @ViewChild('usersField') userField: any;
-
-  // DataContext: any;
-  // Position: any;
   chatDocs: object[] = [];
-  // actualChatDocument: any;
+
+
 
   constructor(public toggler: DrawerTogglerService,
     private firestore: Firestore,
@@ -57,17 +54,5 @@ export class CreateChatComponent implements OnInit {
   searchUser(event: any) {
     this.chatService.foundedUsers = event;
   }
-
-
-
-
-
-  // ngAfterContentChecked() {
-
-  //   this.userService.users.DataContext = this.DataContext;
-  //   this.userService.users.Position = this.Position;
-  //   this.cdref.detectChanges();
-
-  // }
 
 }

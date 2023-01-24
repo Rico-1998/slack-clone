@@ -30,7 +30,8 @@
 
         <mat-menu #menu="matMenu" class="del-menu">
           <div class="menu-options">
-            <button mat-menu-item *ngIf="userService.currentUser.userName == message.author">Nachricht
+            <button mat-menu-item *ngIf="userService.currentUser.userName == message.author"
+              (click)="changePath(message)">Nachricht
               bearbeiten</button>
             <button mat-menu-item class="delete" (click)="deleteMessage(message)"
               *ngIf="userService.currentUser.userName == message.author">Nachricht löschen</button>
@@ -50,8 +51,10 @@
         </div>
 
         <span [innerHTML]="message.msg"></span>
-        <!-- <span class="open-thread-link">{{ message.comments }} Antworten</span> -->
 
+        <div class="phils-div-box-zum-stylen-des-editors">
+          <app-message-box *ngIf="chatService.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
+        </div>
       </div>
 
     </mat-card>

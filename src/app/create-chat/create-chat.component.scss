@@ -52,3 +52,16 @@ mat-toolbar {
         }
     }
 }
+
+.selectedUser {
+    display: flex;
+    color: $txt-clr-primary;
+    align-items: center;
+    gap: 5px;
+    background-color: $bgClr-chatList;
+    border-radius: $br-primary;
+
+    mat-icon {
+        cursor: pointer;
+    }
+}
