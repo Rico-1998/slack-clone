@@ -12,6 +12,16 @@ mat-drawer-container, mat-drawer {
     border-top: none !important;
 }
 
+mat-drawer-container {
+    position: relative !important;
+
+    .toggle-btn {
+        position: absolute;
+        top: 0;
+    }
+}
+
+
 .content-container {
     height: calc(100% - $height-searchbar);
 
