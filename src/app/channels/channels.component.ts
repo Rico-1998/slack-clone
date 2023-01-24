@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
-import { addDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
 import { timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,12 +23,11 @@ export class ChannelsComponent implements OnInit {
   public displayEditMenu;
   messageToEdit: any;
   channelId: any;
-  // currentChannel: any;
   currentUserName: any;
-  // allMessages: any[] = [];
   newMessage: Message;
   showBtn: boolean = false;
   textBoxPath: string = 'channels';
+  textBoxPathEdit: string = 'edit-channel';
   currentMessage: any;
   messageEditable: boolean = false;
 
@@ -96,6 +95,16 @@ export class ChannelsComponent implements OnInit {
     this.channel.threadOpen = true;
     this.channel.loadCommentsToThread();
     this.channel.loadMessageToThread();
+  }
+
+  changePath(message) {
+    this.channel.msgToEdit = message;
+  }
+
+  async deleteMessage(message: any) {
+    console.log(message.id)
+    await deleteDoc(doc(this.channel.db, 'channels', this.channel.channelId, 'messages', message.id));
+    this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== message.id) // wegen snapshot fehler
   }
 
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
@@ -24,6 +24,7 @@ export class ChannelService {
   messageId: string;
   currentMessage: any;
   currentChannel: any;
+  msgToEdit: any;
 
   constructor(
     public user: UserService,
@@ -53,9 +54,7 @@ export class ChannelService {
     })
       .then(() => {
         let message = this.allMessages.find(m => m.id == this.threadId)['comments']++;
-        console.log(message, 'message')
         this.threadLoading = false;
-        console.log('comment added');
       })
   }
 
@@ -101,13 +100,20 @@ export class ChannelService {
 
   }
 
-  editMessage() {
-
+  async editMessage(msg) {
+    console.log(msg);
+    console.log(doc(this.db, 'channels', this.channelId, 'messages', this.messageId))
+    let docToUpdate = doc(this.db, 'channels', this.channelId, 'messages', this.messageId);
+    let message = this.allMessages.find(m => m.id == this.messageId); // wegen snapshot fehler
+    message['msg'] = msg; // wegen snapshot fehler
+    await updateDoc(docToUpdate, {
+      msg: msg
+    })
   }
 
-  openDeleteMessageDialog() {
-    this.dialog.open(DialogDeleteMessageComponent)
-  }
+  // openDeleteMessageDialog() {
+  //   this.dialog.open(DialogDeleteMessageComponent)
+  // }
 
 
   convertTimestamp(timestamp, type) {

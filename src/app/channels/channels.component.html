@@ -16,8 +16,40 @@
         </mat-card-content>
       </mat-card>
       <mat-card class="message-container" *ngFor="let message of this.channel.allMessages; let i = index"
-        (mouseover)="displayEditMenu = i" (mouseleave)="displayEditMenu = -1"
         (click)="channel.getCurrentMessage(message.id)">
+
+        <div class="option-box">
+          <div class="option">
+            <mat-icon matTooltip="Reaktion hinzufügen"> add_reaction </mat-icon>
+          </div>
+          <div class="option">
+            <mat-icon matTooltip="Im Thread antworten" (click)="openThread(message.id)"> comment </mat-icon>
+          </div>
+          <div class="option">
+            <mat-icon matTooltip="Lesezeichen hinzufügen"> bookmark </mat-icon>
+          </div>
+          <div class="option">
+            <mat-icon matTooltip="Weitere Aktionen" [matMenuTriggerFor]="menu"> more_vert </mat-icon>
+          </div>
+  
+  
+          <mat-menu #menu="matMenu" class="del-menu">
+
+            <div class="menu-options">
+
+              <button mat-menu-item *ngIf="userService.currentUser.userName == message.author"
+                (click)="changePath(message)">Nachricht
+                bearbeiten</button>
+              <button mat-menu-item class="delete" (click)="deleteMessage(message)"
+                *ngIf="userService.currentUser.userName == message.author">Nachricht löschen</button>
+              <button mat-menu-item>Link kopieren</button>
+            </div>
+
+          </mat-menu>
+
+        </div>
+
+
         <div class="img-container">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
         </div>
@@ -27,9 +59,12 @@
             {{ message.timestamp }}
           </div>
           <span [innerHTML]="message.msg"></span>
-          <span class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
+          <span *ngIf="message.comments" class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
+          <div class="phils-div-box-zum-stylen-des-editors">
+            <app-message-box *ngIf="channel.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
+          </div>
         </div>
-        <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
+        <!-- <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
           <button mat-mini-fab color="basic" [matMenuTriggerFor]="msgMenu"
             (click)="channel.checkIfUserIsAuthor(message.id)">
             <mat-icon>more_vert</mat-icon>
@@ -43,7 +78,7 @@
               delete message
             </button>
           </mat-menu>
-        </div>
+        </div> -->
       </mat-card>
     </div>
     <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>

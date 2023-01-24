@@ -76,6 +76,8 @@ export class MessageBoxComponent implements OnInit {
       this.messageForm.reset();
     } else if (this.textBoxPath == 'edit') {
       this.chatService.editMsg(this.chatService.chatMsg);
+    } else if (this.textBoxPath == 'edit-channel') {
+      this.channel.editMessage(this.chatService.chatMsg);
     }
     quillEditorTextfield[0].innerHTML = "";
   }

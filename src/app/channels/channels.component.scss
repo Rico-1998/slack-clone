@@ -13,62 +13,125 @@
         flex-direction: column;
         justify-content: space-between;
 
-            .welcome-card {
-                display: flex;
-                padding: $padding-messages;
-                background-color: transparent;
-                color: #D1D2D3;
-
-                .leftframe {
-                    span {
-                        background-color: $txt-clr-primary;
-                        border-radius: 5px;
-                        padding-left: 2px;
-                        color: $bgClr-primary;
-                        height: 30px;
-                        width: 30px;
-                        display: flex;
-                        align-items: center;
-                        justify-items: center;
-                        font-size: 25px;
+            .scroll-box {
+                .welcome-card {
+                    display: flex;
+                    padding: $padding-messages;
+                    background-color: transparent;
+                    color: #D1D2D3;
+    
+                    .leftframe {
+                        span {
+                            background-color: $txt-clr-primary;
+                            border-radius: 5px;
+                            padding-left: 2px;
+                            color: $bgClr-primary;
+                            height: 30px;
+                            width: 30px;
+                            display: flex;
+                            align-items: center;
+                            justify-items: center;
+                            font-size: 25px;
+                        }
+                    }
+    
+                    .welcome-content {
+                        margin-left: 24px;
                     }
                 }
 
-                .welcome-content {
-                    margin-left: 24px;
+                .message-container {
+
+                    &:hover {
+                        background-color: $bgClr-newChat;
+            
+                        .option-box {
+                            opacity: 1;
+                        }
+                    }
+
+                    .highlight {
+                        color: #1D9BD1;
+                        font-weight: bold;
+                    }
+
+                    .option-box {
+                        display: flex;
+                        align-items: center;
+                        position: absolute;
+                        right: 16px;
+                        top: -20px;
+                        border-radius: $br-secondary;
+                        background-color: $bgClr-primary;
+                        border: $border-primary;
+                        opacity: 0;
+            
+                        .option {
+                            padding: 5px;
+                            display: flex;
+            
+                            &:hover {
+                                background-color: $bgClr-newChat;
+                                border-radius: $br-secondary;
+                                cursor: pointer;
+                            }
+            
+                            mat-icon {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                color: $txt-clr-primary;
+                                font-size: $fs-l;
+            
+                                &:hover {
+                                    color: white;
+                                }
+                            }
+            
+                        }
+                    }
                 }
+    
+    
+    
+
+
             }
 
-
-
-            .highlight {
-                color: #1D9BD1;
-                font-weight: bold;
-            }
         }
 }
 
-.btnAfterMenuDisabled{
-    opacity: 0.2;
-    pointer-events:none;
+.menu-options {
+    .delete {
+        color: #df205a;
+    }
+
+    button {
+        color: $txt-clr-primary;
+    }
 }
 
-.showMenuBtn {
-    opacity: 0;
-    z-index: 2;
-    position: absolute;
-    top: 0px;
-    right: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
-  
-    &:hover {
-      opacity: 1;
-    }
-  }
+// .btnAfterMenuDisabled{
+//     opacity: 0.2;
+//     pointer-events:none;
+// }
 
-  .opacity1 {
-    opacity: 1 !important;
-  }
+// .showMenuBtn {
+//     opacity: 0;
+//     z-index: 2;
+//     position: absolute;
+//     top: 0px;
+//     right: 5px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     background-color: transparent;
+  
+//     &:hover {
+//       opacity: 1;
+//     }
+//   }
+
+//   .opacity1 {
+//     opacity: 1 !important;
+//   }
