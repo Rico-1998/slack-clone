@@ -149,6 +149,7 @@ body {
 .add-channel mat-dialog-container {
     background-color: $bgClr-newChat;
     color: $txt-clr-primary;
+    border-radius: $br-secondary;
 
     h1 {
         color: $txt-clr-h1;
@@ -163,6 +164,13 @@ body {
         &::placeholder {
             color: $txt-clr-primary;
            }
+    }
+
+    .mat-button {
+        &:hover {
+            background-color: #363b41;
+            transition: $transition-hover;
+        }
     }
 }
 

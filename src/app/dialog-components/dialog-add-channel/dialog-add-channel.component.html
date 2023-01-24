@@ -1,26 +1,31 @@
 <div class="dialog-container">
+  <div class="top-container">
     <!-- <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar> -->
     <h1 mat-dialog-title>Channels erstellen</h1>
-    <span class="description-text">Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein – #marketing zum Beispiel.</span>
+    <span class="description-text">Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein
+      – #marketing zum Beispiel.</span>
     <div class="form-container" mat-dialog-content>
       <div>
-      <span><b>Name des Channels</b></span>
-      <mat-form-field appearance="outline">
-        <!-- <mat-label>Name</mat-label> -->
-        <input disable="loading" matInput [(ngModel)]="channel.channelName" placeholder="z.B. budget-planung">
-      </mat-form-field>
-    </div>
-    <div>
-      <span><b>Beschreibung</b> (optional)</span>
-      <mat-form-field appearance="outline">
-        <!-- <mat-label>Beschreibung</mat-label> -->
-        <input disable="loading" matInput [(ngModel)]="channel.channelDescription" placeholder="Worum geht es in diesem Channel?">
-      </mat-form-field>
-    </div>
-    </div>
-    
-    <div class="btn-container" mat-dialog-actions>
-      <button disable="loading" mat-button mat-dialog-close>Cancel</button>
-      <button disable="loading" (click)="createChannel()" mat-button mat-dialog-close cdkFocusInitial>Channel erstellen</button>
+        <span><b>Name des Channels</b></span>
+        <mat-form-field appearance="outline">
+          <!-- <mat-label>Name</mat-label> -->
+          <input disable="loading" matInput [(ngModel)]="channel.channelName" placeholder="z.B. budget-planung">
+        </mat-form-field>
+      </div>
+      <div>
+        <span><b>Beschreibung</b> (optional)</span>
+        <mat-form-field appearance="outline">
+          <!-- <mat-label>Beschreibung</mat-label> -->
+          <input disable="loading" matInput [(ngModel)]="channel.channelDescription"
+            placeholder="Worum geht es in diesem Channel?">
+        </mat-form-field>
+      </div>
     </div>
   </div>
+
+  <div class="btn-container" mat-dialog-actions>
+    <button disable="loading" mat-button mat-dialog-close>Cancel</button>
+    <button disable="loading" (click)="createChannel()" mat-button mat-dialog-close cdkFocusInitial>Channel
+      erstellen</button>
+  </div>
+</div>

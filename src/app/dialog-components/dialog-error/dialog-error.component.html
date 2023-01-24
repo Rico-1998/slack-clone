@@ -1,22 +1,9 @@
 <div class="error-container">
-
-    <div class="iconBox">
-        <mat-icon>priority_high</mat-icon>
-        <h1>Ups, An error occured</h1>
-    </div>
-
-
+    <h1>Ups, something went wrong</h1>
     <div class="errBox">
-
         <div>
-            <h2>Error Message</h2>
-            <span> {{ authService.errorMessage }}</span>
+           {{ errorMessage }}
         </div>
-
-        <div>
-            <h2>Error Code</h2>
-            <span> {{ authService.errorCode }}</span>
-        </div>
-
+        <button mat-raised-button mat-dialog-close (click)="closeDialog()" [ngStyle]="{'width': '115px', 'display':'flex', 'justify-content':'center'}"> Back</button>
     </div>
 </div>

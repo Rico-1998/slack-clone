@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { DialogErrorComponent } from '../dialog-error/dialog-error.component';
+
 
 @Component({
   selector: 'app-dialog-success-message',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DialogSuccessMessageComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dialogRef: MatDialogRef<DialogErrorComponent>
+
+  ) { }
 
   ngOnInit(): void {
   }
 
+  closeDialog() {
+    this.dialogRef.close();
+  }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogErrorComponent } from '../dialog-components/dialog-error/dialog-error.component';
+import { DialogSuccessMessageComponent } from '../dialog-components/dialog-success-message/dialog-success-message.component';
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { AuthService } from '../services/auth.service';

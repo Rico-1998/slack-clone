@@ -1,5 +1,8 @@
 <div class="container">
     <h1>Thank you for using Slack-clone</h1>
+    <mat-icon [ngStyle]="{'color':'#2E8C46', 'font-size': '50px', 'height':'50px', 'width': '50px'}">done</mat-icon>
     <span class="main-msg">Your Registration was succesfull!</span>
     <span class="sub-msg">You can now sign in with your data</span>
+    <button mat-raised-button mat-dialog-close (click)="closeDialog()" [ngStyle]="{'width': '115px', 'display':'flex', 'justify-content':'center'}"> Back</button>
+
 </div>
