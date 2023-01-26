@@ -22,10 +22,11 @@ export class DialogDeleteMessageComponent implements OnInit {
   }
 
 
-  deleteMessage() {
-    // deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
-    // this.dialogRef.close();
-    // location.reload();
-  }
+  // async deleteMessage() {
+  //   await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
+  //   this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
+  //   this.dialogRef.close();
+  //   location.reload();
+  // }
 
 }

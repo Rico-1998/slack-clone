@@ -111,9 +111,17 @@ export class ChannelService {
     })
   }
 
-  // openDeleteMessageDialog() {
-  //   this.dialog.open(DialogDeleteMessageComponent)
-  // }
+  openDeleteMessageDialog(message) {
+    this.dialog.open(DialogDeleteMessageComponent, message)
+  }
+
+
+  async deleteMessage() {
+    await deleteDoc(doc(this.db, 'channels', this.channelId, 'messages', this.messageId));
+    this.allMessages = this.allMessages.filter(item => item.id !== this.messageId)
+    // this.dialogRef.close();
+    location.reload();
+  }
 
 
   convertTimestamp(timestamp, type) {

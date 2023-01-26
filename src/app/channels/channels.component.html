@@ -40,7 +40,7 @@
               <button mat-menu-item *ngIf="userService.currentUser.userName == message.author"
                 (click)="changePath(message)">Nachricht
                 bearbeiten</button>
-              <button mat-menu-item class="delete" (click)="deleteMessage(message)"
+              <button mat-menu-item class="delete" (click)="channel.openDeleteMessageDialog(message)"
                 *ngIf="userService.currentUser.userName == message.author">Nachricht löschen</button>
               <button mat-menu-item>Link kopieren</button>
             </div>
