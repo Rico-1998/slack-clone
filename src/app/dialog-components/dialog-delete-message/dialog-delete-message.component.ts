@@ -19,14 +19,20 @@ export class DialogDeleteMessageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.channel.currentMessage);
   }
 
 
-  // async deleteMessage() {
-  //   await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
-  //   this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
-  //   this.dialogRef.close();
-  //   location.reload();
-  // }
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+
+  //** delete the picked message out of firebase server and array */
+  async deleteMessage() {
+    await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
+    this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
+    this.dialogRef.close();
+  }
 
 }

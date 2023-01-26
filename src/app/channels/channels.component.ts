@@ -52,14 +52,18 @@ export class ChannelsComponent implements OnInit {
     }, 0);
   }
 
+
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
+
 
   scrollToBottom(): void {
     this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
   }
 
+  
+  //**  get channelRoom ID*/
   async getChannelRoom() {
     this.route.params.subscribe((params) => {
       this.channel.channelId = params['id'];
@@ -74,6 +78,7 @@ export class ChannelsComponent implements OnInit {
   }
 
 
+  //** load all messages to the current channel */
   async loadMessagesInChannel() {
     this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
@@ -89,6 +94,8 @@ export class ChannelsComponent implements OnInit {
     });
   }
 
+
+  //** open thread with all comments of the picked message*/
   openThread(id) {
     this.channel.threadId = id;
     this.channel.threadOpen = true;
@@ -96,14 +103,10 @@ export class ChannelsComponent implements OnInit {
     this.channel.loadMessageToThread();
   }
 
+
+  //** */
   changePath(message) {
     this.channel.msgToEdit = message;
-  }
-
-  async deleteMessage(message: any) {
-    console.log(message.id)
-    await deleteDoc(doc(this.channel.db, 'channels', this.channel.channelId, 'messages', message.id));
-    this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== message.id) // wegen snapshot fehler
   }
 
 }

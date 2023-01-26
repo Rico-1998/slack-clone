@@ -33,6 +33,7 @@ export class ChannelService {
   ) { }
 
 
+  //**adding message to the picked channel */
   postInChannel() {
     let timestamp = Timestamp.fromDate(new Date()).toDate();
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
@@ -44,6 +45,8 @@ export class ChannelService {
       });
   }
 
+
+  //** post comment in the thread of the picked message */
   postComment() {
     this.threadLoading = true;
     let timestamp = Timestamp.fromDate(new Date()).toDate();
@@ -58,6 +61,8 @@ export class ChannelService {
       })
   }
 
+
+  //** loading picked message as head of the thread */
   async loadMessageToThread() {
     this.threadLoading = true;
     let document = doc(this.db, 'channels', this.channelId, 'messages', this.threadId);
@@ -69,6 +74,8 @@ export class ChannelService {
       })
   }
 
+
+  //** loading all saved comments to a picked thread*/
   async loadCommentsToThread() {
     this.allThreadComments = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages', this.threadId, 'comments');
@@ -85,21 +92,16 @@ export class ChannelService {
     })
   }
 
+
+  //** gets id of the clicked message*/
   getCurrentMessage(id: string) {
     this.messageId = id;
+    console.log(this.messageId);
     return this.allMessages.find(item => item.id === id);
   }
 
-  checkIfUserIsAuthor(id) {
-    this.getCurrentMessage(id);
-    this.currentMessage = this.getCurrentMessage(this.messageId);
-    if (this.user.currentUser['userName'] === this.currentMessage.author) {
-      document.getElementById('btnEdit').classList.remove('btnAfterMenuDisabled');
-      document.getElementById('btnOpenDialog').classList.remove('btnAfterMenuDisabled');
-    }
 
-  }
-
+  //** edit picked message and save in array and firebase */
   async editMessage(msg) {
     console.log(msg);
     console.log(doc(this.db, 'channels', this.channelId, 'messages', this.messageId))
@@ -111,19 +113,15 @@ export class ChannelService {
     })
   }
 
+
+  //** open dialog for confirming to delete message */
   openDeleteMessageDialog(message) {
-    this.dialog.open(DialogDeleteMessageComponent, message)
+    this.currentMessage = message;
+    this.dialog.open(DialogDeleteMessageComponent)
   }
 
 
-  async deleteMessage() {
-    await deleteDoc(doc(this.db, 'channels', this.channelId, 'messages', this.messageId));
-    this.allMessages = this.allMessages.filter(item => item.id !== this.messageId)
-    // this.dialogRef.close();
-    location.reload();
-  }
-
-
+  //** transforms timestamp to a date standard */
   convertTimestamp(timestamp, type) {
     let date = timestamp?.toDate();
     let mm = date?.getMonth();
@@ -147,6 +145,5 @@ export class ChannelService {
       return fullDate;
     } else return onlyDate;
   }
-
 
 }
