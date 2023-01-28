@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Firestore, limit, onSnapshot, orderBy } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { collection, getDocs, getFirestore, query } from '@firebase/firestore';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
 import { UserSettingsComponent } from '../user-settings/user-settings.component';
+import { DrawerTogglerService } from '../services/drawer-toggler.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -20,7 +21,10 @@ export class SearchbarComponent implements OnInit {
   constructor(
     public chatService: ChatService,
     public dialog: MatDialog,
-    public userService: UserService) { }
+    public userService: UserService,
+    public toggler: DrawerTogglerService) { }
+
+    showToggleBtn: boolean = false;
 
   ngOnInit(): void {
     let data = [];
@@ -34,6 +38,15 @@ export class SearchbarComponent implements OnInit {
         }
       }
     }));
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (window.innerWidth < 600) {
+      this.showToggleBtn = true
+    } else {
+      this.showToggleBtn = false
+    }
   }
 
   openSettings() {

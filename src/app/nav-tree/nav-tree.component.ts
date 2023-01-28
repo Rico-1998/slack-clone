@@ -7,6 +7,7 @@ import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestor
 import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
+import { DrawerTogglerService } from '../services/drawer-toggler.service';
 
 
 
@@ -28,7 +29,8 @@ export class NavTreeComponent implements OnInit {
     public dialog: MatDialog,
     public userService: UserService,
     public chatService: ChatService,
-    public auth: AuthService
+    public auth: AuthService,
+    public toggler: DrawerTogglerService
   ) { }
 
   ngOnInit(): void {

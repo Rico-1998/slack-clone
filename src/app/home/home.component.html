@@ -1,7 +1,7 @@
 <app-searchbar #searchbar></app-searchbar>
 <mat-drawer-container class="content-container" autosize>
 
-  <mat-drawer #drawer class="sidenav" [opened]="open" [mode]="type">
+  <mat-drawer #drawer class="sidenav" [opened]="this.toggler.open" [mode]="this.toggler.type">
     <div class="workspace heading">
       <h1>Developer Akademie</h1>
       <div class="new-chat-container">
@@ -10,11 +10,6 @@
     </div>
 
     <app-nav-tree></app-nav-tree>
-    <!-- toggle btn für drawer -->
-    <!-- <button mat-icon-button (click)="drawer.toggle()" class="toggle-btn"
-      aria-label="Example icon-button with menu icon">
-      <mat-icon>keyboard_double_arrow_right</mat-icon>
-    </button> -->
   </mat-drawer>
   <!-- <mat-toolbar>
     <button

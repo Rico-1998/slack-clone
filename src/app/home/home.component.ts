@@ -12,17 +12,16 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public type: any = 'side';
-  public open: boolean = true;
 
+  //Close Drawer on small screen size
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    if (window.innerWidth < 700) {
-      this.type = 'over';
-      this.open = false;
+    if (window.innerWidth < 600) {
+      this.toggler.type = 'over';
+      this.toggler.open = false;
     } else {
-      this.type = 'side';
-      this.open = true;
+      this.toggler.type = 'side';
+      this.toggler.open = true;
     }
   }
 
