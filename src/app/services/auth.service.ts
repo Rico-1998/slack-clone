@@ -52,7 +52,7 @@ export class AuthService {
           userName: 'guest',
         });
         this.loggedIn = true;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/channel/LluY3y28ojngKCAClTRg']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);
@@ -109,9 +109,10 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
+
         console.log('user logged in:', cred.user)
         this.loggedIn = true;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/channel/LluY3y28ojngKCAClTRg']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);
