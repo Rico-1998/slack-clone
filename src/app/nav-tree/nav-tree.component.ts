@@ -8,6 +8,7 @@ import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
+import { Observable } from 'rxjs';
 
 
 
@@ -24,6 +25,7 @@ export class NavTreeComponent implements OnInit {
   currentUser = JSON.parse(localStorage.getItem('user'));
   currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
   channels: any = [];
+  _lastUserVisits: any;
 
   constructor(
     public dialog: MatDialog,
@@ -41,6 +43,8 @@ export class NavTreeComponent implements OnInit {
         this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })
     });
+
+
   }
 
   openDialogAddChannel() {
