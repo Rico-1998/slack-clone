@@ -3,7 +3,9 @@
     <span># Thread {{ this.channel.currentChannel.channelName }}</span>
     <mat-icon class="close" (click)="closeThread()">close</mat-icon>
   </div>
+
   <div class="thread-content-container">
+
     <div class="message">
       <mat-card *ngIf="this.channel.threadMessage" class="message-container">
         <div class="img-container">
@@ -20,7 +22,12 @@
         </div>
       </mat-card>
     </div>
+
     <div class="scroll-box">
+      <div class="devider">
+        <span *ngIf="this.threadMessage.comments > 0 && this.threadMessage.comments == 1">{{ this.threadMessage.comments}} Antwort</span>
+        <span *ngIf="this.threadMessage.comments > 1">{{ this.threadMessage.comments}} Antworten</span>
+      </div>
       <mat-card *ngFor="let comment of this.channel.allThreadComments; let i = index" class="comment-container">
         <div class="img-container">
           <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
@@ -34,6 +41,7 @@
           </span>
         </div>
       </mat-card>
+
     </div>
   </div>
   <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>

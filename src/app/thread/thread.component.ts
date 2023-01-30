@@ -15,13 +15,15 @@ export class ThreadComponent implements OnInit {
   message: any;
   allComments: any[] = []
   public textBoxPath: string = 'thread';
+  threadMessage: any ;
 
   constructor(
     public channel: ChannelService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.channel.threadLoading = true;
+    this.threadMessage = this.channel.allMessages.find(m => m.id === this.channel.threadId);
   }
 
   closeThread() {

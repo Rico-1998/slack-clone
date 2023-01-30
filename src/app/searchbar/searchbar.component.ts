@@ -40,15 +40,6 @@ export class SearchbarComponent implements OnInit {
     }));
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    if (window.innerWidth < 600) {
-      this.showToggleBtn = true
-    } else {
-      this.showToggleBtn = false
-    }
-  }
-
   openSettings() {
     this.dialog.open(UserSettingsComponent, { panelClass: 'custom-dialog-container' })
   }

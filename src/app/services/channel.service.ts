@@ -26,6 +26,7 @@ export class ChannelService {
   currentChannel: any;
   msgToEdit: any;
 
+
   constructor(
     public user: UserService,
     private route: ActivatedRoute,

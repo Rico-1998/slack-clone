@@ -64,21 +64,7 @@
             <app-message-box *ngIf="channel.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
           </div>
         </div>
-        <!-- <div *ngIf="messageToEdit !== i" [class.opacity1]="displayEditMenu == i" class="showMenuBtn">
-          <button mat-mini-fab color="basic" [matMenuTriggerFor]="msgMenu"
-            (click)="channel.checkIfUserIsAuthor(message.id)">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #msgMenu="matMenu">
-            <button id="btnEdit" class="btnAfterMenuDisabled" (click)="channel.editMessage()" mat-menu-item>
-              edit message
-            </button>
-            <button id="btnOpenDialog" class="btnAfterMenuDisabled" (click)="channel.openDeleteMessageDialog()"
-              mat-button color="warn">
-              delete message
-            </button>
-          </mat-menu>
-        </div> -->
+    
       </mat-card>
     </div>
     <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
