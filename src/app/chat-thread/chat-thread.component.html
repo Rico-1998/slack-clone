@@ -1,6 +1,8 @@
 <div class="thread-main-container">
     <div class="heading">
-        <span># Title</span><mat-icon class="close" (click)="closeThread()">close</mat-icon>
+        <span *ngFor="let otherUser of chatService.currentChatMembers; let last = last">Thread # 
+            {{ otherUser.userName }}
+          </span><mat-icon class="close" (click)="closeThread()">close</mat-icon>
     </div>
     <div class="thread-content-container">
         <div class="message">
