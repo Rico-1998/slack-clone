@@ -16,6 +16,7 @@ import { timestamp } from 'rxjs';
 })
 export class DialogAddChannelComponent implements OnInit {
   channel = new Channel()
+  channelName: string;
   
   constructor(
     private angularFirestore: AngularFirestore, //Tobi added Firestore version 8
@@ -33,4 +34,5 @@ export class DialogAddChannelComponent implements OnInit {
       .add(this.channel.toJSON());
     console.log('New Channel created')
   }
+
 }
