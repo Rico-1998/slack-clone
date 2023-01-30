@@ -92,4 +92,40 @@
     }
 }
 
+@media(max-width:1000px) {
+    .world-img {
+        display: none !important;
+    }
+
+    .btn-box {
+        justify-content: flex-start !important;
+    }
+}
+
+@media (max-width:600px) {
+    .start-screen-section {
+        padding: 50px 75px 50px 75px !important;
+    }
+}
+
+@media(max-width:462px) {
+    .start-screen-section {
+        padding: 25px !important;
+
+        .introduction-container {
+            h2 {
+                font-size: 30px !important;
+            }
+
+            .btn-box {
+                button {
+                    width: 190px !important;
+                    padding: 8px !important;
+                    font-size: 16px !important;
+                }
+            }
+        }
+    }
+}
+
 // 4a154b

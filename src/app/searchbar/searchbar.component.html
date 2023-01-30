@@ -12,7 +12,7 @@
     </mat-option>
   </mat-autocomplete>
   <div class="settings">
-    <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon>
+    <!-- <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon> -->
     <div class="img-container" (click)="openSettings()" matTooltip="{{currentUser.userName}}"
       *ngIf="userService.currentUser$ | async as currentUser">
       <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />

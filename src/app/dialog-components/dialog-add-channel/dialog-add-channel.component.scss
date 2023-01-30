@@ -1,7 +1,7 @@
 @import 'src/modules/_vars';
 
 .dialog-container{
-    width: 400px;
+    max-width: 400px;
     height: 500px;
     display: flex;
     flex-direction: column;
@@ -33,10 +33,39 @@
 
     .btn-container{
         margin-top: 30px;
+        justify-content: end;
+    }
+
+    .small-screen-btn{
+        display: none;
     }
 
     mat-form-field{
         display: flex;
         flex-direction: column;
+    }
+}
+
+@media (max-width:450px) {
+    :root {
+        padding: 12px;
+    }
+    .dialog-container {
+        .top-container {
+            font-size: 12px;
+
+            h1 {
+                font-size: 27px;
+            }
+        }
+
+        .small-screen-btn {
+            display: flex;
+            justify-content: end;
+        }
+
+        .btn-container {
+            display: none;
+        }
     }
 }

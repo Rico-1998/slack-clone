@@ -1,6 +1,9 @@
 .form-container {
     width: 400px;
-    height: 500px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     h2 {
         text-align: center;
@@ -10,6 +13,7 @@
     .form-box {
         display: flex;
         flex-direction: column;
+        
 
         .forgotPassword {
             color: rgba($color: #000000, $alpha: .4);
@@ -42,7 +46,27 @@
         }
     }
 
-    .other-options {
-        margin-top: 125px;
+    // .other-options {
+    //     margin-top: 125px;
+    // }
+}
+
+
+@media(max-width:560px) {
+    .form-container {
+        width: 350px;
+    }
+}
+
+@media(max-width:500px) {
+    .form-container {
+        width: 250px;
+    }
+}
+
+@media(max-width:373px) {
+    .form-container {
+        width: unset;
+        height: 400 !important;
     }
 }
