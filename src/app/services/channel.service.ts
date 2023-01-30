@@ -25,6 +25,7 @@ export class ChannelService {
   currentMessage: any;
   currentChannel: any;
   msgToEdit: any;
+  shouldScroll = true;
 
 
   constructor(
@@ -45,7 +46,7 @@ export class ChannelService {
       .then(() => {
         this.updateLastMessageTimestamp(timestamp)
       });
-
+      this.shouldScroll = true;
   }
 
   //* Updates the time when last message was send in channel */

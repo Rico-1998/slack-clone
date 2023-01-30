@@ -58,7 +58,7 @@ export class MessageBoxComponent implements OnInit {
 
 
   check() {
-    var quillEditorTextfield = document.getElementsByClassName("ql-editor");
+    let quillEditorTextfield = document.getElementsByClassName("ql-editor");
     if (this.textBoxPath == 'channels') {
       this.channel.postInChannel();
       this.messageForm.reset();

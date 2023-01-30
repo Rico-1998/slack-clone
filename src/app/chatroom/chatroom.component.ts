@@ -14,7 +14,6 @@ import { map } from 'rxjs';
   styleUrls: ['./chatroom.component.scss']
 })
 export class ChatroomComponent implements OnInit {
-  // currentchatMessages = [];
   textBoxPath: string = 'chatroom';
   textBoxPathEdit: string = 'edit';
   @ViewChild('scrollBox') private scrollBox: ElementRef;
@@ -31,17 +30,23 @@ export class ChatroomComponent implements OnInit {
       this.route.params.subscribe(chatroomId => {
         this.chatService.getChatRoom(chatroomId);
       });
-      this.scrollToBottom();
     }, 1500);
-
+    this.scrollToBottom();
   }
-
+  
   ngAfterViewChecked() {
-    // this.scrollToBottom();
+    this.scrollToBottom();
   }
 
   scrollToBottom(): void {
-    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+    if(this.chatService.shouldScroll) {
+      setTimeout(() => {
+        this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+      }, 0);
+      setTimeout(() => {
+        this.chatService.shouldScroll = false;
+      }, 100);
+    }
   }
 
   async deleteMessage(message: any) {

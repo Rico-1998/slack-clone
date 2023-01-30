@@ -40,8 +40,8 @@ export class ChannelsComponent implements OnInit {
     public router: Router,
     public dialog: MatDialog,
   ) {
-    route.params.subscribe(val => {
-      this.getChannelRoom();
+    route.params.subscribe((val) => {
+      this.getChannelRoom(val);
     });
 
   }
@@ -49,9 +49,7 @@ export class ChannelsComponent implements OnInit {
   ngOnInit() {
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
-    setTimeout(() => {
-      this.scrollToBottom();
-    }, 0);
+    this.scrollToBottom();    
   }
 
   ngAfterViewChecked() {
@@ -59,22 +57,27 @@ export class ChannelsComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-    this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+    if(this.channel.shouldScroll) {
+      setTimeout(() => {
+        this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
+      }, 0);
+      setTimeout(() => {
+        this.channel.shouldScroll = false;
+      }, 100);
+    }
   }
 
   //**  get channelRoom ID*/
-  async getChannelRoom() {
-    this.route.params.subscribe((params) => {
-      this.channel.channelId = params['id'];
-    })
+  async getChannelRoom(val) {
+    this.channel.channelId = val['id'];    
     let document = doc(this.db, 'channels', this.channel.channelId);
     await getDoc(document)
       .then((doc) => {
         this.channel.currentChannel = doc.data();
         this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
       })
-    this.loadMessagesInChannel();
-      this.updateLastVisitTimestamp();
+    await this.loadMessagesInChannel();
+    this.updateLastVisitTimestamp();     
   }
 
 
@@ -92,6 +95,9 @@ export class ChannelsComponent implements OnInit {
             this.channel.allMessages.push(message);}
       });
     });
+    setTimeout(() => {
+      this.channel.shouldScroll = true;
+    }, 150);
   }
 
 
