@@ -28,6 +28,7 @@ export class ChatService {
   thread: any;
   threadMessage: any;
   msgToEdit: object;
+  shouldScroll = true;
 
 
 
@@ -115,9 +116,7 @@ export class ChatService {
       this.saveMsg(roomId);
       this.router.navigate(['/home/chatroom/' + roomId])
     }
-    // interface chatMessage erstellen mit (timestamp, author, msg)
-    // value aus dem texteditor holen
-    // format chatMsg bearbeiten (siehe andere Gruppe)
+    this.shouldScroll = true;
   }
 
   getChats() {
@@ -133,26 +132,28 @@ export class ChatService {
           this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
         }
       });
-      // console.log(this.chats);
-      // kann man vielleicht noch auf die find methode umbauen und damit verkürzen
-      for (let i = 0; i < this.chats.length; i++) {
-        let otherUsers = this.chats[i].otherUsers;
-        for (let i = 0; i < otherUsers.length; i++) {
-          let actualMember = otherUsers[i];
-          await getDoc(doc(this.db, 'users', actualMember))
-            .then((docData) => {
-              let index = otherUsers.indexOf(actualMember);
-              otherUsers[index] = docData.data();
-            })
-        }
-      }
+      this.findOtherUsers();
     });
+  }
+
+  async findOtherUsers() {
+    for (let i = 0; i < this.chats.length; i++) {
+      let otherUsers = this.chats[i]?.otherUsers;
+      for (let i = 0; i < otherUsers.length; i++) {
+        let actualMember = otherUsers[i];
+        await getDoc(doc(this.db, 'users', actualMember))
+          .then((docData) => {
+            let index = otherUsers.indexOf(actualMember);
+            otherUsers[index] = docData.data();
+          })
+      }
+    }
   }
 
   getChatRoom(chatroomId) {
     let chatId = chatroomId['id'];
     this.currentChat = this.chats.filter(a => a.id == chatId);
-    this.currentChatMembers = this.currentChat[0]['otherUsers'];
+    this.currentChatMembers = this.currentChat[0]?.otherUsers;
     let colRef = query(collection(this.db, 'chats', chatroomId['id'], 'messages'), orderBy('timestamp', 'asc'));
     onSnapshot(colRef, async (snapshot) => {
       this.currentchatMessages = [];
@@ -161,7 +162,8 @@ export class ChatService {
         timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
         this.currentchatMessages.push(timestampConvertedMsg)
       });
-    })
+    });
+    this.shouldScroll = true;
   }
 
   addMessage() {
@@ -171,11 +173,7 @@ export class ChatService {
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
     });
-  }
-
-  showNewestMessage() {
-    let objDiv = document.getElementById("scrollBox");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    this.shouldScroll = true;
   }
 
   async getCurrentThread() {
