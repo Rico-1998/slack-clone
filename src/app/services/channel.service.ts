@@ -128,7 +128,9 @@ export class ChannelService {
   //** open dialog for confirming to delete message */
   openDeleteMessageDialog(message) {
     this.currentMessage = message;
-    this.dialog.open(DialogDeleteMessageComponent)
+    this.dialog.open(DialogDeleteMessageComponent, {
+      panelClass: 'delete-message'
+    })
   }
 
 
