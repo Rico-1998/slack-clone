@@ -35,7 +35,7 @@ export class ChannelService {
 
 
   //**adding message to the picked channel */
-  postInChannel() {
+  async postInChannel() {
     let timestamp = Timestamp.fromDate(new Date()).toDate();
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
       author: this.user.currentUser['userName'],
@@ -43,7 +43,16 @@ export class ChannelService {
       msg: this.newMessage
     })
       .then(() => {
+        this.updateLastMessageTimestamp(timestamp)
       });
+
+  }
+
+  //* Updates the time when last message was send in channel */
+  async updateLastMessageTimestamp(timestamp) {
+    await updateDoc(doc(this.db, 'channels', this.channelId), {
+      lastMessage: timestamp
+    })
   }
 
 

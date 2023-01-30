@@ -24,8 +24,8 @@
     </div>
 
     <div class="scroll-box">
-      <div class="devider">
-        <span *ngIf="this.threadMessage.comments > 0 && this.threadMessage.comments == 1">{{ this.threadMessage.comments}} Antwort</span>
+      <div class="devider" *ngIf="this.threadMessage.comments">
+        <span *ngIf="this.threadMessage.comments == 1">{{ this.threadMessage.comments}} Antwort</span>
         <span *ngIf="this.threadMessage.comments > 1">{{ this.threadMessage.comments}} Antworten</span>
       </div>
       <mat-card *ngFor="let comment of this.channel.allThreadComments; let i = index" class="comment-container">

@@ -2,13 +2,14 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
-import { addDoc, deleteDoc, doc, getDoc, getDocs } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
-import { timestamp } from 'rxjs';
+import { map, timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
+import { update } from '@firebase/database';
 // import { query } from '@angular/animations';
 
 
@@ -30,6 +31,7 @@ export class ChannelsComponent implements OnInit {
   textBoxPathEdit: string = 'edit-channel';
   currentMessage: any;
   messageEditable: boolean = false;
+  lastMessage: any ;
 
   constructor(
     public userService: UserService,
@@ -41,8 +43,8 @@ export class ChannelsComponent implements OnInit {
     route.params.subscribe(val => {
       this.getChannelRoom();
     });
-  }
 
+  }
 
   ngOnInit() {
     this.userService.channelEditor = true;
@@ -52,17 +54,14 @@ export class ChannelsComponent implements OnInit {
     }, 0);
   }
 
-
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
-
 
   scrollToBottom(): void {
     this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
   }
 
-  
   //**  get channelRoom ID*/
   async getChannelRoom() {
     this.route.params.subscribe((params) => {
@@ -75,6 +74,7 @@ export class ChannelsComponent implements OnInit {
         this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
       })
     this.loadMessagesInChannel();
+      this.updateLastVisitTimestamp();
   }
 
 
@@ -107,6 +107,17 @@ export class ChannelsComponent implements OnInit {
   //** */
   changePath(message) {
     this.channel.msgToEdit = message;
+  }
+
+  //* Updates the timestap when user last visited the channel*/
+  async updateLastVisitTimestamp() {
+    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channel.channelId);
+     await setDoc(docToUpdate, {
+      time: Timestamp.fromDate(new Date()).toDate()
+    });
+
+    console.log('channelvisits',this.userService.lastChannelVisits)
+    console.log('lastmessage', this.channel.currentChannel.lastMessage)
   }
 
 }

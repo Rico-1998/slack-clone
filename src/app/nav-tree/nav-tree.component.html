@@ -16,7 +16,7 @@
     <mat-list-item *ngFor="let channel of channels">
       <div class="listItem" matListItemTitle (click)="this.toggler.closeNav()" routerLink="channel/{{ channel.id }}">
         <div class="hashtag">#</div>
-        <span class="channelName">{{ channel.channelName }}</span>
+        <span class="channelName" [class.highlight]="">{{ channel.channelName }}</span>
       </div>
     </mat-list-item>
     <mat-list-item>
@@ -34,7 +34,7 @@
     <div class="headline" (click)="openChatsPanel = !openChatsPanel">
       <div class="icon-hover-wrapper">
         <mat-icon>{{
-          openChannelPanel ? "arrow_drop_down" : "arrow_right"
+          openChatsPanel ? "arrow_drop_down" : "arrow_right"
           }}</mat-icon>
       </div>
       <h3>Chats</h3>

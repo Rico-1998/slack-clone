@@ -16,6 +16,7 @@ export class UserService {
   channelEditor: boolean = false;
   chatEditor: boolean = false;
   threadEditor: boolean = false;
+  lastChannelVisits: any = [];
 
   constructor(
     public authService: AuthService,
@@ -45,6 +46,7 @@ export class UserService {
       })
     )
 
+    this.loadLastVisitTimestamps()
   }
 
 
@@ -54,6 +56,15 @@ export class UserService {
         // console.log(response.docs.map(docs => docs.data()));
       })
     // console.log('das ist der Current User:', this.currentUser);
+  }
 
+  loadLastVisitTimestamps() {
+    onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if(!this.lastChannelVisits.find(v => v.id == doc.id)) {
+          this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
+        }
+      })
+    }) 
   }
 }
