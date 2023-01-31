@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp, updateDoc } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
@@ -12,6 +12,7 @@ import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete
 })
 export class ChannelService {
   channelId: string;
+  channels: any = [];
   db: any = getFirestore();
   newMessage: Message;
   newComment: Message;
@@ -32,8 +33,38 @@ export class ChannelService {
     public user: UserService,
     private route: ActivatedRoute,
     public dialog: MatDialog,
+    public userService: UserService,
   ) { }
 
+  //**get the channels from firestore */
+  // async getChannels() {
+  //   while (!this.userService.loadedChannelVisits) {
+  //     await new Promise(resolve => setTimeout(resolve,100));
+  //   }
+  //   onSnapshot(collection(this.db, 'channels'), (snapshot) => {
+  //     this.channels = [];
+  //     snapshot.docs.forEach((doc) => {
+  //       const lastUserVisit = this.userService.lastChannelVisits.find(v => v.id == doc.id)?.time;
+  //       this.channels.push(({ ...(doc.data() as object), id: doc.id, lastUserVisit: lastUserVisit }));
+  //     })
+  //   });
+  // }
+  async getChannels() {
+    onSnapshot(collection(this.db, 'channels'), (snapshot) => {
+      this.channels = [];
+      snapshot.docs.forEach((doc) => {
+        this.channels.push(({ ...(doc.data() as object), id: doc.id}));
+      })
+      onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+         let channel = this.channels.find(c => c.id == doc.id);
+         if(channel) {
+          channel.lastUserVisit = doc.data();
+         }
+        })
+      }) 
+    });
+  }
 
   //**adding message to the picked channel */
   async postInChannel() {
@@ -45,6 +76,9 @@ export class ChannelService {
     })
       .then(() => {
         this.updateLastMessageTimestamp(timestamp)
+        setTimeout(() => {
+          this.updateLastVisitTimestamp()
+        }, 1000);
       });
       this.shouldScroll = true;
   }
@@ -128,7 +162,9 @@ export class ChannelService {
   //** open dialog for confirming to delete message */
   openDeleteMessageDialog(message) {
     this.currentMessage = message;
-    this.dialog.open(DialogDeleteMessageComponent)
+    this.dialog.open(DialogDeleteMessageComponent, {
+      panelClass: 'delete-message'
+    })
   }
 
 
@@ -157,4 +193,21 @@ export class ChannelService {
     } else return onlyDate;
   }
 
+   //* Updates the timestap when user last visited the channel*/
+   async updateLastVisitTimestamp() {
+    // this.updateLastVisitsLocally();
+    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channelId);
+     await setDoc(docToUpdate, {
+      time: Timestamp.fromDate(new Date()).toDate()
+    });
+  }
+
+  updateLastVisitsLocally() {
+    const channel = this.channels.find(c => c.id == this.channelId);
+    if(channel) {
+      channel.lastUserVisit = Timestamp.fromDate(new Date());
+    }
+  }
 }
+
+

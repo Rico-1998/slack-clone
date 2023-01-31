@@ -15,12 +15,6 @@ export class DrawerTogglerService {
     public channel: ChannelService,
     public chats: ChatService,
   ) {
-    // if(window.innerWidth < 600) {
-    //   this.isSidenavOpen = true;
-    // } else {
-    //   this.isSidenavOpen = false;
-    // }
-
    
   }
 
@@ -30,6 +24,10 @@ export class DrawerTogglerService {
     } else {
       this.open = true;
     }
+  }
+
+  test() {
+    console.log('test')
   }
 
   //Closes Nav and Threads on small screens
