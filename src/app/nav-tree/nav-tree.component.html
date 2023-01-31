@@ -17,7 +17,7 @@
     </div>
   </div>
   <div *ngIf="openChannelPanel">
-    <mat-list-item *ngFor="let channel of channels">
+    <mat-list-item *ngFor="let channel of this.channelService.channels">
       <div
         class="listItem"
         matListItemTitle
@@ -25,7 +25,7 @@
         routerLink="channel/{{ channel.id }}"
       >
         <div class="hashtag">#</div>
-        <span class="channelName" [class.highlight]="">{{
+        <span class="channelName" [class.highlight]="channel?.lastMessage > channel.lastUserVisit?.time && this.channelService.channelId !== channel.id && channel.lastUserVisit?.time">{{
           channel.channelName
         }}</span>
       </div>
