@@ -22,7 +22,8 @@ export class ChatroomComponent implements OnInit {
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
-    public userService: UserService
+    public userService: UserService,
+    public channelService:ChannelService
   ) { }
 
   ngOnInit(): void {

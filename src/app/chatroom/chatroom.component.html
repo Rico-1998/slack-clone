@@ -55,7 +55,7 @@
               (click)="changePath(message)">
               Edit message
             </button>
-            <button mat-menu-item class="delete" (click)="deleteMessage(message)"
+            <button mat-menu-item class="delete" (click)="channelService.openDeleteMessageDialog(message)"
               *ngIf="userService.currentUser.userName == message.author">
               Delete message
             </button>
