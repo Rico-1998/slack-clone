@@ -81,22 +81,38 @@ export class ChannelsComponent implements OnInit {
 
   //** load all messages to the current channel */
   async loadMessagesInChannel() {
-    this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     onSnapshot(q, (snapshot) => {
+      this.channel.allMessages = [];
       snapshot.docs.forEach(async (doc) => {
-        if (!this.channel.allMessages.find(m => m.id == doc.id)) {
-            let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-            let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-            message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-            this.channel.allMessages.push(message);}
-      });
+        let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+        let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+        message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+        this.channel.allMessages.push(message);}
+        );
     });
     setTimeout(() => {
       this.channel.shouldScroll = true;
     }, 150);
   }
+  // async loadMessagesInChannel() {
+  //   this.channel.allMessages = [];
+  //   const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
+  //   const q = query(colRef, orderBy('timestamp'));
+  //   onSnapshot(q, (snapshot) => {
+  //     snapshot.docs.forEach(async (doc) => {
+  //       if (!this.channel.allMessages.find(m => m.id == doc.id)) {
+  //           let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+  //           let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+  //           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+  //           this.channel.allMessages.push(message);}
+  //     });
+  //   });
+  //   setTimeout(() => {
+  //     this.channel.shouldScroll = true;
+  //   }, 150);
+  // }
 
 
   //** open thread with all comments of the picked message*/
