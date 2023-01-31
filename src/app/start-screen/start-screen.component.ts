@@ -15,13 +15,10 @@ import { ChatService } from '../services/chat.service';
 })
 export class StartScreenComponent implements OnInit {
 
-  constructor(public dialog: MatDialog,
-    public chatService: ChatService,
-    public channelService: ChannelService) { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.chatService.threadOpen = false;
-    this.channelService.threadOpen = false;
+
   }
 
   openLogin() {

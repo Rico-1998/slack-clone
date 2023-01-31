@@ -44,7 +44,6 @@ export class NavTreeComponent implements OnInit {
       })
     });
 
-
   }
 
   openDialogAddChannel() {

@@ -59,12 +59,14 @@ export class UserService {
   }
 
   loadLastVisitTimestamps() {
-    onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        if(!this.lastChannelVisits.find(v => v.id == doc.id)) {
-          this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
-        }
+    if (JSON.parse(localStorage.getItem('user')) !== null) {
+      onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          if (!this.lastChannelVisits.find(v => v.id == doc.id)) {
+            this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
+          }
+        })
       })
-    }) 
+    }
   }
 }
