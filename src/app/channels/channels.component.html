@@ -1,6 +1,8 @@
 <div class="main-container">
   <div class="channels-content-container">
-    <div class="heading"># {{ this.channel.currentChannel?.channelName }}</div>
+    <div class="heading">
+      # {{ this.channelService.currentChannel?.channelName }}
+    </div>
     <div class="scroll-box" #scrollBox>
       <mat-card class="welcome-card">
         <div class="leftframe">
@@ -9,46 +11,75 @@
         <mat-card-content class="welcome-content">
           <span>
             Thats the beginning of this channel
-            <span class="highlight">#{{ this.channel.currentChannel?.channelName }}</span> </span><br />
-          <span>This Channel was created at: {{ this.channel.currentChannel?.created }}</span><br />
-          <span>Channeldescription:
-            <span class="highlight">#{{ this.channel.currentChannel?.channelDescription }}</span></span>
+            <span class="highlight"
+              >#{{ this.channelService.currentChannel?.channelName }}</span
+            > </span
+          ><br />
+          <span
+            >This Channel was created at:
+            {{ this.channelService.currentChannel?.created }}</span
+          ><br />
+          <span
+            >Channeldescription:
+            <span class="highlight"
+              >#{{
+                this.channelService.currentChannel?.channelDescription
+              }}</span
+            ></span
+          >
         </mat-card-content>
       </mat-card>
-      <mat-card class="message-container" *ngFor="let message of this.channel.allMessages; let i = index"
-        (click)="channel.getCurrentMessage(message.id)">
-
+      <mat-card
+        class="message-container"
+        *ngFor="let message of this.channelService.allMessages; let i = index"
+        (click)="this.channelService.getCurrentMessage(message.id)"
+      >
         <div class="option-box">
           <div class="option">
             <mat-icon matTooltip="Reaktion hinzufügen"> add_reaction </mat-icon>
           </div>
           <div class="option">
-            <mat-icon matTooltip="Im Thread antworten" (click)="openThread(message.id)"> comment </mat-icon>
+            <mat-icon
+              matTooltip="Im Thread antworten"
+              (click)="openThread(message.id)"
+            >
+              comment
+            </mat-icon>
           </div>
           <div class="option">
-            <mat-icon matTooltip="Weitere Aktionen" [matMenuTriggerFor]="menu"> more_vert </mat-icon>
+            <mat-icon matTooltip="Weitere Aktionen" [matMenuTriggerFor]="menu">
+              more_vert
+            </mat-icon>
           </div>
-  
-  
+
           <mat-menu #menu="matMenu" class="del-menu">
-
             <div class="menu-options">
-
-              <button mat-menu-item *ngIf="userService.currentUser.userName == message.author"
-                (click)="changePath(message)">Nachricht
-                bearbeiten</button>
-              <button mat-menu-item class="delete" (click)="channel.openDeleteMessageDialog(message)"
-                *ngIf="userService.currentUser.userName == message.author">Nachricht löschen</button>
+              <button
+                mat-menu-item
+                *ngIf="userService.currentUser.userName == message.author"
+                (click)="changePath(message)"
+              >
+                Nachricht bearbeiten
+              </button>
+              <button
+                mat-menu-item
+                class="delete"
+                (click)="this.channelService.openDeleteMessageDialog(message)"
+                *ngIf="userService.currentUser.userName == message.author"
+              >
+                Nachricht löschen
+              </button>
               <button mat-menu-item>Link kopieren</button>
             </div>
-
           </mat-menu>
-
         </div>
 
-
         <div class="img-container">
-          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+          <img
+            class="profile-img"
+            src="assets/img/profile-img.jpg"
+            alt="profile-img"
+          />
         </div>
         <div class="message-content">
           <div class="">
@@ -56,15 +87,25 @@
             {{ message.timestamp }}
           </div>
           <span [innerHTML]="message.msg"></span>
-          <span *ngIf="message.comments" class="open-thread-link" (click)="openThread(message.id)">{{ message.comments }} Antworten</span>
+          <span
+            *ngIf="message.comments"
+            class="open-thread-link"
+            (click)="openThread(message.id)"
+            >{{ message.comments }} Antworten</span
+          >
           <div class="phils-div-box-zum-stylen-des-editors">
-            <app-message-box *ngIf="channel.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
+            <app-message-box
+              *ngIf="this.channelService.msgToEdit == message"
+              [textBoxPath]="textBoxPathEdit"
+            ></app-message-box>
           </div>
         </div>
-    
       </mat-card>
     </div>
-    <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
+    <app-message-box
+      class="message-box"
+      [textBoxPath]="textBoxPath"
+    ></app-message-box>
   </div>
-  <app-thread *ngIf="channel.threadOpen"></app-thread>
+  <app-thread *ngIf="this.channelService.threadOpen"></app-thread>
 </div>

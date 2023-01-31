@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, deleteDoc, doc, onSnapshot } from '@angular/fire/firestore';
+import { collection, deleteDoc, doc, onSnapshot, orderBy} from '@angular/fire/firestore';
+import { query } from '@firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { getDoc } from '@firebase/firestore';
 import { ChatService } from '../services/chat.service';
-import { ChannelService } from '../services/channel.service';
 import { UserService } from '../services/user.service';
-import { map } from 'rxjs';
+import { ChannelService } from '../services/channel.service';
+
 
 
 @Component({
@@ -22,13 +22,14 @@ export class ChatroomComponent implements OnInit {
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
-    public userService: UserService
+    public userService: UserService,
+    public channelService: ChannelService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     setTimeout(() => {
       this.route.params.subscribe(chatroomId => {
-        this.chatService.getChatRoom(chatroomId);
+        this.getChatRoom(chatroomId);
       });
     }, 1500);
     this.scrollToBottom();
@@ -63,6 +64,30 @@ export class ChatroomComponent implements OnInit {
 
   changePath(message) {
     this.chatService.msgToEdit = message;
+  }
+
+  getChatRoom(chatroomId) {
+    let chatId = chatroomId['id'];
+    this.chatService.currentChat = this.chatService.chats.filter(a => a.id == chatId);
+    this.chatService.currentChatMembers = this.chatService.currentChat[0]?.otherUsers;
+    let colRef = query(collection(this.chatService.db, 'chats', chatId, 'messages'), orderBy('timestamp', 'asc'));
+    const unsub = onSnapshot(colRef, async (snapshot) => {
+      if(chatId != this.chatService.currentChat[0]?.id) {
+        unsub();
+      } else {
+        await this.snapChatroomMessages(chatroomId, snapshot);
+      }
+    });
+    this.chatService.shouldScroll = true;    
+  }
+
+  async snapChatroomMessages(chatroomId, snapshot) {
+    this.chatService.currentChatMessages = [];
+    snapshot.docs.forEach(async (document) => {
+      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId, documentId: document.id };
+      timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+      this.chatService.currentChatMessages.push(timestampConvertedMsg)
+    });
   }
 
 }

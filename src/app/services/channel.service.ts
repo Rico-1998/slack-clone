@@ -49,20 +49,25 @@ export class ChannelService {
   //     })
   //   });
   // }
+  
   async getChannels() {
     onSnapshot(collection(this.db, 'channels'), (snapshot) => {
       this.channels = [];
       snapshot.docs.forEach((doc) => {
         this.channels.push(({ ...(doc.data() as object), id: doc.id}));
       })
-      onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-         let channel = this.channels.find(c => c.id == doc.id);
-         if(channel) {
-          channel.lastUserVisit = doc.data();
-         }
-        })
-      }) 
+      this.setLastVisitForChannel();
+    });
+  }
+
+  setLastVisitForChannel() {
+    onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+       let channel = this.channels.find(c => c.id == doc.id);
+       if(channel) {
+        channel.lastUserVisit = doc.data();
+       }
+      })
     });
   }
 

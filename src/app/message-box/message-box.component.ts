@@ -87,12 +87,21 @@ export class MessageBoxComponent implements OnInit {
     if (event.event === 'text-change') {
       let text = event.html;
       if (text !== null) {
-        this.channel.newMessage = event.html;
-        this.channel.newComment = event.html;
-        this.chatService.chatMsg = event.html;
+        this.channel.newMessage = text;
+        this.channel.newComment = text;
+        this.chatService.chatMsg = text;
         this.valid = true;
       } else {
         this.valid = false;
+      }
+    }
+  }
+
+  checkEnter(event) {
+    if (event.event === 'text-change') {
+      let text = event.html;
+      if (text !== null) {
+    console.log('das ist', event.html.replace(/<[^>]+>/g, ''));
       }
     }
   }

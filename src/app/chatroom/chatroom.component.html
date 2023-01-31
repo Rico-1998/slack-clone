@@ -1,10 +1,16 @@
 <div class="chatroomContainer">
   <div class="heading">
     <div class="img-container-chatroom sidenav-shrink">
-      <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+      <img
+        class="profile-img"
+        src="assets/img/profile-img.jpg"
+        alt="profile-img"
+      />
       <div class="dot-sidenav online"></div>
     </div>
-    <span *ngFor="let otherUser of chatService.currentChatMembers; let last = last">
+    <span
+      *ngFor="let otherUser of chatService.currentChatMembers; let last = last"
+    >
       {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
     </span>
   </div>
@@ -12,25 +18,52 @@
   <div class="scroll-box" #scrollBox>
     <mat-card class="first-message-container">
       <div class="img-container">
-        <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+        <img
+          class="profile-img"
+          src="assets/img/profile-img.jpg"
+          alt="profile-img"
+        />
       </div>
 
       <div class="message-content">
-        <span *ngFor="let otherUser of chatService.currentChatMembers; let last = last">
+        <span
+          *ngFor="
+            let otherUser of chatService.currentChatMembers;
+            let last = last
+          "
+        >
           {{ otherUser.userName }}
         </span>
-        <span>Diese Unterhaltung findet nur zwischen <span class="highlight">@<span *ngFor="let otherUser of chatService.currentChatMembers; let last = last">
-          {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container></span>
-        </span> und dir statt.</span>
+        <span
+          >Diese Unterhaltung findet nur zwischen
+          <span class="highlight"
+            >@<span
+              *ngFor="
+                let otherUser of chatService.currentChatMembers;
+                let last = last
+              "
+            >
+              {{ otherUser.userName
+              }}<ng-container *ngIf="!last">,</ng-container></span
+            >
+          </span>
+          und dir statt.</span
+        >
       </div>
     </mat-card>
-    <mat-card class="message-container" *ngFor="let message of chatService.currentchatMessages; let i = index">
+    <mat-card
+      class="message-container"
+      *ngFor="let message of chatService.currentChatMessages; let i = index"
+    >
       <div class="option-box">
         <div class="option">
           <mat-icon matTooltip="Reaktion hinzufügen"> add_reaction </mat-icon>
         </div>
         <div class="option">
-          <mat-icon matTooltip="Im Thread antworten" (click)="openThread(message)">
+          <mat-icon
+            matTooltip="Im Thread antworten"
+            (click)="openThread(message)"
+          >
             comment
           </mat-icon>
         </div>
@@ -51,15 +84,25 @@
 
         <mat-menu #menu="matMenu" class="del-menu">
           <div class="menu-options">
-            <button mat-menu-item *ngIf="userService.currentUser.userName == message.author"
-              (click)="changePath(message)">
+            <button
+              mat-menu-item
+              *ngIf="userService.currentUser.userName == message.author"
+              (click)="changePath(message)"
+            >
               Edit message
             </button>
-            <button mat-menu-item class="delete" (click)="deleteMessage(message)"
-              *ngIf="userService.currentUser.userName == message.author">
+            <button
+              mat-menu-item
+              class="delete"
+              (click)="deleteMessage(message)"
+              *ngIf="userService.currentUser.userName == message.author"
+            >
               Delete message
             </button>
-            <button *ngIf="userService.currentUser.userName != message.author" mat-menu-item>
+            <button
+              *ngIf="userService.currentUser.userName != message.author"
+              mat-menu-item
+            >
               Not your message
             </button>
           </div>
@@ -67,7 +110,11 @@
       </div>
 
       <div class="img-container">
-        <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+        <img
+          class="profile-img"
+          src="assets/img/profile-img.jpg"
+          alt="profile-img"
+        />
       </div>
 
       <div class="message-content">
@@ -79,7 +126,10 @@
         <span [innerHTML]="message.msg"></span>
 
         <div class="phils-div-box-zum-stylen-des-editors">
-          <app-message-box *ngIf="chatService.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
+          <app-message-box
+            *ngIf="chatService.msgToEdit == message"
+            [textBoxPath]="textBoxPathEdit"
+          ></app-message-box>
         </div>
       </div>
     </mat-card>

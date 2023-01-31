@@ -1,17 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { collection, getFirestore, onSnapshot, Timestamp, orderBy, query, serverTimestamp } from '@firebase/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
+import { collection, getFirestore, onSnapshot,  orderBy, query } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
-import { addDoc, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Message } from 'src/modules/messages.class';
-import { map, timestamp } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
-import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
-import { update } from '@firebase/database';
-// import { query } from '@angular/animations';
-
+import { doc, getDocs } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-channels',
@@ -24,30 +18,31 @@ export class ChannelsComponent implements OnInit {
   public displayEditMenu;
   messageToEdit: any;
   channelId: any;
+  currentMessage: any;
   currentUserName: any;
+  currentChannelRoom: any;
   newMessage: Message;
   showBtn: boolean = false;
   textBoxPath: string = 'channels';
   textBoxPathEdit: string = 'edit-channel';
-  currentMessage: any;
   messageEditable: boolean = false;
-  lastMessage: any ;
+  lastMessage: any;
 
   constructor(
     public userService: UserService,
     private route: ActivatedRoute,
-    public channel: ChannelService,
+    public channelService: ChannelService,
     public router: Router,
     public dialog: MatDialog,
   ) {
-    route.params.subscribe((val) => {
-      this.getChannelRoom(val);
+    route.params.subscribe((channelRoomId) => {
+      this.getChannelRoom(channelRoomId);
     });
 
   }
 
   ngOnInit() {
-    this.channel.updateLastVisitTimestamp()
+    this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
     this.scrollToBottom();    
@@ -58,75 +53,93 @@ export class ChannelsComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-    if(this.channel.shouldScroll) {
+    if(this.channelService.shouldScroll) {
       setTimeout(() => {
         this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
       }, 0);
       setTimeout(() => {
-        this.channel.shouldScroll = false;
+        this.channelService.shouldScroll = false;
       }, 100);
     }
   }
 
   //**  get channelRoom ID*/
-  async getChannelRoom(val) {
-    this.channel.channelId = val['id'];    
-    onSnapshot(doc(this.db, 'channels', this.channel.channelId), async (snapshot) => {
-      this.channel.currentChannel = snapshot.data();
-      this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
-    })
+  async getChannelRoom(channelRoomId) {
+    this.channelService.channelId = channelRoomId['id'];   
+    const unsub = onSnapshot(doc(this.db, 'channels', this.channelService.channelId), async (snapshot) => {
+      if(!this.channelService.channelId) {
+        unsub();
+      } else {
+        this.channelService.currentChannel = snapshot.data();
+        this.channelService.currentChannel.created = this.channelService.convertTimestamp(this.channelService.currentChannel.created, 'onlyDate');        
+      }
+    });
     await this.loadMessagesInChannel();
-    this.channel.updateLastVisitTimestamp();     
+    this.channelService.updateLastVisitTimestamp();     
   }
 
   //** load all messages to the current channel */
-  async loadMessagesInChannel() {
-    const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
-    const q = query(colRef, orderBy('timestamp'));
-    onSnapshot(q, (snapshot) => {
-      this.channel.allMessages = [];
-      snapshot.docs.forEach(async (doc) => {
-        let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-        let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
-        message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-        this.channel.allMessages.push(message);}
-        );
-    });
-    setTimeout(() => {
-      this.channel.shouldScroll = true;
-    }, 150);
-  }
   // async loadMessagesInChannel() {
-  //   this.channel.allMessages = [];
   //   const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
   //   const q = query(colRef, orderBy('timestamp'));
-  //   onSnapshot(q, (snapshot) => {
-  //     snapshot.docs.forEach(async (doc) => {
-  //       if (!this.channel.allMessages.find(m => m.id == doc.id)) {
-  //           let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-  //           let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-  //           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-  //           this.channel.allMessages.push(message);}
-  //     });
+  //   const unsub = onSnapshot(q, (snapshot) => {
+  //     if(!this.channel.channelId) {
+  //       unsub();
+  //     } else {
+  //       this.channel.allMessages = [];
+  //       snapshot.docs.forEach(async (doc) => {
+  //         let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+  //         let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
+  //         message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+  //         this.channel.allMessages.push(message);}
+  //         );
+
+  //     }
   //   });
   //   setTimeout(() => {
   //     this.channel.shouldScroll = true;
   //   }, 150);
   // }
 
+  async loadMessagesInChannel() {
+    this.channelService.allMessages = [];
+    const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
+    const q = query(colRef, orderBy('timestamp'));
+    const unsub = onSnapshot(q, (snapshot) => {   
+      if(!this.channelService.channelId) {
+        unsub();
+      }   else {
+        this.snapCurrentChannelMessages(snapshot);      
+      }
+    });
+    setTimeout(() => {
+      this.channelService.shouldScroll = true;
+    }, 150);
+  }
+
+  snapCurrentChannelMessages(snapshot) {
+    snapshot.docs.forEach(async (doc) => {
+      if (!this.channelService.allMessages.find(m => m.id == doc.id)) {
+          let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
+          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+          message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
+          this.channelService.allMessages.push(message);}
+    });
+  }
+
 
   //** open thread with all comments of the picked message*/
   openThread(id) {
-    this.channel.threadId = id;
-    this.channel.threadOpen = true;
-    this.channel.loadCommentsToThread();
-    this.channel.loadMessageToThread();
+    this.channelService.threadId = id;
+    this.channelService.threadOpen = true;
+    this.channelService.loadCommentsToThread();
+    this.channelService.loadMessageToThread();
   }
 
 
   //** */
   changePath(message) {
-    this.channel.msgToEdit = message;
+    this.channelService.msgToEdit = message;
   }
 
 }
