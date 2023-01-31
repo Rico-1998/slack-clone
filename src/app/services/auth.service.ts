@@ -44,20 +44,20 @@ export class AuthService {
   }
 
 
-  guestLogin() {
-    signInAnonymously(this.auth)
-      .then((guest) => {
-        // console.log(guest);
-        setDoc(doc(this.colRef, guest.user.uid), {
-          userName: 'guest',
-        });
-        this.loggedIn = true;
-        this.router.navigate(['/home']);
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
-  }
+  // guestLogin() {
+  //   signInAnonymously(this.auth)
+  //     .then((guest) => {
+  //       // console.log(guest);
+  //       setDoc(doc(this.colRef, guest.user.uid), {
+  //         userName: 'guest',
+  //       });
+  //       this.loggedIn = true;
+  //       this.router.navigate(['/home']);
+  //     })
+  //     .catch((e) => {
+  //       this.handleError(e.message, e.code);
+  //     })
+  // }
 
 
   isLoggedIn(): any {

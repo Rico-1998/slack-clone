@@ -1,11 +1,19 @@
 <app-searchbar #searchbar></app-searchbar>
 <mat-drawer-container class="content-container" autosize>
-
-  <mat-drawer #drawer class="sidenav" [opened]="this.toggler.open" [mode]="this.toggler.type">
+  <mat-drawer
+    #drawer
+    class="sidenav"
+    [opened]="this.toggler.open"
+    [mode]="this.toggler.type"
+  >
     <div class="workspace heading">
       <h1>Developer Akademie</h1>
       <div class="new-chat-container">
-        <mat-icon class="material-symbols-outlined" routerLink="/home/create-chat">edit_square</mat-icon>
+        <mat-icon
+          class="material-symbols-outlined"
+          routerLink="/home/create-chat"
+          >edit_square</mat-icon
+        >
       </div>
     </div>
 
@@ -22,7 +30,6 @@
   responsive all( Fertig bis auf Delete Message Dialog) => Victor macht den dialog fertig
   on login go to chat or channel
   bug in chats( if reload console error) => Phil, Kannst du da nochmal drüber schauen?
-  scroll bug in channels ( scrolls to bottom on hover)
   Load only 20 of the newest messages in Chats and channels
   Avoid double names in channels
   Bug in chats, after change to guest user, same private chats are shown like for the user before
