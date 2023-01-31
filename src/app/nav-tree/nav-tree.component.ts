@@ -9,6 +9,8 @@ import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { Observable } from 'rxjs';
+import { ChannelService } from '../services/channel.service';
+
 
 
 
@@ -19,31 +21,28 @@ import { Observable } from 'rxjs';
   styleUrls: ['./nav-tree.component.scss']
 })
 export class NavTreeComponent implements OnInit {
-  openChannelPanel = false;
-  openChatsPanel = false;
+  openChannelPanel = true;
+  openChatsPanel = true;
   db = getFirestore();
   currentUser = JSON.parse(localStorage.getItem('user'));
-  currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
-  channels: any = [];
+  // currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  // channels: any = [];
   _lastUserVisits: any;
 
   constructor(
     public dialog: MatDialog,
     public userService: UserService,
     public chatService: ChatService,
+    public channelService: ChannelService,
     public auth: AuthService,
-    public toggler: DrawerTogglerService
-  ) { }
+    public toggler: DrawerTogglerService,
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.chatService.getChats();
-    onSnapshot(collection(this.db, 'channels'), (snapshot) => {
-      this.channels = [];
-      snapshot.docs.forEach((doc) => {
-        this.channels.push(({ ...(doc.data() as object), id: doc.id }));
-      })
-    });
-
+    this.channelService.getChannels();
   }
 
   openDialogAddChannel() {
@@ -51,5 +50,4 @@ export class NavTreeComponent implements OnInit {
       panelClass: 'add-channel',
     });
   }
-
 }

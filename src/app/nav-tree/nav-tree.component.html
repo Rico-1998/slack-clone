@@ -1,78 +1,64 @@
 <mat-selection-list [multiple]="false">
+
   <div class="header-container">
     <div class="headline" (click)="openChannelPanel = !openChannelPanel">
       <div class="icon-hover-wrapper">
         <mat-icon>{{
           openChannelPanel ? "arrow_drop_down" : "arrow_right"
-        }}</mat-icon>
+          }}</mat-icon>
       </div>
       <h3>Channels</h3>
     </div>
     <div class="icon-hover-wrapper">
-      <mat-icon
-        (click)="openDialogAddChannel()"
-        (click)="this.toggler.closeNav()"
-        >add</mat-icon
-      >
+      <mat-icon (click)="openDialogAddChannel()" (click)="this.toggler.closeNav()">add</mat-icon>
     </div>
   </div>
+
   <div *ngIf="openChannelPanel">
-    <mat-list-item *ngFor="let channel of channels">
-      <div
-        class="listItem"
-        matListItemTitle
-        (click)="this.toggler.closeNav()"
-        routerLink="channel/{{ channel.id }}"
-      >
+    <mat-list-item *ngFor="let channel of this.channelService.channels">
+      <div class="listItem" matListItemTitle (click)="this.toggler.closeNav()" routerLink="channel/{{ channel.id }}">
         <div class="hashtag">#</div>
-        <span class="channelName" [class.highlight]="">{{
-          channel.channelName
-        }}</span>
+        <span class="channelName" [class.highlight]="channel?.lastMessage > channel.lastUserVisit?.time 
+          && this.channelService.channelId !== channel.id 
+          && channel.lastUserVisit?.time">
+          {{ channel.channelName }}</span>
       </div>
     </mat-list-item>
+
     <mat-list-item>
       <div class="addItem" matListItemTitle>
         <div class="hashtag">
           <mat-icon class="plusIcon">add</mat-icon>
         </div>
-        <span (click)="openDialogAddChannel()" (click)="this.toggler.closeNav()"
-          >Channel hinzufügen</span
-        >
+        <span (click)="openDialogAddChannel()" (click)="this.toggler.closeNav()">Channel hinzufügen</span>
       </div>
     </mat-list-item>
   </div>
+
 </mat-selection-list>
 <mat-selection-list [multiple]="false">
+
   <div class="header-container">
     <div class="headline" (click)="openChatsPanel = !openChatsPanel">
       <div class="icon-hover-wrapper">
         <mat-icon>{{
           openChatsPanel ? "arrow_drop_down" : "arrow_right"
-        }}</mat-icon>
+          }}</mat-icon>
       </div>
       <h3>Chats</h3>
     </div>
-    <div
-      class="icon-hover-wrapper"
-      routerLink="/home/create-chat"
-      (click)="this.toggler.closeNav()"
-    >
+    <div class="icon-hover-wrapper" routerLink="/home/create-chat" (click)="this.toggler.closeNav()">
       <mat-icon>add</mat-icon>
     </div>
   </div>
+
   <div *ngIf="openChatsPanel">
-    <mat-list-item
-      *ngFor="let chat of chatService.chats"
-      (click)="this.toggler.closeNav()"
-      routerLink="/home/chatroom/{{ chat.id }}"
-    >
+
+    <mat-list-item *ngFor="let chat of chatService.chats" (click)="this.toggler.closeNav()"
+      routerLink="/home/chatroom/{{ chat.id }}">
       <div class="listItem" matListItemTitle>
         <div class="img-container sidenav-shrink">
-          <img
-            class="profile-img"
-            src="assets/img/profile-img.jpg"
-            alt="profile-img"
-          />
+          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
           <div class="dot-sidenav online"></div>
         </div>
         <span *ngFor="let otherUser of chat.otherUsers; let last = last">
@@ -80,18 +66,16 @@
         </span>
       </div>
     </mat-list-item>
+
     <mat-list-item>
-      <div
-        class="addItem"
-        matListItemTitle
-        routerLink="/home/create-chat"
-        (click)="this.toggler.closeNav()"
-      >
+      <div class="addItem" matListItemTitle routerLink="/home/create-chat" (click)="this.toggler.closeNav()">
         <div class="hashtag">
           <mat-icon class="plusIcon">add</mat-icon>
         </div>
         <span>Chat hinzufügen</span>
       </div>
     </mat-list-item>
+
   </div>
+
 </mat-selection-list>

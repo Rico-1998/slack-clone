@@ -47,6 +47,7 @@ export class ChannelsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.channel.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
     this.scrollToBottom();    
@@ -70,35 +71,48 @@ export class ChannelsComponent implements OnInit {
   //**  get channelRoom ID*/
   async getChannelRoom(val) {
     this.channel.channelId = val['id'];    
-    let document = doc(this.db, 'channels', this.channel.channelId);
-    await getDoc(document)
-      .then((doc) => {
-        this.channel.currentChannel = doc.data();
-        this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
-      })
+    onSnapshot(doc(this.db, 'channels', this.channel.channelId), async (snapshot) => {
+      this.channel.currentChannel = snapshot.data();
+      this.channel.currentChannel.created = this.channel.convertTimestamp(this.channel.currentChannel.created, 'onlyDate');
+    })
     await this.loadMessagesInChannel();
-    this.updateLastVisitTimestamp();     
+    this.channel.updateLastVisitTimestamp();     
   }
-
 
   //** load all messages to the current channel */
   async loadMessagesInChannel() {
-    this.channel.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     onSnapshot(q, (snapshot) => {
+      this.channel.allMessages = [];
       snapshot.docs.forEach(async (doc) => {
-        if (!this.channel.allMessages.find(m => m.id == doc.id)) {
-            let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
-            let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-            message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-            this.channel.allMessages.push(message);}
-      });
+        let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+        let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
+        message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+        this.channel.allMessages.push(message);}
+        );
     });
     setTimeout(() => {
       this.channel.shouldScroll = true;
     }, 150);
   }
+  // async loadMessagesInChannel() {
+  //   this.channel.allMessages = [];
+  //   const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
+  //   const q = query(colRef, orderBy('timestamp'));
+  //   onSnapshot(q, (snapshot) => {
+  //     snapshot.docs.forEach(async (doc) => {
+  //       if (!this.channel.allMessages.find(m => m.id == doc.id)) {
+  //           let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+  //           let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+  //           message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
+  //           this.channel.allMessages.push(message);}
+  //     });
+  //   });
+  //   setTimeout(() => {
+  //     this.channel.shouldScroll = true;
+  //   }, 150);
+  // }
 
 
   //** open thread with all comments of the picked message*/
@@ -113,17 +127,6 @@ export class ChannelsComponent implements OnInit {
   //** */
   changePath(message) {
     this.channel.msgToEdit = message;
-  }
-
-  //* Updates the timestap when user last visited the channel*/
-  async updateLastVisitTimestamp() {
-    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channel.channelId);
-     await setDoc(docToUpdate, {
-      time: Timestamp.fromDate(new Date()).toDate()
-    });
-
-    console.log('channelvisits',this.userService.lastChannelVisits)
-    console.log('lastmessage', this.channel.currentChannel.lastMessage)
   }
 
 }

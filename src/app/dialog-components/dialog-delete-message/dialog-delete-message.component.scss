@@ -1,6 +1,25 @@
+.dialog-container{
+    max-width: 400px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+mat-dialog-contant{
+    h1{
+        margin-bottom: 50px !important;
+        font-size: 30px; 
+    }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
 mat-card-title {
     display: flex;
     align-items: center;
+    margin-top: 40px;
     span{
         font-size: 16px;
         margin-right: 8px;

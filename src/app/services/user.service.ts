@@ -16,7 +16,7 @@ export class UserService {
   channelEditor: boolean = false;
   chatEditor: boolean = false;
   threadEditor: boolean = false;
-  lastChannelVisits: any = [];
+
 
   constructor(
     public authService: AuthService,
@@ -46,7 +46,7 @@ export class UserService {
       })
     )
 
-    this.loadLastVisitTimestamps()
+    // this.loadLastVisitTimestamps()
   }
 
 
@@ -58,15 +58,15 @@ export class UserService {
     // console.log('das ist der Current User:', this.currentUser);
   }
 
-  loadLastVisitTimestamps() {
-    if (JSON.parse(localStorage.getItem('user')) !== null) {
-      onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
-        snapshot.docs.forEach((doc) => {
-          if (!this.lastChannelVisits.find(v => v.id == doc.id)) {
-            this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
-          }
-        })
-      })
-    }
-  }
+  // loadLastVisitTimestamps() {
+  //   this.loadedChannelVisits = false
+  //   onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
+  //     snapshot.docs.forEach((doc) => {
+  //       if(!this.lastChannelVisits.find(v => v.id == doc.id)) {
+  //         this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
+  //       }
+  //     })
+  //     this.loadedChannelVisits = true;
+  //   }) 
+  // }
 }
