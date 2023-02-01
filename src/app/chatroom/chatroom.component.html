@@ -9,7 +9,7 @@
       <div class="dot-sidenav online"></div>
     </div>
     <span
-      *ngFor="let otherUser of chatService.currentChatMembers; let last = last"
+      *ngFor="let otherUser of chatService?.currentChatMembers; let last = last"
     >
       {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
     </span>
@@ -28,7 +28,7 @@
       <div class="message-content">
         <span
           *ngFor="
-            let otherUser of chatService.currentChatMembers;
+            let otherUser of chatService?.currentChatMembers;
             let last = last
           "
         >
@@ -39,7 +39,7 @@
           <span class="highlight"
             >@<span
               *ngFor="
-                let otherUser of chatService.currentChatMembers;
+                let otherUser of chatService?.currentChatMembers;
                 let last = last
               "
             >
@@ -53,7 +53,7 @@
     </mat-card>
     <mat-card
       class="message-container"
-      *ngFor="let message of chatService.currentChatMessages; let i = index"
+      *ngFor="let message of chatService?.currentChatMessages; let i = index"
     >
       <div class="option-box">
         <div class="option">
@@ -86,7 +86,7 @@
           <div class="menu-options">
             <button
               mat-menu-item
-              *ngIf="userService.currentUser.userName == message.author"
+              *ngIf="userService.currentUser?.userName == message.author"
               (click)="changePath(message)"
             >
               Edit message
@@ -95,12 +95,12 @@
               mat-menu-item
               class="delete"
               (click)="deleteMessage(message)"
-              *ngIf="userService.currentUser.userName == message.author"
+              *ngIf="userService.currentUser?.userName == message.author"
             >
               Delete message
             </button>
             <button
-              *ngIf="userService.currentUser.userName != message.author"
+              *ngIf="userService.currentUser?.userName != message.author"
               mat-menu-item
             >
               Not your message
