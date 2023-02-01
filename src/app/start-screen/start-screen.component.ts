@@ -5,6 +5,8 @@ import { DialogSuccessMessageComponent } from '../dialog-components/dialog-succe
 import { LoginComponent } from '../login/login.component';
 import { RegisterComponent } from '../register/register.component';
 import { AuthService } from '../services/auth.service';
+import { ChannelService } from '../services/channel.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-start-screen',
@@ -16,6 +18,7 @@ export class StartScreenComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
   }
 
   openLogin() {

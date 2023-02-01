@@ -37,10 +37,10 @@ export class NavTreeComponent implements OnInit {
     public auth: AuthService,
     public toggler: DrawerTogglerService,
   ) {
-    
-   }
 
-   ngOnInit(): void {
+  }
+
+  ngOnInit(): void {
     this.chatService.getChats();
     this.channelService.getChannels();
   }
