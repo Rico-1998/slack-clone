@@ -1,9 +1,6 @@
 <div class="text-box">
-  <form
-    [formGroup]="messageForm"
-    (submit)="check()"
-    (keydown.enter)="checkEnter($event)"
-  >
+  <form [formGroup]="messageForm" (submit)="check()">
+    <!-- (keydown.enter)="checkEnter($event)" -->
     <quill-editor
       class="editor"
       [modules]="modules"

@@ -97,13 +97,23 @@ export class MessageBoxComponent implements OnInit {
     }
   }
 
-  checkEnter(event) {
-    if (event.event === 'text-change') {
-      let text = event.html;
-      if (text !== null) {
-    console.log('das ist', event.html.replace(/<[^>]+>/g, ''));
-      }
-    }
-  }
+  // checkEnter(event) {  
+  //     // let text = event.target.innerHTML.replace(/<[^>]+>/g, undefined);
+  //     let text = event.target.firstChild.innerText = '\n' ? '' : event.target.innerHTML;
+  //     console.log(event);
+      
+  //     // if (text != '') {
+  //     //   console.log(text);
+  //     //   this.valid = true;
+  //     //   this.check();
+  //     // } else {
+  //     //   this.valid = false;
+  //     //   console.log(
+  //     //     text
+  //     //   );
+        
+  //     // }
+  // }
+  
 
 }

@@ -33,6 +33,8 @@ export class ChatroomComponent implements OnInit {
       });
     }, 1500);
     this.scrollToBottom();
+    
+    console.log('all chats',this.chatService.chats);
   }
   
   ngAfterViewChecked() {
@@ -43,7 +45,7 @@ export class ChatroomComponent implements OnInit {
     if(this.chatService.shouldScroll) {
       setTimeout(() => {
         this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
-      }, 0);
+      });
       setTimeout(() => {
         this.chatService.shouldScroll = false;
       }, 100);
@@ -77,8 +79,7 @@ export class ChatroomComponent implements OnInit {
       } else {
         await this.snapChatroomMessages(chatroomId, snapshot);
       }
-    });
-    this.chatService.shouldScroll = true;    
+    });    
   }
 
   async snapChatroomMessages(chatroomId, snapshot) {
@@ -86,7 +87,8 @@ export class ChatroomComponent implements OnInit {
     snapshot.docs.forEach(async (document) => {
       let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId, documentId: document.id };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-      this.chatService.currentChatMessages.push(timestampConvertedMsg)
+      this.chatService.currentChatMessages.push(timestampConvertedMsg);
+      this.chatService.shouldScroll = true;
     });
   }
 

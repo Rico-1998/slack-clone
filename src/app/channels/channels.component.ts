@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot,  orderBy, query } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
 import { Message } from 'src/modules/messages.class';
@@ -56,7 +56,7 @@ export class ChannelsComponent implements OnInit {
     if(this.channelService.shouldScroll) {
       setTimeout(() => {
         this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
-      }, 0);
+      });
       setTimeout(() => {
         this.channelService.shouldScroll = false;
       }, 100);
@@ -64,18 +64,48 @@ export class ChannelsComponent implements OnInit {
   }
 
   //**  get channelRoom ID*/
-  async getChannelRoom(channelRoomId) {
-    this.channelService.channelId = channelRoomId['id'];   
-    const unsub = onSnapshot(doc(this.db, 'channels', this.channelService.channelId), async (snapshot) => {
-      if(!this.channelService.channelId) {
+  getChannelRoom(channelRoomId: Params) {
+    this.channelService.channelId = channelRoomId['id'];
+    const unsub = onSnapshot(doc(this.db, 'channels', channelRoomId['id']), async (snapshot) => {      
+      if(channelRoomId['id'] != this.channelService.channelId) {
         unsub();
       } else {
         this.channelService.currentChannel = snapshot.data();
         this.channelService.currentChannel.created = this.channelService.convertTimestamp(this.channelService.currentChannel.created, 'onlyDate');        
       }
     });
-    await this.loadMessagesInChannel();
+    this.loadMessagesInChannel(channelRoomId['id']);
     this.channelService.updateLastVisitTimestamp();     
+  }
+
+  loadMessagesInChannel(currentChannelId: string) {
+    this.channelService.allMessages = [];
+    const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
+    const q = query(colRef, orderBy('timestamp'));
+    const unsub = onSnapshot(q, (snapshot) => { 
+      if(currentChannelId != this.channelService.channelId) {
+        unsub();        
+      }   else {
+        this.snapCurrentChannelMessages(snapshot);      
+      }
+    });    
+  }
+
+  snapCurrentChannelMessages(snapshot) {
+    snapshot.docs.forEach(async (doc) => {
+      if (!this.channelService.allMessages.find(m => m.id == doc.id)) {
+          let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
+          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+          message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
+          this.channelService.allMessages.push(message);}
+          this.showNewMessage();
+    });
+  }
+
+  showNewMessage() {
+    setTimeout(() => {
+      this.channelService.shouldScroll = true;
+    }, 150);
   }
 
   //** load all messages to the current channel */
@@ -101,31 +131,7 @@ export class ChannelsComponent implements OnInit {
   //   }, 150);
   // }
 
-  async loadMessagesInChannel() {
-    this.channelService.allMessages = [];
-    const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
-    const q = query(colRef, orderBy('timestamp'));
-    const unsub = onSnapshot(q, (snapshot) => {   
-      if(!this.channelService.channelId) {
-        unsub();
-      }   else {
-        this.snapCurrentChannelMessages(snapshot);      
-      }
-    });
-    setTimeout(() => {
-      this.channelService.shouldScroll = true;
-    }, 150);
-  }
-
-  snapCurrentChannelMessages(snapshot) {
-    snapshot.docs.forEach(async (doc) => {
-      if (!this.channelService.allMessages.find(m => m.id == doc.id)) {
-          let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
-          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-          message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
-          this.channelService.allMessages.push(message);}
-    });
-  }
+  
 
 
   //** open thread with all comments of the picked message*/
