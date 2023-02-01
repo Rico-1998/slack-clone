@@ -167,6 +167,11 @@ export class ChannelService {
   //** open dialog for confirming to delete message */
   openDeleteMessageDialog(message) {
     this.currentMessage = message;
+    if(this.currentMessage['documentId']){
+
+      console.log(this.currentMessage['documentId']);
+    }
+    
     this.dialog.open(DialogDeleteMessageComponent, {
       panelClass: 'delete-message'
     })
@@ -214,5 +219,4 @@ export class ChannelService {
     }
   }
 }
-
 
