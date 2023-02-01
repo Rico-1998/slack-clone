@@ -94,7 +94,7 @@
             <button
               mat-menu-item
               class="delete"
-              (click)="deleteMessage(message)"
+              (click)="service.openDeleteMessageDialog(message)"
               *ngIf="userService.currentUser?.userName == message.author"
             >
               Delete message

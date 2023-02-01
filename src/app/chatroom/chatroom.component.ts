@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
+import { FirestoreService } from '../services/firestore.service';
 
 
 
@@ -23,7 +24,8 @@ export class ChatroomComponent implements OnInit {
     public chatService: ChatService,
     private route: ActivatedRoute,
     public userService: UserService,
-    public channelService: ChannelService
+    public channelService: ChannelService,
+    public service: FirestoreService,
   ) { }
 
   ngOnInit() {

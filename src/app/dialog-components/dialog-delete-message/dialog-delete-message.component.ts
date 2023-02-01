@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { deleteDoc, getFirestore } from '@firebase/firestore';
 import { ChannelService } from 'src/app/services/channel.service';
 import { ChatService } from 'src/app/services/chat.service';
+import { FirestoreService } from 'src/app/services/firestore.service';
 
 @Component({
   selector: 'app-dialog-delete-message',
@@ -13,16 +14,16 @@ import { ChatService } from 'src/app/services/chat.service';
 export class DialogDeleteMessageComponent implements OnInit {
   messageId: any;
   db: any = getFirestore();
-  @Input() textBoxPath;
+  @Input() messagePath;
 
   constructor(
     public dialogRef: MatDialogRef<DialogDeleteMessageComponent>,
+    public service: FirestoreService,
     public channel: ChannelService,
-    public chat: ChatService,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.channel.currentMessage);
+    console.log(this.service.currentMessage);
   }
 
 
@@ -33,15 +34,16 @@ export class DialogDeleteMessageComponent implements OnInit {
 
   //** delete the picked message out of firebase server and array */
   async deleteMessage() {
-    if (this.channel.currentMessage['documentId']) {
-      console.log('Message from CHATROOM');
-      // let actualMsg = doc(this.chat.db, 'chats', message.id.id, 'messages', message.documentId);
-    // await deleteDoc(actualMsg);
-    } else {
-      console.log('Message from CHANNEL');
-      // await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
-      // this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
-      // this.dialogRef.close();
+    if (this.service.currentMessage['documentId']) {
+      let actualMsg = doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId);
+      // console.log('Message from CHATROOM', actualMsg);
+      await deleteDoc(actualMsg);
+    } else if(!this.service.currentMessage['documentId']){
+      let actualMsgChannel = doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId);
+      // console.log('Message from CHANNEL', actualMsgChannel);
+      await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
+      this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
+      this.dialogRef.close();
       }
     }
 }

@@ -3,9 +3,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { collection, getFirestore, onSnapshot,  orderBy, query } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
 import { Message } from 'src/modules/messages.class';
-import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../services/user.service';
 import { doc, getDocs } from '@angular/fire/firestore';
+import { FirestoreService } from '../services/firestore.service';
 
 @Component({
   selector: 'app-channels',
@@ -33,7 +33,7 @@ export class ChannelsComponent implements OnInit {
     private route: ActivatedRoute,
     public channelService: ChannelService,
     public router: Router,
-    public dialog: MatDialog,
+    public service: FirestoreService,
   ) {
     route.params.subscribe((channelRoomId) => {
       this.getChannelRoom(channelRoomId);

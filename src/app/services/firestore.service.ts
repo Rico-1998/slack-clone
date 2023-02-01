@@ -1,45 +1,26 @@
 import { Injectable, Injector } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Message } from '../../modules/messages.class';
-import { Channel } from '../../modules/channels.class';
-import { arrayUnion } from '@angular/fire/firestore';
+import { getFirestore } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-  user: any;
-  currentUser: any;
-  userID: any;
-  allChannels: any;
-  channelID: any = '';
-  currentChannel: any;
-  channel: Channel = new Channel();
-  messageInput: any;
-  newMessage: any;
-  message: Message = new Message();
-  messages: any = [];
   currentMessage: any;
-  indexOfMessage: number;
-  filteredMessages: Array<any>;
-
+  db = getFirestore();
 
   constructor(
-    private firestore: AngularFirestore,
-    private injector: Injector,
+    public dialog: MatDialog,
   ) { }
 
-
-  postMessage(){
-    this.message = new Message ({
-      message: this.messageInput,
-    })
-    this.firestore
-      .collection('channels')
-      .doc(this.channelID)
-      .update({
-        messages: arrayUnion(this.message.toJson()),
-      });
-  }
+//** open dialog for confirming to delete message */
+openDeleteMessageDialog(message) {
+  this.currentMessage = message;
+  this.dialog.open(DialogDeleteMessageComponent, {
+    panelClass: 'delete-message'
+  })
+}
+  
 }

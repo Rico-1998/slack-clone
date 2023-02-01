@@ -5,10 +5,10 @@
     <mat-card class="message_card">
       <mat-card-header>
         <mat-card-title>
-          <span>{{ channel.currentMessage.author }}</span>
-          <span>{{ channel.currentMessage.timestamp }}</span>
+          <span>{{ service.currentMessage.author }}</span>
+          <span>{{ service.currentMessage.timestamp }}</span>
         </mat-card-title>
-        <mat-card-subtitle [innerHTML]="channel.currentMessage.msg">{{ channel.currentMessage.msg }}</mat-card-subtitle>
+        <mat-card-subtitle [innerHTML]="service.currentMessage.msg">{{ service.currentMessage.msg }}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>
   </mat-dialog-content>
