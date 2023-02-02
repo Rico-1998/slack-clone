@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
-import { doc, docData, Firestore, getDoc, getDocs, query, where } from '@angular/fire/firestore';
+import { deleteDoc, deleteField, doc, docData, Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
@@ -28,6 +28,7 @@ export class NavTreeComponent implements OnInit {
   // currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
   // channels: any = [];
   _lastUserVisits: any;
+  hover: any = [];
 
   constructor(
     public dialog: MatDialog,
@@ -49,5 +50,20 @@ export class NavTreeComponent implements OnInit {
     this.dialog.open(DialogAddChannelComponent, {
       panelClass: 'add-channel',
     });
+  }
+
+  // async deleteChat(chat: any) {
+  //   console.log('selected chat',chat);
+  //   this.chatService.currentChatMessages.forEach(async (message) => {
+  //     let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
+  //     await deleteDoc(actualChatMessages);
+  //   });
+    
+  //   let actualChat = doc(this.chatService.db, 'chats', chat.id);    
+  //   await deleteDoc(actualChat);
+  // }
+
+  deleteChat() {
+    console.log('delete');    
   }
 }

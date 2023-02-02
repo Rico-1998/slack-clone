@@ -61,7 +61,7 @@ export class ChatroomComponent implements OnInit {
     console.log(this.chatService.currentChatMessages);
     
     snapshot.docs.forEach(async (document) => {
-      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId, documentId: document.id };
+      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
       this.chatService.currentChatMessages.push(timestampConvertedMsg);
       this.chatService.shouldScroll = true;
@@ -83,7 +83,7 @@ export class ChatroomComponent implements OnInit {
     let actualMsg = doc(this.chatService.db, 'chats', message.id.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
   }
-
+  
   openThread(message) {
     this.chatService.thread = message;
     this.chatService.threadOpen = true;

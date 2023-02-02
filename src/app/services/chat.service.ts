@@ -133,18 +133,18 @@ export class ChatService implements OnDestroy {
   }
 
   addMessage() {
-    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id.id, 'messages');
+    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages');
     addDoc(colRef, {
       timestamp: Timestamp.fromDate(new Date()),
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
-    });
+    }); 
     this.shouldScroll = true;
   }
 
   async getCurrentThread() {
     this.threadComments = [];
-    let colRef = query(collection(this.db, 'chats', this.currentChatMessages[0].id.id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
+    let colRef = query(collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
     await onSnapshot(colRef, async (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.threadComments.find(c => c.id == doc.id)) {
@@ -158,7 +158,7 @@ export class ChatService implements OnDestroy {
 
   async loadMessageToThread() {
     this.loading = true;
-    let document = doc(this.db, 'chats', this.currentChatMessages[0].id.id, 'messages', this.thread.documentId);
+    let document = doc(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId);
     await getDoc(document)
       .then((doc) => {
         this.threadMessage = doc.data();
@@ -169,7 +169,7 @@ export class ChatService implements OnDestroy {
 
   msgToChatThread() {
     this.loading = true;
-    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id.id, 'messages', this.thread.documentId, 'comments');
+    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments');
     addDoc(colRef, {
       timestamp: Timestamp.fromDate(new Date()),
       author: this.userService.currentUser.userName,
@@ -179,7 +179,7 @@ export class ChatService implements OnDestroy {
   }
 
   async editMsg(msg) {
-    let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id']['id'], 'messages', this.msgToEdit['documentId']);
+    let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
       msg: msg
     });
