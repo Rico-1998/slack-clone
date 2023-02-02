@@ -57,9 +57,7 @@ export class ChatroomComponent implements OnInit {
   }
 
   async snapChatroomMessages(chatroomId, snapshot) {
-    this.chatService.currentChatMessages = [];
-    console.log(this.chatService.currentChatMessages);
-    
+    this.chatService.currentChatMessages = [];    
     snapshot.docs.forEach(async (document) => {
       let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
