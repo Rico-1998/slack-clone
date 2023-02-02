@@ -35,11 +35,11 @@ export class DialogDeleteMessageComponent implements OnInit {
   //** delete the picked message out of firebase server and array */
   async deleteMessage() {
     if (this.service.currentMessage['documentId']) {
-      let actualMsg = doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId);
+      // let actualMsg = doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId);
       // console.log('Message from CHATROOM', actualMsg);
-      await deleteDoc(actualMsg);
+      await deleteDoc(doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId));
+      this.dialogRef.close();
     } else if(!this.service.currentMessage['documentId']){
-      let actualMsgChannel = doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId);
       // console.log('Message from CHANNEL', actualMsgChannel);
       await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
       this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
