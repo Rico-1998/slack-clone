@@ -32,7 +32,7 @@ export class ChatroomComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.route.params.subscribe(chatroomId => {
-        this.getChatRoom(chatroomId);
+        this.chatService.getChatRoom(chatroomId);
       });
     }, 1500);
     this.scrollToBottom();
@@ -40,32 +40,6 @@ export class ChatroomComponent implements OnInit {
   
   ngAfterViewChecked() {
     this.scrollToBottom();
-  }
-
-  getChatRoom(chatroomId) {
-    let chatId = chatroomId['id'];
-    this.chatService.currentChat = this.chatService.chats.filter(a => a.id == chatId);
-    console.log(this.chatService.currentChat);
-    this.chatService.currentChatMembers = this.chatService.currentChat[0]?.otherUsers;
-    let colRef = query(collection(this.chatService.db, 'chats', chatId, 'messages'), orderBy('timestamp', 'asc'));
-    const unsub = onSnapshot(colRef, async (snapshot) => {
-      if(chatId != this.chatService.currentChat[0]?.id) {
-        unsub();
-      } else {
-        await this.snapChatroomMessages(chatroomId, snapshot);
-      }
-    });    
-  }
-
-  async snapChatroomMessages(chatroomId, snapshot) {
-    this.chatService.currentChatMessages = [];    
-    snapshot.docs.forEach(async (document) => {
-      let comments = (await getDocs(collection(this.chatService.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
-      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
-      timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-      this.chatService.currentChatMessages.push(timestampConvertedMsg);
-      this.chatService.shouldScroll = true;      
-    });
   }
 
   scrollToBottom(): void {

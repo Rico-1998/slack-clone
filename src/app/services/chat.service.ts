@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
 import { ChannelService } from './channel.service';
@@ -18,6 +18,7 @@ export class ChatService implements OnDestroy {
   chats: any[] = [];
   currentUser = JSON.parse(localStorage.getItem('user'));
   currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  chatId: any;
   currentChat: any;
   currentChatMembers: any;
   currentChatMessages = [];
@@ -40,6 +41,31 @@ export class ChatService implements OnDestroy {
 
   ngOnDestroy() {
     
+  }
+
+  async getChatRoom(chatroomId) {
+    this.chatId = chatroomId['id'];
+    this.currentChat = this.chats.filter(a => a.id == this.chatId);
+    this.currentChatMembers = this.currentChat[0]?.otherUsers;
+    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages'), orderBy('timestamp', 'asc'));
+    const unsub = onSnapshot(colRef, async (snapshot) => {
+      if(this.chatId != this.currentChat[0]?.id) {
+        unsub();
+      } else {
+        await this.snapChatroomMessages(chatroomId, snapshot);
+      }
+    });    
+  }
+
+  async snapChatroomMessages(chatroomId, snapshot) {
+    this.currentChatMessages = [];    
+    snapshot.docs.forEach(async (document) => {
+      let comments = (await getDocs(collection(this.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
+      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
+      timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+      this.currentChatMessages.push(timestampConvertedMsg);
+      this.shouldScroll = true;      
+    });
   }
 
   setToChatList(user) {

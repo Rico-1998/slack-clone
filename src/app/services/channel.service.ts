@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addDoc, deleteDoc, doc, Firestore, getDoc, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
@@ -69,6 +69,55 @@ export class ChannelService {
        }
       })
     });
+  }
+
+  //**  get channelRoom ID*/
+  async getChannelRoom(channelRoomId) {
+    this.channelId = channelRoomId['id'];
+    this.currentChannel = this.channels.find(a => a.id == this.channelId);
+    console.log(this.currentChannel);
+    
+    // const unsub = onSnapshot(doc(this.db, 'channels', channelRoomId['id']), async (snapshot) => {      
+    //   if(channelRoomId['id'] != this.channelId) {
+    //     unsub();
+    //   } else {
+    //     // this.currentChannel = snapshot.data();
+    //     // this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate');        
+    //   }
+    // });
+    this.loadMessagesInChannel(channelRoomId['id']);
+    this.updateLastVisitTimestamp();     
+  }
+
+  loadMessagesInChannel(currentChannelId: string) {
+    this.allMessages = [];  
+    const colRef = collection(this.db, 'channels', this.channelId, 'messages');
+    const q = query(colRef, orderBy('timestamp'));
+    const unsub = onSnapshot(q, (snapshot) => { 
+      if(currentChannelId != this.channelId) {
+        unsub();        
+      }   else {
+        this.snapCurrentChannelMessages(snapshot);      
+      }
+    });    
+  }
+
+  snapCurrentChannelMessages(snapshot) {
+    snapshot.docs.forEach(async (doc) => {
+      if (!this.allMessages.find(m => m.id == doc.id)) {
+          let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
+          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+          message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+          this.allMessages.push(message);
+        } 
+          this.showNewMessage();
+    });
+  }
+
+  showNewMessage() {
+    setTimeout(() => {
+      this.shouldScroll = true;
+    }, 150);
   }
 
   //**adding message to the picked channel */
