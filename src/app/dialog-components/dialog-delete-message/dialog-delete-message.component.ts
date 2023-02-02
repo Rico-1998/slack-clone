@@ -41,8 +41,9 @@ export class DialogDeleteMessageComponent implements OnInit {
       this.dialogRef.close();
     } else if(!this.service.currentMessage['documentId']){
       // console.log('Message from CHANNEL', actualMsgChannel);
+      // this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
       await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
-      this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
+      this.service.spliceDeletedMessage()
       this.dialogRef.close();
       }
     }

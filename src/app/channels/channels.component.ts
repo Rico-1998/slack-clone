@@ -50,6 +50,7 @@ export class ChannelsComponent implements OnInit {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
+    
   }
 
   scrollToBottom(): void {
@@ -97,7 +98,8 @@ export class ChannelsComponent implements OnInit {
           let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
           let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
           message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
-          this.channelService.allMessages.push(message);}
+          this.channelService.allMessages.push(message);
+        } 
           this.showNewMessage();
     });
   }
@@ -108,27 +110,24 @@ export class ChannelsComponent implements OnInit {
     }, 150);
   }
 
-  //** load all messages to the current channel */
+  // /** load all messages to the current channel */
   // async loadMessagesInChannel() {
-  //   const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
+  //   const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
   //   const q = query(colRef, orderBy('timestamp'));
   //   const unsub = onSnapshot(q, (snapshot) => {
-  //     if(!this.channel.channelId) {
+  //     if(!this.channelService.channelId) {
   //       unsub();
   //     } else {
-  //       this.channel.allMessages = [];
+  //       this.channelService.allMessages = [];
   //       snapshot.docs.forEach(async (doc) => {
-  //         let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+  //         let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
   //         let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
-  //         message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
-  //         this.channel.allMessages.push(message);}
-  //         );
-
+  //         message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
+  //         this.channelService.allMessages.push(message);
+  //       });
   //     }
   //   });
-  //   setTimeout(() => {
-  //     this.channel.shouldScroll = true;
-  //   }, 150);
+  //   this.showNewMessage();
   // }
 
   
