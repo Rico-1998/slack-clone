@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, deleteDoc, doc, onSnapshot, orderBy} from '@angular/fire/firestore';
+import { collection, deleteDoc, doc, getDocs, onSnapshot, orderBy} from '@angular/fire/firestore';
 import { query } from '@firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../services/chat.service';
@@ -18,6 +18,7 @@ export class ChatroomComponent implements OnInit {
   textBoxPath: string = 'chatroom';
   textBoxPathEdit: string = 'edit';
   @ViewChild('scrollBox') private scrollBox: ElementRef;
+  hover: boolean = false;
 
 
   constructor(
@@ -59,10 +60,11 @@ export class ChatroomComponent implements OnInit {
   async snapChatroomMessages(chatroomId, snapshot) {
     this.chatService.currentChatMessages = [];    
     snapshot.docs.forEach(async (document) => {
-      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id };
+      let comments = (await getDocs(collection(this.chatService.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
+      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
       this.chatService.currentChatMessages.push(timestampConvertedMsg);
-      this.chatService.shouldScroll = true;
+      this.chatService.shouldScroll = true;      
     });
   }
 

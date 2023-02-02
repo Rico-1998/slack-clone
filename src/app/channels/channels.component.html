@@ -56,7 +56,8 @@
             <div class="menu-options">
               <button
                 mat-menu-item
-                *ngIf="userService.currentUser.userName == message.author"
+                class="hoverEdit"
+                *ngIf="userService.currentUser?.userName == message.author"
                 (click)="changePath(message)"
               >
                 Nachricht bearbeiten
@@ -64,12 +65,17 @@
               <button
                 mat-menu-item
                 class="delete"
-                (click)="this.service.openDeleteMessageDialog(message)"
-                *ngIf="userService.currentUser.userName == message.author"
+                (click)="service.openDeleteMessageDialog(message)"
+                *ngIf="userService.currentUser?.userName == message.author"
               >
                 Nachricht löschen
               </button>
-              <button mat-menu-item>Link kopieren</button>
+              <button
+                *ngIf="userService.currentUser?.userName != message.author"
+                mat-menu-item
+              >
+                Nicht deine Nachricht
+              </button>
             </div>
           </mat-menu>
         </div>
@@ -87,12 +93,15 @@
             {{ message.timestamp }}
           </div>
           <span [innerHTML]="message.msg"></span>
-          <span
-            *ngIf="message.comments"
-            class="open-thread-link"
-            (click)="openThread(message.id)"
-            >{{ message.comments }} Antworten</span
-          >
+          <div class="comments-container" *ngIf="message.comments">
+            <div class="hover-container">
+              <span class="open-thread-link" (click)="openThread(message.id)">
+                {{ message.comments }} Antworten
+              </span>
+              <span class="open-thread-info">Thread anzeigen</span>
+            </div>
+            <mat-icon class="arrow">navigate_next</mat-icon>
+          </div>
           <div class="phils-div-box-zum-stylen-des-editors">
             <app-message-box
               *ngIf="this.channelService.msgToEdit == message"

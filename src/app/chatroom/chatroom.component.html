@@ -86,10 +86,11 @@
           <div class="menu-options">
             <button
               mat-menu-item
+              class="hoverEdit"
               *ngIf="userService.currentUser?.userName == message.author"
               (click)="changePath(message)"
             >
-              Edit message
+              Nachricht bearbeiten
             </button>
             <button
               mat-menu-item
@@ -97,13 +98,13 @@
               (click)="service.openDeleteMessageDialog(message)"
               *ngIf="userService.currentUser?.userName == message.author"
             >
-              Delete message
+              Nachricht löschen
             </button>
             <button
               *ngIf="userService.currentUser?.userName != message.author"
               mat-menu-item
             >
-              Not your message
+              Nicht deine Nachricht
             </button>
           </div>
         </mat-menu>
@@ -124,6 +125,15 @@
         </div>
 
         <span [innerHTML]="message.msg"></span>
+        <div class="comments-container" *ngIf="message.comments">
+          <div class="hover-container">
+            <span class="open-thread-link" (click)="openThread(message)">
+              {{ message.comments }} Antworten
+            </span>
+            <span class="open-thread-info">Thread anzeigen</span>
+          </div>
+          <mat-icon class="arrow">navigate_next</mat-icon>
+        </div>
 
         <div class="phils-div-box-zum-stylen-des-editors">
           <app-message-box

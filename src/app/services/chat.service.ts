@@ -100,12 +100,12 @@ export class ChatService implements OnDestroy {
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
       this.chats = [];
-      this.snapChatMembers(snapshot);
-      this.findOtherUsers();
+      await this.snapChatMembers(snapshot);
+      await this.findOtherUsers();
     });
   }
 
-  snapChatMembers(snapshot) {
+  async snapChatMembers(snapshot) {
     snapshot.docs.forEach((doc) => {
       let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
       let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));

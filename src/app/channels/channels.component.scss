@@ -19,12 +19,12 @@
                     display: flex;
                     padding: $padding-messages;
                     background-color: transparent;
-                    color: #D1D2D3;
+                    color: $txt-clr-h2;
     
                     .leftframe {
                         span {
                             background-color: $txt-clr-primary;
-                            border-radius: 5px;
+                            border-radius: $br-primary;
                             padding-left: 2px;
                             color: $bgClr-primary;
                             height: 30px;
@@ -32,7 +32,7 @@
                             display: flex;
                             align-items: center;
                             justify-items: center;
-                            font-size: 25px;
+                            font-size: $fs-xxl;
                         }
                     }
     
@@ -52,7 +52,7 @@
                     }
 
                     .highlight {
-                        color: #1D9BD1;
+                        color: $txt-clr-link;
                         font-weight: bold;
                     }
 
@@ -85,7 +85,7 @@
                                 font-size: $fs-l;
             
                                 &:hover {
-                                    color: white;
+                                    color: $txt-clr-secondary;
                                 }
                             }
             
@@ -100,16 +100,6 @@
             }
 
         }
-}
-
-.menu-options {
-    .delete {
-        color: #df205a;
-    }
-
-    button {
-        color: $txt-clr-primary;
-    }
 }
 
 // .btnAfterMenuDisabled{

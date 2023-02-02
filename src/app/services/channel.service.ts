@@ -51,16 +51,16 @@ export class ChannelService {
   // }
   
   async getChannels() {
-    onSnapshot(collection(this.db, 'channels'), (snapshot) => {
+    onSnapshot(collection(this.db, 'channels'), async (snapshot) => {
       this.channels = [];
-      snapshot.docs.forEach((doc) => {
-        this.channels.push(({ ...(doc.data() as object), id: doc.id}));
+      snapshot.docs.forEach(async (doc) => {
+        await this.channels.push(({ ...(doc.data() as object), id: doc.id}));
       })
-      this.setLastVisitForChannel();
+      await this.setLastVisitForChannel();
     });
   }
 
-  setLastVisitForChannel() {
+  async setLastVisitForChannel() {
     onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
        let channel = this.channels.find(c => c.id == doc.id);
@@ -146,7 +146,6 @@ export class ChannelService {
   //** gets id of the clicked message*/
   getCurrentMessage(id: string) {
     this.messageId = id;
-    console.log(this.messageId);
     return this.allMessages.find(item => item.id === id);
   }
 

@@ -41,9 +41,9 @@ export class NavTreeComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this.chatService.getChats();
-    this.channelService.getChannels();     
+  async ngOnInit() {
+    await this.chatService.getChats();
+    await this.channelService.getChannels();    
   }
 
   openDialogAddChannel() {

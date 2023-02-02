@@ -87,6 +87,29 @@ body {
     border: 2.5px solid $absent;
 }
 
+.menu-options {
+    .delete {
+        color: $txt-clr-delte;
+        &:hover {
+            background-color: $txt-clr-delte;
+            color: $txt-clr-secondary;
+        }
+    }
+    
+    .hoverEdit {
+        &:hover {
+            background-color: $txt-clr-link;
+            color: $txt-clr-secondary;
+        }
+    }
+
+    button {
+        color: $txt-clr-primary;
+        line-height: unset;
+        height: 30px;
+    }
+}
+
 .img-container {
     position: relative;
     height: $size-profile-img;
@@ -115,7 +138,7 @@ body {
 .scroll-box {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: $gap-primary;
     height: 100%;
     overflow-y: auto;
 }
@@ -124,22 +147,74 @@ body {
     background-color: transparent;
     color: #D1D2D3;
     display: flex !important;
-    gap: 25px;
+    gap: $gap-primary;
     border-bottom: 1px solid $border-clr;
     position: relative;
 
     .message-content {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: $gap-primary;
 
-        .open-thread-link {
-            cursor: pointer;
-            color: $txt-clr-link;
+        span > p {
+            margin: 0;
+        }
 
-            &:hover {
-                text-decoration: underline;
-                filter: brightness(1.2);
+        .comments-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: $padding-messages-comments;
+            border: 1px solid transparent;
+            font-size: $fs-s;
+            transition: $transition-hover;
+
+            &:hover {    
+                background-color: $bgClr-primary;            
+                border: 1px solid $border-clr-input;
+                border-radius: $br-primary;
+            }
+
+            &:hover .hover-container .open-thread-info {
+                opacity: 1;
+            }
+
+            &:hover .arrow {
+                opacity: 1;
+            }
+
+            .hover-container {
+                display: flex;
+                gap: $gap-primary;
+
+                .open-thread-link {
+                    cursor: pointer;
+                    color: $txt-clr-link;
+                    font-size: inherit;
+        
+                    &:hover {
+                        text-decoration: underline;
+                        filter: brightness(1.2);
+
+                    }
+                }
+                
+
+                .open-thread-info {
+                    filter: brightness(0.7);
+                    cursor: default;
+                    opacity: 0;
+                }
+            }
+            
+            .arrow {
+                opacity: 0;
+                height: $fs-m;
+                width: $fs-m;
+                font-size: $fs-m;
+                filter: brightness(0.7);
             }
         }
     }
@@ -299,4 +374,5 @@ body {
     top: -45px;
     background-color: $bgClr-newChat;
     border: $border-primary;
+    min-height: unset !important;
 }
