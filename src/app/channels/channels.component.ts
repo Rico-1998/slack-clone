@@ -36,12 +36,19 @@ export class ChannelsComponent implements OnInit {
     public service: FirestoreService,
   ) {
     route.params.subscribe((channelRoomId) => {
-      this.channelService.getChannelRoom(channelRoomId);
+      this.channelService.channelId = channelRoomId['id']
     });
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
+    this.route.params.subscribe(async (channelRoomId) => {
+      if (this.channelService.channelId) {
+        await this.channelService.updateLastVisitTimestamp()
+      }
+      this.channelService.getChannelRoom(channelRoomId);
+    })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;

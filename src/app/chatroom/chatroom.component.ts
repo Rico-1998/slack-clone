@@ -33,6 +33,7 @@ export class ChatroomComponent implements OnInit {
     setTimeout(() => {
       this.route.params.subscribe(chatroomId => {
         this.chatService.getChatRoom(chatroomId);
+        this.chatService.updateLastVisitTimestamp();
       });
     }, 1500);
     this.scrollToBottom();
