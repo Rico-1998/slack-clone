@@ -84,9 +84,10 @@ export class ChannelsComponent implements OnInit {
     const colRef = collection(this.db, 'channels', this.channel.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     onSnapshot(q, (snapshot) => {
+      console.log(snapshot.docChanges()[0].doc)
       this.channel.allMessages = [];
       snapshot.docs.forEach(async (doc) => {
-        let comments = (await getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+        let comments = await this.loadCommentsLenght(doc);
         let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
         message['timestamp'] = this.channel.convertTimestamp(message['timestamp'], 'full');
         this.channel.allMessages.push(message);}
@@ -114,6 +115,9 @@ export class ChannelsComponent implements OnInit {
   //   }, 150);
   // }
 
+  loadCommentsLenght(doc) {
+    return (getDocs(collection(this.db, 'channels', this.channel.channelId, 'messages', doc.id, 'comments')));
+  }
 
   //** open thread with all comments of the picked message*/
   openThread(id) {
