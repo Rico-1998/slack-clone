@@ -49,24 +49,24 @@ export class ChannelService {
   //     })
   //   });
   // }
-  
+
   async getChannels() {
     onSnapshot(collection(this.db, 'channels'), async (snapshot) => {
       this.channels = [];
       snapshot.docs.forEach(async (doc) => {
-        await this.channels.push(({ ...(doc.data() as object), id: doc.id}));
+        await this.channels.push(({ ...(doc.data() as object), id: doc.id }));
       })
-      await this.setLastVisitForChannel();
+      await this.getLastVisitForChannels();
     });
   }
 
-  async setLastVisitForChannel() {
+  async getLastVisitForChannels() {
     onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
-       let channel = this.channels.find(c => c.id == doc.id);
-       if(channel) {
-        channel.lastUserVisit = doc.data();
-       }
+        let channel = this.channels.find(c => c.id == doc.id);
+        if (channel) {
+          channel.lastUserVisit = doc.data();
+        }
       })
     });
   }
@@ -75,8 +75,7 @@ export class ChannelService {
   async getChannelRoom(channelRoomId) {
     this.channelId = channelRoomId['id'];
     this.currentChannel = this.channels.find(a => a.id == this.channelId);
-    console.log(this.currentChannel);
-    
+
     // const unsub = onSnapshot(doc(this.db, 'channels', channelRoomId['id']), async (snapshot) => {      
     //   if(channelRoomId['id'] != this.channelId) {
     //     unsub();
@@ -85,32 +84,32 @@ export class ChannelService {
     //     // this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate');        
     //   }
     // });
-    this.loadMessagesInChannel(channelRoomId['id']);
-    this.updateLastVisitTimestamp();     
+    this.loadMessagesInChannel(this.channelId);
+    this.updateLastVisitTimestamp();
   }
 
   loadMessagesInChannel(currentChannelId: string) {
-    this.allMessages = [];  
+    this.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
-    const unsub = onSnapshot(q, (snapshot) => { 
-      if(currentChannelId != this.channelId) {
-        unsub();        
-      }   else {
-        this.snapCurrentChannelMessages(snapshot);      
+    const unsub = onSnapshot(q, (snapshot) => {
+      if (currentChannelId != this.channelId) {
+        unsub();
+      } else {
+        this.snapCurrentChannelMessages(snapshot);
       }
-    });    
+    });
   }
 
   snapCurrentChannelMessages(snapshot) {
     snapshot.docs.forEach(async (doc) => {
       if (!this.allMessages.find(m => m.id == doc.id)) {
-          let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
-          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-          message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
-          this.allMessages.push(message);
-        } 
-          this.showNewMessage();
+        let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
+        let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+        message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+        this.allMessages.push(message);
+      }
+      this.showNewMessage();
     });
   }
 
@@ -134,7 +133,7 @@ export class ChannelService {
           this.updateLastVisitTimestamp()
         }, 1000);
       });
-      this.shouldScroll = true;
+    this.shouldScroll = true;
   }
 
   //* Updates the time when last message was send in channel */
@@ -237,20 +236,20 @@ export class ChannelService {
     } else return onlyDate;
   }
 
-   //* Updates the timestap when user last visited the channel*/
-   async updateLastVisitTimestamp() {
+  //* Updates the timestap when user last visited the channel*/
+  async updateLastVisitTimestamp() {
     // this.updateLastVisitsLocally();
     const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channelId);
-     await setDoc(docToUpdate, {
+    await setDoc(docToUpdate, {
       time: Timestamp.fromDate(new Date()).toDate()
     });
   }
 
-  updateLastVisitsLocally() {
-    const channel = this.channels.find(c => c.id == this.channelId);
-    if(channel) {
-      channel.lastUserVisit = Timestamp.fromDate(new Date());
-    }
-  }
+  // updateLastVisitsLocally() {
+  //   const channel = this.channels.find(c => c.id == this.channelId);
+  //   if(channel) {
+  //     channel.lastUserVisit = Timestamp.fromDate(new Date());
+  //   }
+  // }
 }
 

@@ -36,12 +36,19 @@ export class ChannelsComponent implements OnInit {
     public service: FirestoreService,
   ) {
     route.params.subscribe((channelRoomId) => {
-      this.channelService.getChannelRoom(channelRoomId);
+      this.channelService.channelId = channelRoomId['id']
     });
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
+    this.route.params.subscribe(async (channelRoomId) => {
+      if (this.channelService.channelId) {
+        await this.channelService.updateLastVisitTimestamp()
+      }
+      this.channelService.getChannelRoom(channelRoomId);
+    })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
@@ -50,7 +57,7 @@ export class ChannelsComponent implements OnInit {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
-
+    
   }
 
   scrollToBottom(): void {
@@ -66,7 +73,7 @@ export class ChannelsComponent implements OnInit {
 
   
 
-  // /** load all messages to the current channel */
+// /** load all messages to the current channel */
   // async loadMessagesInChannel() {
   //   const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
   //   const q = query(colRef, orderBy('timestamp'));
@@ -86,8 +93,8 @@ export class ChannelsComponent implements OnInit {
   //   this.showNewMessage();
   // }
 
-  
 
+  
 
   //** open thread with all comments of the picked message*/
   openThread(id) {

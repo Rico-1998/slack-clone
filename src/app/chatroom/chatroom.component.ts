@@ -27,12 +27,18 @@ export class ChatroomComponent implements OnInit {
     public userService: UserService,
     public channelService: ChannelService,
     public service: FirestoreService,
-  ) { }
+  ) { 
+  }
 
-  ngOnInit() {
+  async ngOnInit() {
+   
     setTimeout(() => {
-      this.route.params.subscribe(chatroomId => {
+      this.route.params.subscribe(async chatroomId => {
+        if (this.chatService.chatId) {
+          await this.chatService.updateLastVisitTimestamp()
+        }
         this.chatService.getChatRoom(chatroomId);
+        this.chatService.updateLastVisitTimestamp();
       });
     }, 1500);
     this.scrollToBottom();
