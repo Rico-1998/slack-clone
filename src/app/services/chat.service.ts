@@ -133,6 +133,7 @@ export class ChatService implements OnDestroy {
     });
   }
 
+
   async snapChatMembers(snapshot) {
     snapshot.docs.forEach((doc) => {
       let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
@@ -153,7 +154,7 @@ export class ChatService implements OnDestroy {
       snapshot.docs.forEach((doc) => {
         let chat = this.chats.find(c => c.id == doc.id);
         if (chat) {
-          chat.lastChatVisit = doc.data();
+          chat.lastUserVisit = doc.data();
         }
       })
     })
