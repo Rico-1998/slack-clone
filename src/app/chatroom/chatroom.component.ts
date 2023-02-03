@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, deleteDoc, doc, onSnapshot } from '@angular/fire/firestore';
+import { collection, deleteDoc, doc, getDocs, onSnapshot, orderBy} from '@angular/fire/firestore';
+import { query } from '@firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { getDoc } from '@firebase/firestore';
 import { ChatService } from '../services/chat.service';
-import { ChannelService } from '../services/channel.service';
 import { UserService } from '../services/user.service';
-import { map } from 'rxjs';
+import { ChannelService } from '../services/channel.service';
+import { FirestoreService } from '../services/firestore.service';
+
 
 
 @Component({
@@ -17,15 +18,18 @@ export class ChatroomComponent implements OnInit {
   textBoxPath: string = 'chatroom';
   textBoxPathEdit: string = 'edit';
   @ViewChild('scrollBox') private scrollBox: ElementRef;
+  hover: boolean = false;
 
 
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
-    public userService: UserService
+    public userService: UserService,
+    public channelService: ChannelService,
+    public service: FirestoreService,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     setTimeout(() => {
       this.route.params.subscribe(chatroomId => {
         this.chatService.getChatRoom(chatroomId);
@@ -42,7 +46,7 @@ export class ChatroomComponent implements OnInit {
     if(this.chatService.shouldScroll) {
       setTimeout(() => {
         this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
-      }, 0);
+      });
       setTimeout(() => {
         this.chatService.shouldScroll = false;
       }, 100);
@@ -53,7 +57,7 @@ export class ChatroomComponent implements OnInit {
     let actualMsg = doc(this.chatService.db, 'chats', message.id.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
   }
-
+  
   openThread(message) {
     this.chatService.thread = message;
     this.chatService.threadOpen = true;
@@ -64,5 +68,7 @@ export class ChatroomComponent implements OnInit {
   changePath(message) {
     this.chatService.msgToEdit = message;
   }
+
+  
 
 }

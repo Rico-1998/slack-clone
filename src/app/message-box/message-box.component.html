@@ -1,9 +1,15 @@
 <div class="text-box">
-    <form [formGroup]="messageForm" (submit)="check()">
-        <quill-editor class="editor" [modules]="modules" formControlName="msgEditor" minlength="1"
-            (onEditorChanged)="checkEditor($event)"></quill-editor>
-        <button type="submit" mat-raised-button [disabled]="!valid">
-            <mat-icon>send</mat-icon>
-        </button>
-    </form>
+  <form [formGroup]="messageForm" (submit)="check()">
+    <!-- (keydown.enter)="checkEnter($event)" -->
+    <quill-editor
+      class="editor"
+      [modules]="modules"
+      formControlName="msgEditor"
+      minlength="1"
+      (onEditorChanged)="checkEditor($event)"
+    ></quill-editor>
+    <button type="submit" mat-raised-button [disabled]="!valid">
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
 </div>

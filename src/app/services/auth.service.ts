@@ -44,20 +44,20 @@ export class AuthService {
   }
 
 
-  guestLogin() {
-    signInAnonymously(this.auth)
-      .then((guest) => {
-        // console.log(guest);
-        setDoc(doc(this.colRef, guest.user.uid), {
-          userName: 'guest',
-        });
-        this.loggedIn = true;
-        this.router.navigate(['/home']);
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
-  }
+  // guestLogin() {
+  //   signInAnonymously(this.auth)
+  //     .then((guest) => {
+  //       // console.log(guest);
+  //       setDoc(doc(this.colRef, guest.user.uid), {
+  //         userName: 'guest',
+  //       });
+  //       this.loggedIn = true;
+  //       this.router.navigate(['/home']);
+  //     })
+  //     .catch((e) => {
+  //       this.handleError(e.message, e.code);
+  //     })
+  // }
 
 
   isLoggedIn(): any {
@@ -109,9 +109,10 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
+
         console.log('user logged in:', cred.user)
         this.loggedIn = true;
-        this.router.navigate(['/home']);
+        this.router.navigate(['/home/channel/LluY3y28ojngKCAClTRg']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);

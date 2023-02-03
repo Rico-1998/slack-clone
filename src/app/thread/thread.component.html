@@ -5,17 +5,20 @@
   </div>
 
   <div class="thread-content-container">
-
     <div class="message">
       <mat-card *ngIf="this.channel.threadMessage" class="message-container">
         <div class="img-container">
-          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+          <img
+            class="profile-img"
+            src="assets/img/slack-big.svg"
+            alt="profile-img"
+          />
         </div>
         <div class="message-content">
           <div>
             <strong>{{
               this.channel.threadMessage?.author | titlecase
-              }}</strong>
+            }}</strong>
             {{ this.channel.threadMessage?.timestamp }}
           </div>
           <span [innerHTML]="this.channel.threadMessage?.msg"></span>
@@ -25,26 +28,38 @@
 
     <div class="scroll-box">
       <div class="devider" *ngIf="this.threadMessage.comments">
-        <span *ngIf="this.threadMessage.comments == 1">{{ this.threadMessage.comments}} Antwort</span>
-        <span *ngIf="this.threadMessage.comments > 1">{{ this.threadMessage.comments}} Antworten</span>
+        <span *ngIf="this.threadMessage.comments == 1"
+          >{{ this.threadMessage.comments }} Antwort</span
+        >
+        <span *ngIf="this.threadMessage.comments > 1"
+          >{{ this.threadMessage.comments }} Antworten</span
+        >
       </div>
-      <mat-card *ngFor="let comment of this.channel.allThreadComments; let i = index" class="comment-container">
+      <mat-card
+        *ngFor="let comment of this.channel.allThreadComments; let i = index"
+        class="comment-container"
+      >
         <div class="img-container">
-          <img class="profile-img" src="assets/img/profile-img.jpg" alt="profile-img" />
+          <img
+            class="profile-img"
+            src="assets/img/slack-big.svg"
+            alt="profile-img"
+          />
         </div>
         <div class="comment-content">
           <div class="">
             <strong>{{ comment.author | titlecase }}</strong>
             {{ comment.timestamp }}
           </div>
-          <span [innerHTML]="comment.comment">
-          </span>
+          <span [innerHTML]="comment.comment"> </span>
         </div>
       </mat-card>
-
     </div>
   </div>
-  <app-message-box class="message-box" [textBoxPath]="textBoxPath"></app-message-box>
+  <app-message-box
+    class="message-box"
+    [textBoxPath]="textBoxPath"
+  ></app-message-box>
   <div *ngIf="this.channel.threadLoading" id="loading-container">
     <div class="lds-ring" id="loading-ring">
       <div></div>

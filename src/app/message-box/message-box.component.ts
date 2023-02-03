@@ -87,14 +87,33 @@ export class MessageBoxComponent implements OnInit {
     if (event.event === 'text-change') {
       let text = event.html;
       if (text !== null) {
-        this.channel.newMessage = event.html;
-        this.channel.newComment = event.html;
-        this.chatService.chatMsg = event.html;
+        this.channel.newMessage = text;
+        this.channel.newComment = text;
+        this.chatService.chatMsg = text;
         this.valid = true;
       } else {
         this.valid = false;
       }
     }
   }
+
+  // checkEnter(event) {  
+  //     // let text = event.target.innerHTML.replace(/<[^>]+>/g, undefined);
+  //     let text = event.target.firstChild.innerText = '\n' ? '' : event.target.innerHTML;
+  //     console.log(event);
+      
+  //     // if (text != '') {
+  //     //   console.log(text);
+  //     //   this.valid = true;
+  //     //   this.check();
+  //     // } else {
+  //     //   this.valid = false;
+  //     //   console.log(
+  //     //     text
+  //     //   );
+        
+  //     // }
+  // }
+  
 
 }

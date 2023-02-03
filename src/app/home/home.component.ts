@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
@@ -27,10 +27,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  constructor(public authService: AuthService, private firestore: Firestore, private userService: UserService, public toggler: DrawerTogglerService) { }
+  constructor(
+    public authService: AuthService, 
+    private firestore: Firestore, 
+    private userService: UserService, 
+    public toggler: DrawerTogglerService, ) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.userService.getData();
+        
     if(window.innerWidth < 600) {
       this.toggler.open = false;
       this.toggler.type = 'over';
