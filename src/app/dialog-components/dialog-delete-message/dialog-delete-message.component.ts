@@ -38,13 +38,14 @@ export class DialogDeleteMessageComponent implements OnInit {
       // let actualMsg = doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId);
       // console.log('Message from CHATROOM', actualMsg);
       await deleteDoc(doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId));
+
       this.dialogRef.close();
-    } else if(!this.service.currentMessage['documentId']){
+    } else if (!this.service.currentMessage['documentId']) {
       // console.log('Message from CHANNEL', actualMsgChannel);
       // this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
       await deleteDoc(doc(this.db, 'channels', this.channel.channelId, 'messages', this.channel.messageId));
       this.service.spliceDeletedMessage()
       this.dialogRef.close();
-      }
     }
+  }
 }
