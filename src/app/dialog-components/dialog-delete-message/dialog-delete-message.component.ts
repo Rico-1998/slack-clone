@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { doc, documentId } from '@angular/fire/firestore';
+import { query, collection, doc, documentId, onSnapshot, orderBy, getDocs } from '@angular/fire/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { deleteDoc, getFirestore } from '@firebase/firestore';
 import { ChannelService } from 'src/app/services/channel.service';
@@ -35,18 +35,13 @@ export class DialogDeleteMessageComponent implements OnInit {
 
   //** delete the picked message out of firebase server and array */
   async deleteMessage() {
-    debugger;
     if (this.service.currentMessage['documentId']) {
-      // let actualMsg = doc(this.service.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId);
-      // console.log('Message from CHATROOM', actualMsg);
-      await deleteDoc(doc(this.service.db, 'chats', this.chatService.chatId, 'messages', this.service.currentMessage.documentId));
-      await this.chatService.getChatRoom(this.chatService.chatId);
+      await deleteDoc(doc(this.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId));
+      this.chatService.chatId = this.service.currentMessage.id;
       this.dialogRef.close();
     } else if(!this.service.currentMessage['documentId']){
-      // console.log('Message from CHANNEL', actualMsgChannel);
-      // this.channel.allMessages = this.channel.allMessages.filter(item => item.id !== this.channel.messageId)
       await deleteDoc(doc(this.db, 'channels', this.channelService.channelId, 'messages', this.service.currentMessage.id));
-      await this.channelService.getChannelRoom(this.channelService.channelId);
+      this.channelService.channelId = this.channelService.channelId;
       this.dialogRef.close();
       }
     }

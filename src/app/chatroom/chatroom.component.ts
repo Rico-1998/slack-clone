@@ -73,6 +73,8 @@ export class ChatroomComponent implements OnInit {
 
   changePath(message) {
     this.chatService.msgToEdit = message;
+    console.log('changePath');
+    
   }
 
   
