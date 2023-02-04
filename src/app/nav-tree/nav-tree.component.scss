@@ -109,4 +109,6 @@ $inner-size: 18px;
 
 .highlight {
     color: white !important;
+    transition: color 0ms ease;
+    transition-delay: 500ms;
 }

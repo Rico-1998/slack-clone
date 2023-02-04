@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
 import { ChannelService } from './channel.service';
@@ -18,6 +18,7 @@ export class ChatService implements OnDestroy {
   chats: any[] = [];
   currentUser = JSON.parse(localStorage.getItem('user'));
   currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
+  chatId: any;
   currentChat: any;
   currentChatMembers: any;
   currentChatMessages = [];
@@ -40,6 +41,31 @@ export class ChatService implements OnDestroy {
 
   ngOnDestroy() {
     
+  }
+
+  async getChatRoom(chatroomId) {
+    this.chatId = chatroomId['id'];
+    this.currentChat = this.chats.filter(a => a.id == this.chatId);
+    this.currentChatMembers = this.currentChat[0]?.otherUsers;
+    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages'), orderBy('timestamp', 'asc'));
+    const unsub = onSnapshot(colRef, async (snapshot) => {
+      if(this.chatId != this.currentChat[0]?.id) {
+        unsub();
+      } else {
+        await this.snapChatroomMessages(chatroomId, snapshot);
+      }
+    });    
+  }
+
+  async snapChatroomMessages(chatroomId, snapshot) {
+    this.currentChatMessages = [];    
+    snapshot.docs.forEach(async (document) => {
+      let comments = (await getDocs(collection(this.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
+      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
+      timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+      this.currentChatMessages.push(timestampConvertedMsg);
+      this.shouldScroll = true;      
+    });
   }
 
   setToChatList(user) {
@@ -68,11 +94,13 @@ export class ChatService implements OnDestroy {
   }  
 
   saveMsg(roomId) { // Bei add vergibt firebase automatisch eine id
+    let timestamp = Timestamp.fromDate(new Date());
     addDoc(collection(this.db, 'chats', roomId, 'messages'), {
-      timestamp: Timestamp.fromDate(new Date()),
+      timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg,
-    });
+    })
+    
   }
 
   setChatRoom(roomId) { //bei set muss man die id selbst angeben 
@@ -105,6 +133,7 @@ export class ChatService implements OnDestroy {
     });
   }
 
+
   async snapChatMembers(snapshot) {
     snapshot.docs.forEach((doc) => {
       let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
@@ -116,6 +145,19 @@ export class ChatService implements OnDestroy {
         this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
       }
     });
+    this.getLastVisitsForChats();
+  }
+
+  //**load and connects the lastVisitTimestamps into the chats */
+  async getLastVisitsForChats() {
+    onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        let chat = this.chats.find(c => c.id == doc.id);
+        if (chat) {
+          chat.lastUserVisit = doc.data();
+        }
+      })
+    })
   }
 
   async findOtherUsers() {
@@ -134,11 +176,19 @@ export class ChatService implements OnDestroy {
 
   addMessage() {
     let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages');
+    let timestamp = Timestamp.fromDate(new Date());
     addDoc(colRef, {
-      timestamp: Timestamp.fromDate(new Date()),
+      timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
-    }); 
+    })
+    .then(() => {
+      this.updateLastMessageTimestamp(timestamp)
+      setTimeout(() => {
+        this.updateLastVisitTimestamp()
+      }, 1000);
+      console.log(this.chatId)
+    });; 
     this.shouldScroll = true;
   }
 
@@ -169,12 +219,13 @@ export class ChatService implements OnDestroy {
 
   msgToChatThread() {
     this.loading = true;
+    let timestamp = Timestamp.fromDate(new Date());
     let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments');
     addDoc(colRef, {
-      timestamp: Timestamp.fromDate(new Date()),
+      timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
-    });
+    })
     this.loading = false;
   }
 
@@ -187,6 +238,21 @@ export class ChatService implements OnDestroy {
 
   arrayToString(array) {
     return array.sort().join('');
+  }
+
+  //* Updates the time when last message was send in chats */
+  async updateLastMessageTimestamp(timestamp) {
+    await updateDoc(doc(this.db, 'chats', this.chatId), {
+      lastMessage: timestamp
+    })
+  }
+
+   //* Updates the timestap when user last visited the chat*/
+   async updateLastVisitTimestamp() {
+    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits', this.chatId);
+    await setDoc(docToUpdate, {
+      time: Timestamp.fromDate(new Date())
+    });
   }
 }
 

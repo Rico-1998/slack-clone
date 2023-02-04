@@ -36,12 +36,19 @@ export class ChannelsComponent implements OnInit {
     public service: FirestoreService,
   ) {
     route.params.subscribe((channelRoomId) => {
-      this.getChannelRoom(channelRoomId);
+      this.channelService.channelId = channelRoomId['id']
     });
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
+    this.route.params.subscribe(async (channelRoomId) => {
+      if (this.channelService.channelId) {
+        await this.channelService.updateLastVisitTimestamp()
+      }
+      this.channelService.getChannelRoom(channelRoomId);
+    })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
@@ -50,7 +57,7 @@ export class ChannelsComponent implements OnInit {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
-    
+
   }
 
   scrollToBottom(): void {
@@ -64,51 +71,7 @@ export class ChannelsComponent implements OnInit {
     }
   }
 
-  //**  get channelRoom ID*/
-  getChannelRoom(channelRoomId: Params) {
-    this.channelService.channelId = channelRoomId['id'];
-    const unsub = onSnapshot(doc(this.db, 'channels', channelRoomId['id']), async (snapshot) => {      
-      if(channelRoomId['id'] != this.channelService.channelId) {
-        unsub();
-      } else {
-        this.channelService.currentChannel = snapshot.data();
-        this.channelService.currentChannel.created = this.channelService.convertTimestamp(this.channelService.currentChannel.created, 'onlyDate');        
-      }
-    });
-    this.loadMessagesInChannel(channelRoomId['id']);
-    this.channelService.updateLastVisitTimestamp();     
-  }
-
-  loadMessagesInChannel(currentChannelId: string) {
-    this.channelService.allMessages = [];
-    const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
-    const q = query(colRef, orderBy('timestamp'));
-    const unsub = onSnapshot(q, (snapshot) => { 
-      if(currentChannelId != this.channelService.channelId) {
-        unsub();        
-      }   else {
-        this.snapCurrentChannelMessages(snapshot);      
-      }
-    });    
-  }
-
-  snapCurrentChannelMessages(snapshot) {
-    snapshot.docs.forEach(async (doc) => {
-      if (!this.channelService.allMessages.find(m => m.id == doc.id)) {
-          let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
-          let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
-          message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
-          this.channelService.allMessages.push(message);
-        } 
-          this.showNewMessage();
-    });
-  }
-
-  showNewMessage() {
-    setTimeout(() => {
-      this.channelService.shouldScroll = true;
-    }, 150);
-  }
+  
 
   // /** load all messages to the current channel */
   // async loadMessagesInChannel() {

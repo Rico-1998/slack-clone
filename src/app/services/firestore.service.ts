@@ -24,10 +24,5 @@ openDeleteMessageDialog(message) {
     panelClass: 'delete-message'
   })
 }
-
-spliceDeletedMessage() {
-  let index = this.channelService.allMessages.findIndex(a => a.id == this.currentMessage.id);
-  this.channelService.allMessages.splice(index, 1);
-}
   
 }

@@ -16,6 +16,7 @@ export class UserService {
   channelEditor: boolean = false;
   chatEditor: boolean = false;
   threadEditor: boolean = false;
+ 
 
 
   constructor(
