@@ -1,5 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
-import { getFirestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChannelService } from './channel.service';
@@ -10,7 +9,6 @@ import { ChannelService } from './channel.service';
 export class FirestoreService {
 
   currentMessage: any;
-  db = getFirestore();
 
   constructor(
     public dialog: MatDialog,

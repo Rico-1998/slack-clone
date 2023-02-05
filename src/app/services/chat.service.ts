@@ -44,26 +44,29 @@ export class ChatService implements OnDestroy {
   }
 
   async getChatRoom(chatroomId) {
-    this.chatId = chatroomId['id'];
+    this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
-    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages'), orderBy('timestamp', 'asc'));
-    const unsub = onSnapshot(colRef, async (snapshot) => {
-      if(this.chatId != this.currentChat[0]?.id) {
+    const colRef = collection(this.db, 'chats', this.chatId, 'messages');
+    const q = query(colRef, orderBy('timestamp', 'asc'))
+    const unsub = onSnapshot(q, async (snapshot) => {
+      if(this.chatId != this.currentChat[0]?.id) {        
         unsub();
       } else {
-        await this.snapChatroomMessages(chatroomId, snapshot);
-      }
+        await this.snapChatroomMessages(snapshot);
+      };
     });    
   }
 
-  async snapChatroomMessages(chatroomId, snapshot) {
-    this.currentChatMessages = [];    
+  async snapChatroomMessages(snapshot) {
+    this.currentChatMessages = []; 
     snapshot.docs.forEach(async (document) => {
-      let comments = (await getDocs(collection(this.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
-      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
+      if (!this.currentChatMessages.find(m => m.id == document.id)) {
+      let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', document.id, 'comments'));
+      let timestampConvertedMsg = await { ...(document.data() as object), id: this.chatId, documentId: document.id, comments: comments.size };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
       this.currentChatMessages.push(timestampConvertedMsg);
+    }
       this.shouldScroll = true;      
     });
   }
@@ -183,9 +186,9 @@ export class ChatService implements OnDestroy {
       msg: this.chatMsg
     })
     .then(() => {
-      this.updateLastMessageTimestamp(timestamp)
+      this.updateLastMessageTimestamp(timestamp);
       setTimeout(() => {
-        this.updateLastVisitTimestamp()
+        this.updateLastVisitTimestamp();
       }, 1000);
       console.log(this.chatId)
     });; 

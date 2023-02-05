@@ -73,35 +73,25 @@ export class ChannelService {
 
   //**  get channelRoom ID*/
   async getChannelRoom(channelRoomId) {
-    this.channelId = channelRoomId['id'];
-    this.currentChannel = this.channels.find(a => a.id == this.channelId);
-
-    // const unsub = onSnapshot(doc(this.db, 'channels', channelRoomId['id']), async (snapshot) => {      
-    //   if(channelRoomId['id'] != this.channelId) {
-    //     unsub();
-    //   } else {
-    //     // this.currentChannel = snapshot.data();
-    //     // this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate');        
-    //   }
-    // });
-    this.loadMessagesInChannel(this.channelId);
-    this.updateLastVisitTimestamp();
-  }
-
-  loadMessagesInChannel(currentChannelId: string) {
-    this.allMessages = [];
+    this.channelId = channelRoomId['id'] || channelRoomId;
+    this.currentChannel = await this.channels.find(a => a.id == this.channelId);
+    // this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate');        
+    console.log(this.currentChannel);
+    
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     const unsub = onSnapshot(q, (snapshot) => {
-      if (currentChannelId != this.channelId) {
+      if (this.currentChannel?.id != this.channelId) {
         unsub();
       } else {
         this.snapCurrentChannelMessages(snapshot);
       }
     });
-  }
+    this.updateLastVisitTimestamp();
+  }  
 
   snapCurrentChannelMessages(snapshot) {
+    this.allMessages = [];
     snapshot.docs.forEach(async (doc) => {
       if (!this.allMessages.find(m => m.id == doc.id)) {
         let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
