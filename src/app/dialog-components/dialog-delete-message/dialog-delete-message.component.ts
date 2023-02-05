@@ -37,11 +37,11 @@ export class DialogDeleteMessageComponent implements OnInit {
   async deleteMessage() {
     if (this.service.currentMessage['documentId']) {
       await deleteDoc(doc(this.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId));
-      this.chatService.chatId = this.service.currentMessage.id;
+      // this.chatService.chatId = this.service.currentMessage.id;
       this.dialogRef.close();
     } else if(!this.service.currentMessage['documentId']){
       await deleteDoc(doc(this.db, 'channels', this.channelService.channelId, 'messages', this.service.currentMessage.id));
-      this.channelService.channelId = this.channelService.channelId;
+      // this.channelService.channelId = this.channelService.channelId;
       this.dialogRef.close();
       }
     }
