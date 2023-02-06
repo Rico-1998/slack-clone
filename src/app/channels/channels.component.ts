@@ -46,7 +46,7 @@ export class ChannelsComponent implements OnInit {
     //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
     this.route.params.subscribe(async (channelRoomId) => {
       console.log(this.channelService.unsub)
-      // this.channelService.ngOnDestroy();
+      this.channelService.destroy();
       if (this.channelService.channelId) {
         await this.channelService.updateLastVisitTimestamp()
       }

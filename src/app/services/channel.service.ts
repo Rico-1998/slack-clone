@@ -11,7 +11,7 @@ import { ObjectUnsubscribedError, Observable, Subscribable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelService implements OnDestroy {
+export class ChannelService {
   channelId: string;
   channels: any = [];
   db: any = getFirestore();
@@ -38,7 +38,7 @@ export class ChannelService implements OnDestroy {
     public userService: UserService,
   ) { }
 
-  ngOnDestroy() {
+  destroy() {
     if(this.unsub) {
       this.unsub();
       console.log('unsubscribed')
@@ -73,16 +73,16 @@ export class ChannelService implements OnDestroy {
     this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');        
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
-    // this.unsub = onSnapshot(q, (snapshot) => {
-    //     this.snapCurrentChannelMessages(snapshot);
-    // });
-    const unsub = onSnapshot(q, (snapshot) => {
-      if (this.currentChannel?.id != this.channelId) {
-        unsub();
-      } else {
+    this.unsub = onSnapshot(q, (snapshot) => {
         this.snapCurrentChannelMessages(snapshot);
-      }
     });
+    // const unsub = onSnapshot(q, (snapshot) => {
+    //   if (this.currentChannel?.id != this.channelId) {
+    //     unsub();
+    //   } else {
+    //     this.snapCurrentChannelMessages(snapshot);
+    //   }
+    // });
     this.updateLastVisitTimestamp();
     
   }  
@@ -200,27 +200,27 @@ export class ChannelService implements OnDestroy {
 
   //** transforms timestamp to a date standard */
   convertTimestamp(timestamp, type) {
-    let date = timestamp?.toDate();
-    let mm = date?.getMonth();
-    let dd = date?.getDate();
-    let yyyy = date?.getFullYear();
-    let hours = date?.getHours();
-    let minutes = date?.getMinutes();
-    let secondes = date?.getSeconds();
-    if (secondes < 10) {
-      secondes = '0' + secondes
-    }
-    if (hours < 10) {
-      hours = '0' + hours
-    }
-    if (minutes < 10) {
-      minutes = '0' + minutes
-    }
-    let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-    let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
-    if (type == 'full') {
-      return fullDate;
-    } else return onlyDate;
+    // let date = timestamp?.toDate();
+    // let mm = date?.getMonth();
+    // let dd = date?.getDate();
+    // let yyyy = date?.getFullYear();
+    // let hours = date?.getHours();
+    // let minutes = date?.getMinutes();
+    // let secondes = date?.getSeconds();
+    // if (secondes < 10) {
+    //   secondes = '0' + secondes
+    // }
+    // if (hours < 10) {
+    //   hours = '0' + hours
+    // }
+    // if (minutes < 10) {
+    //   minutes = '0' + minutes
+    // }
+    // let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
+    // let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
+    // if (type == 'full') {
+    //   return fullDate;
+    // } else return onlyDate;
   }
 
   //* Updates the timestap when user last visited the channel*/
