@@ -112,7 +112,7 @@ export class AuthService {
 
         console.log('user logged in:', cred.user)
         this.loggedIn = true;
-        this.router.navigate(['/home/channel/LluY3y28ojngKCAClTRg']);
+        this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);

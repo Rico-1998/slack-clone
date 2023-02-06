@@ -28,6 +28,14 @@
       </mat-card>
     </div>
     <div class="scroll-box">
+      <div class="devider" *ngIf="this.chatService.thread.comments">
+        <span *ngIf="this.chatService.thread.comments == 1"
+          >{{ this.chatService.thread.comments }} Antwort</span
+        >
+        <span *ngIf="this.chatService.thread.comments > 1"
+          >{{ this.chatService.thread.comments }} Antworten</span
+        >
+      </div>
       <mat-card
         class="comment-container"
         *ngFor="let comment of chatService.threadComments; let i = index"

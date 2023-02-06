@@ -25,6 +25,16 @@
         .scroll-box {
             height: calc(100vh - 350px);
 
+            .devider {
+                padding-left: 16px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                border-bottom: 1px solid #313438;
+                border-radius: 4px;
+                font-style: italic;
+                font-size: 14px;
+            }
+
             .comment-container {
                 background-color: transparent;
                 color: #D1D2D3;

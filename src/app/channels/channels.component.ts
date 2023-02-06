@@ -71,31 +71,6 @@ export class ChannelsComponent implements OnInit {
     }
   }
 
-  
-
-  // /** load all messages to the current channel */
-  // async loadMessagesInChannel() {
-  //   const colRef = collection(this.db, 'channels', this.channelService.channelId, 'messages');
-  //   const q = query(colRef, orderBy('timestamp'));
-  //   const unsub = onSnapshot(q, (snapshot) => {
-  //     if(!this.channelService.channelId) {
-  //       unsub();
-  //     } else {
-  //       this.channelService.allMessages = [];
-  //       snapshot.docs.forEach(async (doc) => {
-  //         let comments = (await getDocs(collection(this.db, 'channels', this.channelService.channelId, 'messages', doc.id, 'comments')));
-  //         let message = {...(doc.data() as object), id: doc.id, comments: comments.size };
-  //         message['timestamp'] = this.channelService.convertTimestamp(message['timestamp'], 'full');
-  //         this.channelService.allMessages.push(message);
-  //       });
-  //     }
-  //   });
-  //   this.showNewMessage();
-  // }
-
-  
-
-
   //** open thread with all comments of the picked message*/
   openThread(id) {
     this.channelService.threadId = id;
@@ -105,7 +80,7 @@ export class ChannelsComponent implements OnInit {
   }
 
 
-  //** */
+  //**Changes the path to identify the message to edit */
   changePath(message) {
     this.channelService.msgToEdit = message;
   }
