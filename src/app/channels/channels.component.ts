@@ -6,6 +6,7 @@ import { Message } from 'src/modules/messages.class';
 import { UserService } from '../services/user.service';
 import { doc, getDocs } from '@angular/fire/firestore';
 import { FirestoreService } from '../services/firestore.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-channels',
@@ -44,6 +45,8 @@ export class ChannelsComponent implements OnInit {
   async ngOnInit() {
     //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
     this.route.params.subscribe(async (channelRoomId) => {
+      console.log(this.channelService.unsub)
+      // this.channelService.ngOnDestroy();
       if (this.channelService.channelId) {
         await this.channelService.updateLastVisitTimestamp()
       }

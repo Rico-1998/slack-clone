@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
@@ -6,11 +6,12 @@ import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
 import { MatDialog, MatDialogRef, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
+import { ObjectUnsubscribedError, Observable, Subscribable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChannelService {
+export class ChannelService implements OnDestroy {
   channelId: string;
   channels: any = [];
   db: any = getFirestore();
@@ -27,6 +28,7 @@ export class ChannelService {
   currentChannel: any;
   msgToEdit: any;
   shouldScroll = true;
+  unsub: any;
 
 
   constructor(
@@ -36,19 +38,12 @@ export class ChannelService {
     public userService: UserService,
   ) { }
 
-  //**get the channels from firestore */
-  // async getChannels() {
-  //   while (!this.userService.loadedChannelVisits) {
-  //     await new Promise(resolve => setTimeout(resolve,100));
-  //   }
-  //   onSnapshot(collection(this.db, 'channels'), (snapshot) => {
-  //     this.channels = [];
-  //     snapshot.docs.forEach((doc) => {
-  //       const lastUserVisit = this.userService.lastChannelVisits.find(v => v.id == doc.id)?.time;
-  //       this.channels.push(({ ...(doc.data() as object), id: doc.id, lastUserVisit: lastUserVisit }));
-  //     })
-  //   });
-  // }
+  ngOnDestroy() {
+    if(this.unsub) {
+      this.unsub();
+      console.log('unsubscribed')
+    }
+  }
 
   async getChannels() {
     onSnapshot(collection(this.db, 'channels'), async (snapshot) => {
@@ -78,6 +73,9 @@ export class ChannelService {
     this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');        
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
+    // this.unsub = onSnapshot(q, (snapshot) => {
+    //     this.snapCurrentChannelMessages(snapshot);
+    // });
     const unsub = onSnapshot(q, (snapshot) => {
       if (this.currentChannel?.id != this.channelId) {
         unsub();
@@ -86,6 +84,7 @@ export class ChannelService {
       }
     });
     this.updateLastVisitTimestamp();
+    
   }  
 
   snapCurrentChannelMessages(snapshot) {
