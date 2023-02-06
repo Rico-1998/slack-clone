@@ -22,11 +22,8 @@ import { ChannelService } from '../services/channel.service';
 })
 export class NavTreeComponent implements OnInit {
   openChannelPanel = true;
-  openChatsPanel = true;
-  db = getFirestore();
+  openChatsPanel = true; 
   currentUser = JSON.parse(localStorage.getItem('user'));
-  // currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
-  // channels: any = [];
   _lastUserVisits: any;
   hover: any = [];
 
@@ -42,7 +39,9 @@ export class NavTreeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.chatService.getChats();
+    if(this.chatService.chats.length == 0) {
+      await this.chatService.getChats();
+    }
     await this.channelService.getChannels();    
   }
 

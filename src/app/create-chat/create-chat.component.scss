@@ -53,15 +53,25 @@ mat-toolbar {
     }
 }
 
-.selectedUser {
+.selectedUser-container {
     display: flex;
-    color: $txt-clr-primary;
-    align-items: center;
-    gap: 5px;
-    background-color: $bgClr-chatList;
-    border-radius: $br-primary;
-
-    mat-icon {
-        cursor: pointer;
+    gap: $gap-primary;
+    
+    .selectedUser {
+        display: flex;
+        color: $txt-clr-primary;
+        align-items: center;
+        gap: 5px;
+        background-color: $bgClr-chatList;
+        border-radius: $br-primary;
+        
+        mat-icon {
+            cursor: pointer;
+        }
     }
+}
+
+.new-chat-info {
+    padding: $padding-messages;
+    font-size: $fs-l;
 }

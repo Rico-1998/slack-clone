@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService implements OnDestroy {
+export class ChatService {
   visibleTextEditor: boolean = false;
   selectedUserList = [];
   foundedUsers: any[] = [];
@@ -29,7 +29,7 @@ export class ChatService implements OnDestroy {
   threadMessage: any;
   msgToEdit: object;
   shouldScroll = true;
-
+  unsub: any;
 
 
   constructor(public userService: UserService,
@@ -39,7 +39,9 @@ export class ChatService implements OnDestroy {
   ) {
   }
 
-  ngOnDestroy() {
+  destroy() {
+    this.unsub();
+    console.log('unsub');
     
   }
 
@@ -49,12 +51,15 @@ export class ChatService implements OnDestroy {
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
-    const unsub = onSnapshot(q, async (snapshot) => {
-      if(this.chatId != this.currentChat[0]?.id) {        
-        unsub();
-      } else {
+    this.unsub = onSnapshot(q, async (snapshot) => {
+      
         await this.snapChatroomMessages(snapshot);
-      };
+      
+      // if(this.chatId != this.currentChat[0]?.id) {        
+      //   unsub();
+      // } else {
+      //   await this.snapChatroomMessages(snapshot);
+      // };
     });    
   }
 
@@ -131,22 +136,24 @@ export class ChatService implements OnDestroy {
 
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
-      this.chats = [];
-      await this.snapChatMembers(snapshot);
-      await this.findOtherUsers();
+      this.snapChatMembers(snapshot);
+      
     });
   }
 
 
   async snapChatMembers(snapshot) {
     snapshot.docs.forEach((doc) => {
-      let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-      let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
-      if (otherUsers.length == 0) {
-        const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
-      } else {
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+      if(!this.chats.find(a => a.id == doc.id)) {
+        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+        if (otherUsers.length == 0) {
+          const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
+        } else {
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+        }
+        this.findOtherUsers();
       }
     });
     this.getLastVisitsForChats();
@@ -169,7 +176,7 @@ export class ChatService implements OnDestroy {
       let otherUsers = this.chats[i]?.otherUsers;
       for (let i = 0; i < otherUsers.length; i++) {
         let actualMember = otherUsers[i];
-        await getDoc(doc(this.db, 'users', actualMember))
+        getDoc(doc(this.db, 'users', actualMember))
           .then((docData) => {
             let index = otherUsers.indexOf(actualMember);
             otherUsers[index] = docData.data();

@@ -38,6 +38,7 @@ export class ChatroomComponent implements OnInit {
         this.route.params.subscribe(async chatroomId => {
           if (this.chatService.chatId) {
             await this.chatService.updateLastVisitTimestamp()
+            this.chatService.destroy();
           }
           this.chatService.getChatRoom(chatroomId);
           this.chatService.updateLastVisitTimestamp();
