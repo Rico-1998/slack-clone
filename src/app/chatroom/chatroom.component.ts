@@ -1,11 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { collection, deleteDoc, doc, getDocs, onSnapshot, orderBy} from '@angular/fire/firestore';
-import { query } from '@firebase/firestore';
+import { deleteDoc, doc } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
 import { ChannelService } from '../services/channel.service';
-import { FirestoreService } from '../services/firestore.service';
+import { DeleteDialogService } from '../services/delete-dialog.service';
 
 
 
@@ -26,7 +25,7 @@ export class ChatroomComponent implements OnInit {
     private route: ActivatedRoute,
     public userService: UserService,
     public channelService: ChannelService,
-    public service: FirestoreService,
+    public deleteDialogService: DeleteDialogService,
     ) { 
       
   }

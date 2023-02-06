@@ -25,17 +25,17 @@
   <div class="settings">
     <!-- <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon> -->
     <div
-      class="img-container"
+      class="img-container-settings"
       (click)="openSettings()"
       matTooltip="{{ currentUser.userName }}"
       *ngIf="userService.currentUser$ | async as currentUser"
     >
       <img
-        class="profile-img"
+        class="profile-img-settings"
         src="assets/img/slack-big.svg"
         alt="profile-img"
       />
-      <div class="dot-nav absent"></div>
+      <div class="dot-nav online"></div>
     </div>
   </div>
 </mat-toolbar>

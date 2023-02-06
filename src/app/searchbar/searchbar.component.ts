@@ -26,7 +26,7 @@ export class SearchbarComponent implements OnInit {
 
     showToggleBtn: boolean = false;
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     let data = [];
     onSnapshot(this.colref, ((snapshot) => {
       snapshot.docs.forEach((doc) => {

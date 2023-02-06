@@ -1,12 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { collection, getFirestore, onSnapshot,  orderBy, query } from '@firebase/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
+import {  getFirestore } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
 import { Message } from 'src/modules/messages.class';
 import { UserService } from '../services/user.service';
-import { doc, getDocs } from '@angular/fire/firestore';
-import { FirestoreService } from '../services/firestore.service';
-import { ChatService } from '../services/chat.service';
+import { DeleteDialogService } from '../services/delete-dialog.service';
 
 @Component({
   selector: 'app-channels',
@@ -34,7 +32,7 @@ export class ChannelsComponent implements OnInit {
     private route: ActivatedRoute,
     public channelService: ChannelService,
     public router: Router,
-    public service: FirestoreService,
+    public deleteDialogService: DeleteDialogService,
   ) {
     route.params.subscribe((channelRoomId) => {
       this.channelService.channelId = channelRoomId['id']
@@ -45,7 +43,6 @@ export class ChannelsComponent implements OnInit {
   async ngOnInit() {
     //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
     this.route.params.subscribe(async (channelRoomId) => {
-      console.log(this.channelService.unsub)
       this.channelService.destroy();
       if (this.channelService.channelId) {
         await this.channelService.updateLastVisitTimestamp()

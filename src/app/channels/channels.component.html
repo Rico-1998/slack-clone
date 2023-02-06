@@ -31,8 +31,13 @@
       </mat-card>
       <mat-card
         class="message-container"
-        *ngFor="let message of this.channelService.allMessages; let i = index"
+        *ngFor="
+          let message of this.channelService.allMessages;
+          let i = index;
+          let last = last
+        "
         (click)="this.channelService.getCurrentMessage(message.id)"
+        [class.border-bottom]="!last"
       >
         <div class="option-box">
           <div class="option">
@@ -65,7 +70,7 @@
               <button
                 mat-menu-item
                 class="delete"
-                (click)="service.openDeleteMessageDialog(message)"
+                (click)="deleteDialogService.openDeleteMessageDialog(message)"
                 *ngIf="userService.currentUser?.userName == message.author"
               >
                 Nachricht löschen

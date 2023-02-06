@@ -95,7 +95,7 @@
             <button
               mat-menu-item
               class="delete"
-              (click)="service.openDeleteMessageDialog(message)"
+              (click)="deleteDialogService.openDeleteMessageDialog(message)"
               *ngIf="userService.currentUser?.userName == message.author"
             >
               Nachricht löschen
@@ -120,8 +120,12 @@
 
       <div class="message-content">
         <div>
-          <strong>{{ message.author | titlecase }}</strong>
-          {{ message.timestamp }}
+          <div>
+            <strong>{{ message.author | titlecase }}</strong>
+          </div>
+          <div>
+            {{ message.timestamp }}
+          </div>
         </div>
 
         <span [innerHTML]="message.msg"></span>

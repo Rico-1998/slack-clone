@@ -89,9 +89,9 @@ body {
 
 .menu-options {
     .delete {
-        color: $txt-clr-delte;
+        color: $txt-clr-delete;
         &:hover {
-            background-color: $txt-clr-delte;
+            background-color: $txt-clr-delete;
             color: $txt-clr-secondary;
         }
     }
@@ -114,12 +114,13 @@ body {
     position: relative;
     height: $size-profile-img;
     aspect-ratio: 1;
-
+    background-color: $bgClr-start;
+    border-radius: $br-primary;
+    
     .profile-img {
         height: inherit;
         aspect-ratio: 1;
         object-fit: cover;
-        border-radius: $br-primary;
     }
 
 }
@@ -142,19 +143,21 @@ body {
     overflow-y: auto;
 }
 
+.border-bottom {
+    border-bottom: 1px solid $border-clr;
+}
+
 .message-container {
     background-color: transparent;
     color: #D1D2D3;
     display: flex !important;
-    gap: $gap-primary;
-    border-bottom: 1px solid $border-clr;
+    gap: $gap-primary;    
     position: relative;
 
     .message-content {
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: $gap-primary;
 
         span > p {
             margin: 0;
@@ -255,22 +258,6 @@ body {
     
     h1 {
         color: $txt-clr-h1;
-    }
-
-    mat-card{
-        background-color: transparent;
-        color: $txt-clr-primary
-    }
-    
-    mat-card-subtitle {
-        color: $txt-clr-primary;
-    }
-
-    button {
-        &:hover {
-            background-color: #363b41;
-            transition: $transition-hover;
-        }
     }
 }
 

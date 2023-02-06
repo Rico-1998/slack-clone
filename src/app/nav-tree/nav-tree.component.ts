@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
-import { deleteDoc, deleteField, doc, docData, Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
-import { Observable } from 'rxjs';
 import { ChannelService } from '../services/channel.service';
 
 

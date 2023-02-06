@@ -1,32 +1,46 @@
+@import 'src/modules/_vars';
+
 .dialog-container{
-    max-width: 400px;
-    height: 500px;
+    min-height: 175px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    .dialog-content {
+        display: flex;
+        flex-direction: column;
+        gap: $gap-primary;
+
+        h1{
+                margin: 0;
+                font-size: 30px; 
+            }
+        
+    }
 }
 
-mat-dialog-contant{
-    h1{
-        margin-bottom: 50px !important;
-        font-size: 30px; 
-    }
+mat-dialog-content{
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-}
+    gap: $gap-primary;
 
-mat-card-title {
-    display: flex;
-    align-items: center;
-    margin-top: 40px;
-    span{
-        font-size: 16px;
-        margin-right: 8px;
-        margin-bottom: 16px;
+    .message-container {
+        border: $border-primary;
     }
 }
 
-mat-card-subtitle{
-    font-size: 24px;
+mat-dialog-actions {
+    justify-content: flex-end;
+
+    .btn-cancel {
+        background-color: transparent;
+        color: $txt-clr-primary;
+        border-radius: $br-primary;
+        border: $border-primary;
+    }
+    
+    .btn-delete {
+        background: $txt-clr-delete;
+        color: $txt-clr-secondary;
+    }
 }

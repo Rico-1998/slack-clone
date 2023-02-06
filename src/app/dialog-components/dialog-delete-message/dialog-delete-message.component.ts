@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { query, collection, doc, documentId, onSnapshot, orderBy, getDocs } from '@angular/fire/firestore';
+import { doc } from '@angular/fire/firestore';
 import { MatDialogRef } from '@angular/material/dialog';
 import { deleteDoc, getFirestore } from '@firebase/firestore';
 import { ChannelService } from 'src/app/services/channel.service';
 import { ChatService } from 'src/app/services/chat.service';
-import { FirestoreService } from 'src/app/services/firestore.service';
+import { DeleteDialogService } from 'src/app/services/delete-dialog.service';
 
 @Component({
   selector: 'app-dialog-delete-message',
@@ -18,13 +18,13 @@ export class DialogDeleteMessageComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogDeleteMessageComponent>,
-    public service: FirestoreService,
+    public deleteDialogService: DeleteDialogService,
     public channelService: ChannelService,
     public chatService: ChatService,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.service.currentMessage);
+    console.log(this.deleteDialogService.currentMessage);
   }
 
 
@@ -35,12 +35,12 @@ export class DialogDeleteMessageComponent implements OnInit {
 
   //** delete the picked message out of firebase server and array */
   async deleteMessage() {
-    if (this.service.currentMessage['documentId']) {
-      await deleteDoc(doc(this.db, 'chats', this.service.currentMessage.id, 'messages', this.service.currentMessage.documentId));
-      // this.chatService.chatId = this.service.currentMessage.id;
+    if (this.deleteDialogService.currentMessage['documentId']) {
+      await deleteDoc(doc(this.db, 'chats', this.deleteDialogService.currentMessage.id, 'messages', this.deleteDialogService.currentMessage.documentId));
+      // this.chatService.chatId = this.deleteDialogService.currentMessage.id;
       this.dialogRef.close();
-    } else if(!this.service.currentMessage['documentId']){
-      await deleteDoc(doc(this.db, 'channels', this.channelService.channelId, 'messages', this.service.currentMessage.id));
+    } else if(!this.deleteDialogService.currentMessage['documentId']){
+      await deleteDoc(doc(this.db, 'channels', this.channelService.channelId, 'messages', this.deleteDialogService.currentMessage.id));
       // this.channelService.channelId = this.channelService.channelId;
       this.dialogRef.close();
       }

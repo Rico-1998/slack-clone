@@ -41,6 +41,7 @@ mat-toolbar {
         justify-self: flex-end;
         align-items: center;
         gap: 10px;
+        cursor: pointer;
 
         .material-symbols-outlined {
             font-variation-settings:
@@ -50,8 +51,18 @@ mat-toolbar {
                 'opsz' 40
         }
 
-        &:hover {
-            cursor: pointer;
+        .img-container-settings {
+            position: relative;
+            height: $size-profile-img-settings;
+            aspect-ratio: 1;
+        
+            .profile-img-settings {
+                height: inherit;
+                aspect-ratio: 1;
+                object-fit: cover;
+                border-radius: $br-primary;
+            }
+        
         }
     }
 
