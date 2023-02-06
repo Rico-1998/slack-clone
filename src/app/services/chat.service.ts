@@ -66,6 +66,7 @@ export class ChatService implements OnDestroy {
       let timestampConvertedMsg = await { ...(document.data() as object), id: this.chatId, documentId: document.id, comments: comments.size };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
       this.currentChatMessages.push(timestampConvertedMsg);
+      // console.log(document.id)
     }
       this.shouldScroll = true;      
     });
@@ -229,7 +230,10 @@ export class ChatService implements OnDestroy {
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
     })
-    this.loading = false;
+    .then(() => {
+      this.thread.comment = this.thread['comments']++;
+      this.loading = false;
+    })
   }
 
   async editMsg(msg) {

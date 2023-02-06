@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
 import { MatDialog, MatDialogRef, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
+import { ObjectUnsubscribedError, Observable, Subscribable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class ChannelService {
   currentChannel: any;
   msgToEdit: any;
   shouldScroll = true;
+  unsub: any;
 
 
   constructor(
@@ -36,27 +38,20 @@ export class ChannelService {
     public userService: UserService,
   ) { }
 
-  //**get the channels from firestore */
-  // async getChannels() {
-  //   while (!this.userService.loadedChannelVisits) {
-  //     await new Promise(resolve => setTimeout(resolve,100));
-  //   }
-  //   onSnapshot(collection(this.db, 'channels'), (snapshot) => {
-  //     this.channels = [];
-  //     snapshot.docs.forEach((doc) => {
-  //       const lastUserVisit = this.userService.lastChannelVisits.find(v => v.id == doc.id)?.time;
-  //       this.channels.push(({ ...(doc.data() as object), id: doc.id, lastUserVisit: lastUserVisit }));
-  //     })
-  //   });
-  // }
+  destroy() {
+    if(this.unsub) {
+      this.unsub();
+      console.log('unsubscribed')
+    }
+  }
 
   async getChannels() {
     onSnapshot(collection(this.db, 'channels'), async (snapshot) => {
       this.channels = [];
       snapshot.docs.forEach(async (doc) => {
         await this.channels.push(({ ...(doc.data() as object), id: doc.id }));
+        await this.getLastVisitForChannels();
       })
-      await this.getLastVisitForChannels();
     });
   }
 
@@ -75,19 +70,21 @@ export class ChannelService {
   async getChannelRoom(channelRoomId) {
     this.channelId = channelRoomId['id'] || channelRoomId;
     this.currentChannel = await this.channels.find(a => a.id == this.channelId);
-    // this.currentChannel.created = this.convertTimestamp(this.currentChannel.created, 'onlyDate');        
-    console.log(this.currentChannel);
-    
+    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');        
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
-    const unsub = onSnapshot(q, (snapshot) => {
-      if (this.currentChannel?.id != this.channelId) {
-        unsub();
-      } else {
+    this.unsub = onSnapshot(q, (snapshot) => {
         this.snapCurrentChannelMessages(snapshot);
-      }
     });
+    // const unsub = onSnapshot(q, (snapshot) => {
+    //   if (this.currentChannel?.id != this.channelId) {
+    //     unsub();
+    //   } else {
+    //     this.snapCurrentChannelMessages(snapshot);
+    //   }
+    // });
     this.updateLastVisitTimestamp();
+    
   }  
 
   snapCurrentChannelMessages(snapshot) {
@@ -203,43 +200,36 @@ export class ChannelService {
 
   //** transforms timestamp to a date standard */
   convertTimestamp(timestamp, type) {
-    let date = timestamp?.toDate();
-    let mm = date?.getMonth();
-    let dd = date?.getDate();
-    let yyyy = date?.getFullYear();
-    let hours = date?.getHours();
-    let minutes = date?.getMinutes();
-    let secondes = date?.getSeconds();
-    if (secondes < 10) {
-      secondes = '0' + secondes
-    }
-    if (hours < 10) {
-      hours = '0' + hours
-    }
-    if (minutes < 10) {
-      minutes = '0' + minutes
-    }
-    let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-    let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
-    if (type == 'full') {
-      return fullDate;
-    } else return onlyDate;
+    // let date = timestamp?.toDate();
+    // let mm = date?.getMonth();
+    // let dd = date?.getDate();
+    // let yyyy = date?.getFullYear();
+    // let hours = date?.getHours();
+    // let minutes = date?.getMinutes();
+    // let secondes = date?.getSeconds();
+    // if (secondes < 10) {
+    //   secondes = '0' + secondes
+    // }
+    // if (hours < 10) {
+    //   hours = '0' + hours
+    // }
+    // if (minutes < 10) {
+    //   minutes = '0' + minutes
+    // }
+    // let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
+    // let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
+    // if (type == 'full') {
+    //   return fullDate;
+    // } else return onlyDate;
   }
 
   //* Updates the timestap when user last visited the channel*/
   async updateLastVisitTimestamp() {
-    // this.updateLastVisitsLocally();
     const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channelId);
     await setDoc(docToUpdate, {
       time: Timestamp.fromDate(new Date()).toDate()
     });
   }
 
-  // updateLastVisitsLocally() {
-  //   const channel = this.channels.find(c => c.id == this.channelId);
-  //   if(channel) {
-  //     channel.lastUserVisit = Timestamp.fromDate(new Date());
-  //   }
-  // }
 }
 
