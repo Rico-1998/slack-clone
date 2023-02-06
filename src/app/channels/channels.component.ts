@@ -57,7 +57,7 @@ export class ChannelsComponent implements OnInit {
 
   ngAfterViewChecked() {
     this.scrollToBottom();
-
+    
   }
 
   scrollToBottom(): void {
