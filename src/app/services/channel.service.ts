@@ -6,7 +6,7 @@ import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
 import { MatDialog, MatDialogRef, MatDialogModule, MatDialogClose } from '@angular/material/dialog';
 import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
-import { ObjectUnsubscribedError, Observable, Subscribable } from 'rxjs';
+import { ObjectUnsubscribedError, Observable, Subscribable, timestamp } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,7 @@ export class ChannelService {
   ) { }
 
   destroy() {
-    if(this.unsub) {
+    if (this.unsub) {
       this.unsub();
       console.log('unsubscribed')
     }
@@ -69,12 +69,12 @@ export class ChannelService {
   //**  get channelRoom ID*/
   async getChannelRoom(channelRoomId) {
     this.channelId = channelRoomId['id'] || channelRoomId;
-    this.currentChannel = await this.channels.find(a => a.id == this.channelId);
-    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');        
+    this.currentChannel = await this.channels.find(a => a.id == this.channelId); 
+    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate')
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
-        this.snapCurrentChannelMessages(snapshot);
+      this.snapCurrentChannelMessages(snapshot);
     });
     // const unsub = onSnapshot(q, (snapshot) => {
     //   if (this.currentChannel?.id != this.channelId) {
@@ -84,8 +84,8 @@ export class ChannelService {
     //   }
     // });
     this.updateLastVisitTimestamp();
-    
-  }  
+
+  }
 
   snapCurrentChannelMessages(snapshot) {
     this.allMessages = [];
@@ -200,27 +200,31 @@ export class ChannelService {
 
   //** transforms timestamp to a date standard */
   convertTimestamp(timestamp, type) {
-    // let date = timestamp?.toDate();
-    // let mm = date?.getMonth();
-    // let dd = date?.getDate();
-    // let yyyy = date?.getFullYear();
-    // let hours = date?.getHours();
-    // let minutes = date?.getMinutes();
-    // let secondes = date?.getSeconds();
-    // if (secondes < 10) {
-    //   secondes = '0' + secondes
-    // }
-    // if (hours < 10) {
-    //   hours = '0' + hours
-    // }
-    // if (minutes < 10) {
-    //   minutes = '0' + minutes
-    // }
-    // let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-    // let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
-    // if (type == 'full') {
-    //   return fullDate;
-    // } else return onlyDate;
+    if (typeof timestamp == 'string') {
+      return timestamp
+    } else {
+      let date = timestamp?.toDate();
+      let mm = date?.getMonth();
+      let dd = date?.getDate();
+      let yyyy = date?.getFullYear();
+      let hours = date?.getHours();
+      let minutes = date?.getMinutes();
+      let secondes = date?.getSeconds();
+      if (secondes < 10) {
+        secondes = '0' + secondes
+      }
+      if (hours < 10) {
+        hours = '0' + hours
+      }
+      if (minutes < 10) {
+        minutes = '0' + minutes
+      }
+      let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
+      let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
+      if (type == 'full') {
+        return fullDate;
+      } else return onlyDate;
+    }
   }
 
   //* Updates the timestap when user last visited the channel*/

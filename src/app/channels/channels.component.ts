@@ -5,6 +5,7 @@ import { ChannelService } from '../services/channel.service';
 import { Message } from 'src/modules/messages.class';
 import { UserService } from '../services/user.service';
 import { DeleteDialogService } from '../services/delete-dialog.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-channels',
@@ -31,6 +32,7 @@ export class ChannelsComponent implements OnInit {
     public userService: UserService,
     private route: ActivatedRoute,
     public channelService: ChannelService,
+    public chatService: ChatService,
     public router: Router,
     public deleteDialogService: DeleteDialogService,
   ) {

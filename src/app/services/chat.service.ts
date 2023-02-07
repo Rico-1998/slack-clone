@@ -40,8 +40,10 @@ export class ChatService {
   }
 
   destroy() {
-    this.unsub();
-    console.log('unsub');
+    if(this.unsub){
+      this.unsub();
+      console.log('unsub');
+    }
     
   }
 
