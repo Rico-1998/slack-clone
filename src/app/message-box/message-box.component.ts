@@ -57,6 +57,7 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
+  //**checks where to add message from quill editor */
   check() {
     let quillEditorTextfield = document.querySelector('.ql-editor');
     if (this.textBoxPath == 'channels') {
@@ -83,6 +84,7 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
+  //**puts message.value in quill editor */
   checkEditor(event: any) {
     if (event.event === 'text-change') {
       let text = event.html;

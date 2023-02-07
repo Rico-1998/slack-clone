@@ -51,6 +51,8 @@ export class CreateChatComponent implements OnInit {
     this.viewportWidth = event.target.innerWidth > 600 ? false : true;
   }
 
+
+  //**search for registrated user in database */
   searchUser(event: any) {
     this.chatService.foundedUsers = event;
   }

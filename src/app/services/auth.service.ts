@@ -42,8 +42,78 @@ export class AuthService {
     })
 
   }
+ 
 
+  //**check if user exist in database and set var logedIn to true if so */
+  isLoggedIn(): any {
+    const user = JSON.parse(localStorage.getItem('user')!);
+    if (user !== null && !user?.isAnonymous) {
+      this.loggedIn = true
+    } else {
+      this.loggedIn = false
+    }
+  }
+  
+  
+  //**create new user data with email and password in database */
+  registrateUser(email: string, password: string, name: string, form: any) {
+    let emailUser = email;
+    let passwordUser = password;
 
+    createUserWithEmailAndPassword(this.auth, email, password)
+    // cred ist ein user credentional object
+    .then((cred) => {
+      // console.log('user created:', cred.user);
+      setDoc(doc(this.colRef, cred.user.uid), {
+        userName: name,
+        id: cred.user.uid,
+        email: email,
+      });
+      this.dialog.open(DialogSuccessMessageComponent);
+      form.reset();
+    })
+    .catch((e) => {
+      this.handleError(e.message, e.code);
+    })
+    
+  }
+  
+  
+  //**remove current user from local storage and auth */
+  logout() {
+    signOut(this.auth)
+    .then(() => {
+      localStorage.removeItem('user');
+      this.router.navigate(['/']);
+    })
+    .catch((e) => {
+      this.handleError(e.message, e.code);
+    })
+  }
+  
+  
+  //**set registrated user to auth */
+  login(email: string, password: string) {
+    signInWithEmailAndPassword(this.auth, email, password)
+    .then((cred) => {
+      
+      console.log('user logged in:', cred.user)
+      this.loggedIn = true;
+      this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
+    })
+    .catch((e) => {
+      this.handleError(e.message, e.code);
+    })
+  }
+  
+  
+  //**opens dialog with error message if login failed */
+  handleError(eMessage: any, eCode: any) {
+    this.errorMessage = eMessage;
+    this.errorCode = eCode;
+    this.dialog.open(DialogErrorComponent);
+  }
+  
   // guestLogin() {
   //   signInAnonymously(this.auth)
   //     .then((guest) => {
@@ -58,71 +128,4 @@ export class AuthService {
   //       this.handleError(e.message, e.code);
   //     })
   // }
-
-
-  isLoggedIn(): any {
-    const user = JSON.parse(localStorage.getItem('user')!);
-
-    if (user !== null && !user?.isAnonymous) {
-      this.loggedIn = true
-    } else {
-      this.loggedIn = false
-    }
-  }
-
-
-  registrateUser(email: string, password: string, name: string, form: any) {
-    let emailUser = email;
-    let passwordUser = password;
-
-    createUserWithEmailAndPassword(this.auth, email, password)
-      // cred ist ein user credentional object
-      .then((cred) => {
-        // console.log('user created:', cred.user);
-        setDoc(doc(this.colRef, cred.user.uid), {
-          userName: name,
-          id: cred.user.uid,
-          email: email,
-        });
-        this.dialog.open(DialogSuccessMessageComponent);
-        form.reset();
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
-
-  }
-
-
-  logout() {
-    signOut(this.auth)
-      .then(() => {
-        localStorage.removeItem('user');
-        this.router.navigate(['/']);
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
-  }
-
-
-  login(email: string, password: string) {
-    signInWithEmailAndPassword(this.auth, email, password)
-      .then((cred) => {
-
-        console.log('user logged in:', cred.user)
-        this.loggedIn = true;
-        this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
-  }
-
-
-  handleError(eMessage: any, eCode: any) {
-    this.errorMessage = eMessage;
-    this.errorCode = eCode;
-    this.dialog.open(DialogErrorComponent);
-  }
 }

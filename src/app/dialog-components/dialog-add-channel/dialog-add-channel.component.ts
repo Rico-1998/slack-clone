@@ -27,8 +27,9 @@ export class DialogAddChannelComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async createChannel(){
 
+  //**creates new Channel if not existing yet */
+  async createChannel(){
     if(!this.channel.channelDescription) {this.channel.channelDescription = '-'}
     this.channel.created = new Date();
     this.angularFirestore

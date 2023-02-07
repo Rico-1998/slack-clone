@@ -33,15 +33,13 @@ export class DialogDeleteMessageComponent implements OnInit {
   }
 
 
-  //** delete the picked message out of firebase server and array */
+  //** delete the picked message out of firebase server */
   async deleteMessage() {
     if (this.deleteDialogService.currentMessage['documentId']) {
       await deleteDoc(doc(this.db, 'chats', this.deleteDialogService.currentMessage.id, 'messages', this.deleteDialogService.currentMessage.documentId));
-      // this.chatService.chatId = this.deleteDialogService.currentMessage.id;
       this.dialogRef.close();
     } else if(!this.deleteDialogService.currentMessage['documentId']){
       await deleteDoc(doc(this.db, 'channels', this.channelService.channelId, 'messages', this.deleteDialogService.currentMessage.id));
-      // this.channelService.channelId = this.channelService.channelId;
       this.dialogRef.close();
       }
     }
