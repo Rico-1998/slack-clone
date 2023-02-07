@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {  getFirestore } from '@firebase/firestore';
+import { getFirestore } from '@firebase/firestore';
 import { ChannelService } from '../services/channel.service';
 import { Message } from 'src/modules/messages.class';
 import { UserService } from '../services/user.service';
@@ -12,6 +12,7 @@ import { ChatService } from '../services/chat.service';
   templateUrl: './channels.component.html',
   styleUrls: ['./channels.component.scss']
 })
+
 export class ChannelsComponent implements OnInit {
   @ViewChild('scrollBox') private scrollBox: ElementRef;
   db = getFirestore();
@@ -21,12 +22,12 @@ export class ChannelsComponent implements OnInit {
   currentMessage: any;
   currentUserName: any;
   currentChannelRoom: any;
+  lastMessage: any;
   newMessage: Message;
   showBtn: boolean = false;
+  messageEditable: boolean = false;
   textBoxPath: string = 'channels';
   textBoxPathEdit: string = 'edit-channel';
-  messageEditable: boolean = false;
-  lastMessage: any;
 
   constructor(
     public userService: UserService,
@@ -37,39 +38,45 @@ export class ChannelsComponent implements OnInit {
     public deleteDialogService: DeleteDialogService,
   ) {
     route.params.subscribe((channelRoomId) => {
-      this.channelService.channelId = channelRoomId['id']
+      this.channelService.channelId = channelRoomId['id'];
     });
-
   }
 
+
   async ngOnInit() {
-    //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
     this.route.params.subscribe(async (channelRoomId) => {
       this.handleComponentChange();
       this.channelService.destroy();
+        //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
       if (this.channelService.channelId) {
-        await this.channelService.updateLastVisitTimestamp()
+        await this.channelService.updateLastVisitTimestamp();
       }
       this.channelService.getChannelRoom(channelRoomId);
     })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
-    this.scrollToBottom();    
+    this.scrollToBottom();
   }
 
+
+  //**handles component change */
   handleComponentChange() {
     this.channelService.channelLoading = true;
     this.channelService.threadOpen = false;
   }
 
+
+  //**triggers scroll to bottom */
   ngAfterViewChecked() {
     this.scrollToBottom();
-    
+
   }
 
+
+  //**scrolls to bottom */
   scrollToBottom(): void {
-    if(this.channelService.shouldScroll) {
+    if (this.channelService.shouldScroll) {
       setTimeout(() => {
         this.scrollBox.nativeElement.scrollTop = this.scrollBox.nativeElement.scrollHeight;
       });
@@ -78,6 +85,7 @@ export class ChannelsComponent implements OnInit {
       }, 100);
     }
   }
+
 
   //** open thread with all comments of the picked message*/
   openThread(id) {

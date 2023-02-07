@@ -52,9 +52,13 @@ export class ChatService {
     this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
+    this.currentChatMessages = [];
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
+      if(snapshot.docChanges()['length'] == 0) {
+        console.log(snapshot.docChanges())
+      }
       await this.snapChatroomMessages(snapshot);
     });
   }
@@ -76,12 +80,6 @@ export class ChatService {
       this.chatLoading = false;
       this.shouldScroll = true;
     })
-  }
-
-
-  checkIfDeletedMessageOnSnapshot(snapshot) {
-
-    console.log('checkedFor deleted Messages')
   }
 
   setToChatList(user) {

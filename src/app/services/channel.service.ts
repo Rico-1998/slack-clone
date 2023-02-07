@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
@@ -84,6 +84,7 @@ export class ChannelService {
 
   //**subscribes the channel messages */
   snapCurrentChannel() {
+    this.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {

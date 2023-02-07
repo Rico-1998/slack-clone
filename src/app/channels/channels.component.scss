@@ -13,92 +13,82 @@
         flex-direction: column;
         justify-content: space-between;
 
-            .scroll-box {
+        .scroll-box {
+            .welcome-card {
+                display: flex;
+                padding: $padding-messages;
+                background-color: transparent;
+                color: $txt-clr-h2;
 
-                .welcome-card {
-                    display: flex;
-                    padding: $padding-messages;
-                    background-color: transparent;
-                    color: $txt-clr-h2;
-    
-                    .leftframe {
-                        span {
-                            background-color: $txt-clr-primary;
-                            border-radius: $br-primary;
-                            padding-left: 2px;
-                            color: $bgClr-primary;
-                            height: 30px;
-                            width: 30px;
-                            display: flex;
-                            align-items: center;
-                            justify-items: center;
-                            font-size: $fs-xxl;
-                        }
-                    }
-    
-                    .welcome-content {
-                        margin-left: 24px;
-                    }
-                }
-
-                .message-container {
-
-                    &:hover {
-                        background-color: $bgClr-newChat;
-            
-                        .option-box {
-                            opacity: 1;
-                        }
-                    }
-
-                    .highlight {
-                        color: $txt-clr-link;
-                        font-weight: bold;
-                    }
-
-                    .option-box {
+                .leftframe {
+                    span {
+                        background-color: $txt-clr-primary;
+                        border-radius: $br-primary;
+                        padding-left: 2px;
+                        color: $bgClr-primary;
+                        height: 30px;
+                        width: 30px;
                         display: flex;
                         align-items: center;
-                        position: absolute;
-                        right: 16px;
-                        top: -20px;
-                        border-radius: $br-secondary;
-                        background-color: $bgClr-primary;
-                        border: $border-primary;
-                        opacity: 0;
-            
-                        .option {
-                            padding: 5px;
+                        justify-items: center;
+                        font-size: $fs-xxl;
+                    }
+                }
+
+                .welcome-content {
+                    margin-left: 24px;
+                }
+            }
+
+            .message-container {
+                &:hover {
+                    background-color: $bgClr-newChat;
+
+                    .option-box {
+                        opacity: 1;
+                    }
+                }
+
+                .highlight {
+                    color: $txt-clr-link;
+                    font-weight: bold;
+                }
+
+                .option-box {
+                    display: flex;
+                    align-items: center;
+                    position: absolute;
+                    right: 16px;
+                    top: -20px;
+                    border-radius: $br-secondary;
+                    background-color: $bgClr-primary;
+                    border: $border-primary;
+                    opacity: 0;
+
+                    .option {
+                        padding: 5px;
+                        display: flex;
+
+                        &:hover {
+                            background-color: $bgClr-newChat;
+                            border-radius: $br-secondary;
+                            cursor: pointer;
+                        }
+
+                        mat-icon {
                             display: flex;
-            
+                            justify-content: center;
+                            align-items: center;
+                            color: $txt-clr-primary;
+                            font-size: $fs-l;
+
                             &:hover {
-                                background-color: $bgClr-newChat;
-                                border-radius: $br-secondary;
-                                cursor: pointer;
+                                color: $txt-clr-secondary;
                             }
-            
-                            mat-icon {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                color: $txt-clr-primary;
-                                font-size: $fs-l;
-            
-                                &:hover {
-                                    color: $txt-clr-secondary;
-                                }
-                            }
-            
                         }
                     }
                 }
-    
-    
-    
-
-
             }
-
         }
+    }
 }
-
