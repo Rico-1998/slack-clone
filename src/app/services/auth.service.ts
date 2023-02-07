@@ -43,23 +43,6 @@ export class AuthService {
 
   }
 
-
-  // guestLogin() {
-  //   signInAnonymously(this.auth)
-  //     .then((guest) => {
-  //       // console.log(guest);
-  //       setDoc(doc(this.colRef, guest.user.uid), {
-  //         userName: 'guest',
-  //       });
-  //       this.loggedIn = true;
-  //       this.router.navigate(['/home']);
-  //     })
-  //     .catch((e) => {
-  //       this.handleError(e.message, e.code);
-  //     })
-  // }
-
-
   isLoggedIn(): any {
     const user = JSON.parse(localStorage.getItem('user')!);
 
@@ -72,13 +55,10 @@ export class AuthService {
 
 
   registrateUser(email: string, password: string, name: string, form: any) {
-    let emailUser = email;
-    let passwordUser = password;
 
     createUserWithEmailAndPassword(this.auth, email, password)
       // cred ist ein user credentional object
       .then((cred) => {
-        // console.log('user created:', cred.user);
         setDoc(doc(this.colRef, cred.user.uid), {
           userName: name,
           id: cred.user.uid,
@@ -109,8 +89,6 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
-
-        console.log('user logged in:', cred.user)
         this.loggedIn = true;
         this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
       })

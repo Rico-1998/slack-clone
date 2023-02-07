@@ -1,5 +1,5 @@
-import { Component, OnInit, HostListener, Input, ViewChild, ElementRef } from '@angular/core';
-import { addDoc, doc, Firestore, query, getDoc, getDocs, getFirestore, onSnapshot, setDoc, where, orderBy, docData } from '@angular/fire/firestore';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Firestore, getFirestore, onSnapshot } from '@angular/fire/firestore';
 import { collection } from '@firebase/firestore';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { UserService } from '../services/user.service';
@@ -29,11 +29,11 @@ export class CreateChatComponent implements OnInit {
 
 
 
-  constructor(public toggler: DrawerTogglerService,
-    private firestore: Firestore,
+  constructor(
+    public toggler: DrawerTogglerService,
     public userService: UserService,
-    public chatService: ChatService,
-    private cdref: ChangeDetectorRef,) { }
+    public chatService: ChatService
+    ) { }
 
   ngOnInit(): void {
     this.userService.chatEditor = true;
@@ -42,8 +42,11 @@ export class CreateChatComponent implements OnInit {
       snapshot.docs.forEach((doc) => {
         this.chatDocs.push(({ ...(doc.data() as object), chatIdDoc: doc.id }));
       })
-    })
-
+    },
+    (error) => {
+      console.warn('Create chat error', error);
+      
+    });
   }
 
   @HostListener('window:resize', ['$event'])

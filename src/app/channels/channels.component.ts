@@ -99,6 +99,11 @@ export class ChannelsComponent implements OnInit {
   //**Changes the path to identify the message to edit */
   changePath(message) {
     this.channelService.msgToEdit = message;
+    setTimeout(() => {
+      let quillEditorTextfield = document.querySelectorAll('.ql-editor');
+      quillEditorTextfield[0].innerHTML = message.msg;
+      quillEditorTextfield    
+    });
   }
 
 }

@@ -24,11 +24,18 @@ body {
 }
 
 #emoji-palette {
-    top: -165px !important;
+    top: -185px !important;
     left: 0px !important;
-    height: 120px;
+    height: 140px;
     overflow: hidden;
     max-width: 100% !important;
+    background-color: $bgClr-primary !important;
+    border-radius: $br-primary !important;
+    border: $border-primary !important;
+}
+
+#tab-toolbar, #tab-panel {
+    background-color: $bgClr-primary !important;
 }
 
 .ql-toolbar {
@@ -36,15 +43,17 @@ body {
     border-top-right-radius: $br-primary !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
+    border-color: $border-clr !important;
 }
 
 .ql-editor.ql-blank::before {
-    color: #B7B8B9;
+    color: $txt-clr-primary;
 }
 
 .ql-snow {
     border-bottom-left-radius: $br-primary;
     border-bottom-right-radius: $br-primary;
+    border-color: $border-clr !important;
 }
 
 /* 
@@ -83,6 +92,8 @@ body {
 }
 
 .message-container {
+    box-shadow: unset !important;
+    border-radius: unset !important;
 
         &:hover {
             background-color: $bgClr-newChat;
@@ -194,12 +205,26 @@ body {
     border-bottom: 1px solid $border-clr;
 }
 
+.editBg {
+    background: $bgClr-newMessage !important;
+}
+
+.message-wrapper {
+    display: flex;
+    gap: $gap-primary;
+
+    .edited {
+        font-weight: 100;
+        font-size: $fs-s;
+    }
+}
+
 .message-box {
     padding: $padding-message-box;
 }
 
 .message-container {
-    background-color: transparent;
+    background-color: $bgClr-primary;
     color: #D1D2D3;
     display: flex !important;
     gap: $gap-primary;    

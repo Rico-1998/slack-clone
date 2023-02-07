@@ -24,7 +24,6 @@ export class DialogDeleteMessageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.deleteDialogService.currentMessage);
   }
 
 
