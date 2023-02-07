@@ -93,7 +93,7 @@
                     font-size: $fs-l;
 
                     &:hover {
-                        color: white;
+                        color: $txt-clr-secondary;
                     }
                 }
 
@@ -103,13 +103,3 @@
     }
 }
 
-
-.menu-options {
-    .delete {
-        color: #df205a;
-    }
-
-    button {
-        color: $txt-clr-primary;
-    }
-}

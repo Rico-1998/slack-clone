@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
+import { addDoc, deleteDoc, doc, Firestore, getDoc, getDocs, limit, orderBy, query, serverTimestamp, setDoc, updateDoc } from '@angular/fire/firestore';
 import { collection, getFirestore, onSnapshot, Timestamp } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { Message } from 'src/modules/messages.class';
@@ -12,22 +12,22 @@ import { ObjectUnsubscribedError, Observable, Subscribable, timestamp } from 'rx
   providedIn: 'root'
 })
 export class ChannelService {
-  channelId: string;
-  channels: any = [];
   db: any = getFirestore();
+  channelId: string;
+  threadId: any;
+  messageId: string;
+  channels: any = [];
+  allMessages: any[] = [];
+  allThreadComments: any = [];
   newMessage: Message;
   newComment: Message;
-  threadId: any; // In use 
-  threadOpen: boolean = false; // In use
-  threadMessage: any; // In Use
+  threadMessage: any;
+  currentMessage: any;
+  msgToEdit: any;
+  currentChannel: any;
+  threadOpen: boolean = false;
   threadLoading: boolean = false;
   channelLoading: boolean = false;
-  allThreadComments: any = [];
-  allMessages: any[] = [];
-  messageId: string;
-  currentMessage: any;
-  currentChannel: any;
-  msgToEdit: any;
   shouldScroll = true;
   unsub: any;
 
@@ -39,12 +39,16 @@ export class ChannelService {
     public userService: UserService,
   ) { }
 
+
+  //**destroys the subscription */
   destroy() {
     if (this.unsub) {
       this.unsub();
     }
   }
 
+
+  //**load the channels */
   async getChannels() {
     onSnapshot(collection(this.db, 'channels'), async (snapshot) => {
       this.channels = [];
@@ -55,6 +59,8 @@ export class ChannelService {
     });
   }
 
+
+  //**updates last user visit channel timestamp */
   async getLastVisitForChannels() {
     onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -66,47 +72,56 @@ export class ChannelService {
     });
   }
 
-  //**  get channelRoom ID*/
+
+  //**  get channelRoom ID and and fills channel vars*/
   async getChannelRoom(channelRoomId) {
-    
     this.channelId = channelRoomId['id'] || channelRoomId;
-    this.currentChannel = await this.channels.find(a => a.id == this.channelId); 
-    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate')
+    this.currentChannel = await this.channels.find(a => a.id == this.channelId);
+    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');
+    this.snapCurrentChannel();
+  }
+
+
+  //**subscribes the channel messages */
+  snapCurrentChannel() {
+    this.allMessages = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
       this.snapCurrentChannelMessages(snapshot);
     });
-    // const unsub = onSnapshot(q, (snapshot) => {
-    //   if (this.currentChannel?.id != this.channelId) {
-    //     unsub();
-    //   } else {
-    //     this.snapCurrentChannelMessages(snapshot);
-    //   }
-    // });
     this.updateLastVisitTimestamp();
-
   }
 
+
+  //**handles the snapshot messages */
   snapCurrentChannelMessages(snapshot) {
-    this.allMessages = [];
-    snapshot.docs.forEach(async (doc) => {
-      if (!this.allMessages.find(m => m.id == doc.id)) {
-        let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
-        let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+    snapshot.docChanges().forEach(async (change) => {
+      if (change.type == 'added') {
+        let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', change.doc.id, 'comments')));
+        let message = { ...(change.doc.data() as object), id: change.doc.id, comments: comments.size };
         message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
         this.allMessages.push(message);
+      } else if (change.type == 'removed') {
+        let indexOfMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
+        this.allMessages.splice(indexOfMessageToRemove, 1);
+      } else if (change.type == "modified") {
+        let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
+        messageToEdit[0]['msg'] = change.doc.data()['msg'];
       }
       this.channelLoading = false;
       this.showNewMessage();
-    });
+    })
   }
 
+
+  //**scolls to bottom */
   showNewMessage() {
     setTimeout(() => {
       this.shouldScroll = true;
     }, 150);
   }
+
 
   //**adding message to the picked channel */
   async postInChannel() {
@@ -117,13 +132,14 @@ export class ChannelService {
       msg: this.newMessage
     })
       .then(() => {
-        this.updateLastMessageTimestamp(timestamp)
+        this.updateLastMessageTimestamp(timestamp);
         setTimeout(() => {
-          this.updateLastVisitTimestamp()
+          this.updateLastVisitTimestamp();
         }, 1000);
       });
     this.shouldScroll = true;
   }
+
 
   //* Updates the time when last message was send in channel */
   async updateLastMessageTimestamp(timestamp) {
@@ -168,7 +184,6 @@ export class ChannelService {
     const colRef = collection(this.db, 'channels', this.channelId, 'messages', this.threadId, 'comments');
     const q = query(colRef, orderBy('timestamp'));
     await onSnapshot(q, (snapshot) => {
-      // console.log(snapshot.docs.length)
       snapshot.docs.forEach((doc) => {
         if (!this.allThreadComments.find(c => c.id == doc.id)) {
           let comment = { ...(doc.data() as object), id: doc.id };
@@ -179,7 +194,6 @@ export class ChannelService {
     })
   }
 
-
   //** gets id of the clicked message*/
   getCurrentMessage(id: string) {
     this.messageId = id;
@@ -189,11 +203,7 @@ export class ChannelService {
 
   //** edit picked message and save in array and firebase */
   async editMessage(msg) {
-    console.log(msg);
-    console.log(doc(this.db, 'channels', this.channelId, 'messages', this.messageId))
     let docToUpdate = doc(this.db, 'channels', this.channelId, 'messages', this.messageId);
-    let message = this.allMessages.find(m => m.id == this.messageId); // wegen snapshot fehler
-    message['msg'] = msg; // wegen snapshot fehler
     await updateDoc(docToUpdate, {
       msg: msg
     })
@@ -228,6 +238,7 @@ export class ChannelService {
       } else return onlyDate;
     }
   }
+
 
   //* Updates the timestap when user last visited the channel*/
   async updateLastVisitTimestamp() {
