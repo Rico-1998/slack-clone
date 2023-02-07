@@ -120,6 +120,14 @@
       class="message-box"
       [textBoxPath]="textBoxPath"
     ></app-message-box>
+    <div *ngIf="this.channelService.channelLoading" id="loading-container">
+      <div class="lds-ring" id="loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </div>
   <app-thread *ngIf="this.channelService.threadOpen"></app-thread>
 </div>

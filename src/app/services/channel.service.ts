@@ -21,6 +21,7 @@ export class ChannelService {
   threadOpen: boolean = false; // In use
   threadMessage: any; // In Use
   threadLoading: boolean = false;
+  channelLoading: boolean = false;
   allThreadComments: any = [];
   allMessages: any[] = [];
   messageId: string;
@@ -41,7 +42,6 @@ export class ChannelService {
   destroy() {
     if (this.unsub) {
       this.unsub();
-      console.log('unsubscribed')
     }
   }
 
@@ -68,6 +68,7 @@ export class ChannelService {
 
   //**  get channelRoom ID*/
   async getChannelRoom(channelRoomId) {
+    
     this.channelId = channelRoomId['id'] || channelRoomId;
     this.currentChannel = await this.channels.find(a => a.id == this.channelId); 
     this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate')
@@ -96,6 +97,7 @@ export class ChannelService {
         message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
         this.allMessages.push(message);
       }
+      this.channelLoading = false;
       this.showNewMessage();
     });
   }

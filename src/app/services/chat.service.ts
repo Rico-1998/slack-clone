@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
@@ -23,6 +23,7 @@ export class ChatService {
   currentChatMembers: any;
   currentChatMessages = [];
   loading: boolean = false;
+  chatLoading: boolean = false;
   threadOpen: boolean = false;
   threadComments: any[] = [];
   thread: any;
@@ -75,8 +76,36 @@ export class ChatService {
       this.currentChatMessages.push(timestampConvertedMsg);
       // console.log(document.id)
     }
+    this.chatLoading = false;
       this.shouldScroll = true;      
     });
+  }
+
+  // async snapChatroomMessages(snapshot) {
+  //   // this.currentChatMessages = []; 
+  //   console.log(snapshot._snapshot['docChanges'].length)
+  //   console.log(snapshot)
+  //   snapshot.doc.forEach(async (document) => {
+  //     if (!this.currentChatMessages.find(m => m.documentId == document.id)) {
+  //     let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', document.id, 'comments'));
+  //     let timestampConvertedMsg = { ...(document.data() as object), id: this.chatId, documentId: document.id, comments: comments.size };
+  //     timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+  //     this.currentChatMessages.push(timestampConvertedMsg);
+      
+  //   }
+
+  //   if(snapshot._snapshot['docChanges'].length < this.currentChatMessages.length) {
+  //     this.checkIfDeletedMessageOnSnapshot(snapshot)
+  //   }
+    
+  //   this.chatLoading = false;
+  //     this.shouldScroll = true;      
+  //   });
+  // }
+
+  checkIfDeletedMessageOnSnapshot(snapshot) {
+
+    console.log('checkedFor deleted Messages')
   }
 
   setToChatList(user) {
@@ -159,6 +188,7 @@ export class ChatService {
       }
     });
     this.getLastVisitsForChats();
+   
   }
 
   //**load and connects the lastVisitTimestamps into the chats */

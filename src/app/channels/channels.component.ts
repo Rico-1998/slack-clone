@@ -45,6 +45,7 @@ export class ChannelsComponent implements OnInit {
   async ngOnInit() {
     //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
     this.route.params.subscribe(async (channelRoomId) => {
+      this.handleComponentChange();
       this.channelService.destroy();
       if (this.channelService.channelId) {
         await this.channelService.updateLastVisitTimestamp()
@@ -55,6 +56,11 @@ export class ChannelsComponent implements OnInit {
     this.userService.channelEditor = true;
     this.userService.chatEditor = false;
     this.scrollToBottom();    
+  }
+
+  handleComponentChange() {
+    this.channelService.channelLoading = true;
+    this.channelService.threadOpen = false;
   }
 
   ngAfterViewChecked() {

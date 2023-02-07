@@ -27,14 +27,15 @@ export class ChatroomComponent implements OnInit {
     public channelService: ChannelService,
     public deleteDialogService: DeleteDialogService,
     ) { 
-      
   }
 
   async ngOnInit() {
+    this.handleComponentChange();
     let timeout = setInterval(() => {
       if(this.chatService.chats.length > 0) {
         clearInterval(timeout);
         this.route.params.subscribe(async chatroomId => {
+          this.handleComponentChange();
           if (this.chatService.chatId) {
             await this.chatService.updateLastVisitTimestamp()
             this.chatService.destroy();
@@ -45,6 +46,11 @@ export class ChatroomComponent implements OnInit {
       }
     },500)
     this.scrollToBottom();
+  }
+
+  handleComponentChange() {
+    this.chatService.chatLoading = true;
+    this.chatService.threadOpen = false
   }
   
   ngAfterViewChecked() {
