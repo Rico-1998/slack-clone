@@ -55,14 +55,7 @@ export class ChatService {
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
-      
-        await this.snapChatroomMessages(snapshot);
-      
-      // if(this.chatId != this.currentChat[0]?.id) {        
-      //   unsub();
-      // } else {
-      //   await this.snapChatroomMessages(snapshot);
-      // };
+      await this.snapChatroomMessages(snapshot);
     });    
   }
 
@@ -74,12 +67,13 @@ export class ChatService {
       let timestampConvertedMsg = await { ...(document.data() as object), id: this.chatId, documentId: document.id, comments: comments.size };
       timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
       this.currentChatMessages.push(timestampConvertedMsg);
-      // console.log(document.id)
     }
     this.chatLoading = false;
-      this.shouldScroll = true;      
+    this.shouldScroll = true;      
     });
   }
+
+
 
   // async snapChatroomMessages(snapshot) {
   //   // this.currentChatMessages = []; 
@@ -150,8 +144,7 @@ export class ChatService {
   }
 
 
-  async createChatRoom() {
-    // this.foundedUsers = [];    
+  async createChatRoom() {   
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
     if (!((await chatRoomExists).data())) {
@@ -167,8 +160,7 @@ export class ChatService {
 
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
-      this.snapChatMembers(snapshot);
-      
+      this.snapChatMembers(snapshot);      
     });
   }
 
@@ -218,7 +210,7 @@ export class ChatService {
   }
 
   addMessage() {
-    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages');
+    let colRef = collection(this.db, 'chats', this.chatId, 'messages');
     let timestamp = Timestamp.fromDate(new Date());
     addDoc(colRef, {
       timestamp: timestamp,
@@ -238,7 +230,7 @@ export class ChatService {
   async getCurrentThread() {
     this.threadComments = [];
     let colRef = query(collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
-    await onSnapshot(colRef, async (snapshot) => {
+    onSnapshot(colRef, async (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.threadComments.find(c => c.id == doc.id)) {
           let timestampConvertedMsg = { ...(doc.data() as object), id: doc.id };
