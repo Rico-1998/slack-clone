@@ -56,9 +56,6 @@ export class ChatService {
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
-      if(snapshot.docChanges()['length'] == 0) {
-        console.log(snapshot.docChanges())
-      }
       await this.snapChatroomMessages(snapshot);
     });
   }
@@ -80,6 +77,11 @@ export class ChatService {
       this.chatLoading = false;
       this.shouldScroll = true;
     })
+    setTimeout(() => {
+      if(this.currentChatMessages.length < 1) {
+        this.chatLoading = false;
+      }
+    }, 500);
   }
 
   setToChatList(user) {
