@@ -52,54 +52,5 @@
             }        
         }
     }
-
-
-    .message-container {
-
-        &:hover {
-            background-color: $bgClr-newChat;
-
-            .option-box {
-                opacity: 1;
-            }
-        }
-
-        .option-box {
-            display: flex;
-            align-items: center;
-            position: absolute;
-            right: 16px;
-            top: -20px;
-            border-radius: $br-secondary;
-            background-color: $bgClr-primary;
-            border: $border-primary;
-            opacity: 0;
-
-            .option {
-                padding: 5px;
-                display: flex;
-
-                &:hover {
-                    background-color: $bgClr-newChat;
-                    border-radius: $br-secondary;
-                    cursor: pointer;
-                }
-
-                mat-icon {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    color: $txt-clr-primary;
-                    font-size: $fs-l;
-
-                    &:hover {
-                        color: $txt-clr-secondary;
-                    }
-                }
-
-            }
-        }
-
-    }
 }
 
