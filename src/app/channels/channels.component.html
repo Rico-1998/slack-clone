@@ -88,9 +88,13 @@
           />
         </div>
         <div class="message-content">
-          <div class="">
-            <strong>{{ message.author | titlecase }}</strong>
-            {{ message.timestamp }}
+          <div class="message-header">
+            <div>
+              <strong>{{ message.author | titlecase }}</strong>
+            </div>
+            <div>
+              {{ message.timestamp }}
+            </div>
           </div>
           <span [innerHTML]="message.msg"></span>
           <div class="comments-container" *ngIf="message.comments">
@@ -111,10 +115,9 @@
         </div>
       </mat-card>
     </div>
-    <app-message-box
-      class="message-box"
-      [textBoxPath]="textBoxPath"
-    ></app-message-box>
+    <div class="message-box">
+      <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
+    </div>
     <div *ngIf="this.channelService.channelLoading" id="loading-container">
       <div class="lds-ring" id="loading-ring">
         <div></div>

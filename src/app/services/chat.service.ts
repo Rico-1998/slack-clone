@@ -250,11 +250,12 @@ export class ChatService {
       })
   }
 
-  async editMsg(msg) {
+  async editMsg(msg) {    
     let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
       msg: msg
     });
+    this.msgToEdit = [];
   }
 
   arrayToString(array) {

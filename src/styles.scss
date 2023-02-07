@@ -32,8 +32,8 @@ body {
 }
 
 .ql-toolbar {
-    border-top-left-radius: $br-secondary !important;
-    border-top-right-radius: $br-secondary !important;
+    border-top-left-radius: $br-primary !important;
+    border-top-right-radius: $br-primary !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
@@ -43,14 +43,9 @@ body {
 }
 
 .ql-snow {
-    border-bottom-left-radius: $br-secondary;
-    border-bottom-right-radius: $br-secondary;
+    border-bottom-left-radius: $br-primary;
+    border-bottom-right-radius: $br-primary;
 }
-
-// .ql-editor.ql-blank::before {
-//     // color: white;
-// }
-
 
 /* 
     Styling for the status of the user
@@ -199,6 +194,10 @@ body {
     border-bottom: 1px solid $border-clr;
 }
 
+.message-box {
+    padding: $padding-message-box;
+}
+
 .message-container {
     background-color: transparent;
     color: #D1D2D3;
@@ -210,6 +209,11 @@ body {
         width: 100%;
         display: flex;
         flex-direction: column;
+
+        .message-header {
+            display: flex;
+            gap: $gap-primary;
+        }
 
         span > p {
             margin: 0;

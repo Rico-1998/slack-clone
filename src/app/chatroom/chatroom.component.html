@@ -71,7 +71,7 @@
           <button
             class="btn edit"
             [disabled]="userService.currentUser?.userName != message.author"
-            (click)="changePath(message)"
+            (click)="changePath(message); showEditor = true"
           >
             <mat-icon
               matTooltip="Edit message"
@@ -108,7 +108,7 @@
       </div>
 
       <div class="message-content">
-        <div>
+        <div class="message-header">
           <div>
             <strong>{{ message.author | titlecase }}</strong>
           </div>
@@ -117,7 +117,10 @@
           </div>
         </div>
 
-        <span [innerHTML]="message.msg"></span>
+        <span
+          *ngIf="chatService.msgToEdit != message"
+          [innerHTML]="message.msg"
+        ></span>
         <div class="comments-container" *ngIf="message.comments">
           <div class="hover-container">
             <span class="open-thread-link" (click)="openThread(message)">
@@ -138,7 +141,7 @@
     </mat-card>
   </div>
 
-  <div>
+  <div class="message-box">
     <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
   </div>
   <div *ngIf="this.chatService.chatLoading" id="loading-container">

@@ -3,8 +3,8 @@
 .text-box {
     position: relative;
     width: 100%;
-    padding: 0 16px 16px 16px;
     background-color: transparent;
+    border-radius: $br-secondary;
 
     .editor {
         width: 100%;
@@ -13,8 +13,8 @@
 
     button {
         position: absolute;
-        bottom: 30px;
-        right: 30px;
+        bottom: 11px;
+        right: 7.5px;
         cursor: pointer;
         outline: none;
         border: none;
@@ -26,7 +26,6 @@
             filter: brightness(1.2);
         }
 
-
         &:disabled {
             background-color: unset;
             cursor: not-allowed;
@@ -34,7 +33,6 @@
     }
 
     mat-icon {
-        // font-size: 20px;
         color: $txt-clr-primary;
         transition: $transition-hover;
     }
