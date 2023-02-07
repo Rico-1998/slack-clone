@@ -68,38 +68,37 @@ export class ChannelService {
 
   //**  get channelRoom ID*/
   async getChannelRoom(channelRoomId) {
-    
+
     this.channelId = channelRoomId['id'] || channelRoomId;
-    this.currentChannel = await this.channels.find(a => a.id == this.channelId); 
+    this.currentChannel = await this.channels.find(a => a.id == this.channelId);
     this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate')
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
       this.snapCurrentChannelMessages(snapshot);
     });
-    // const unsub = onSnapshot(q, (snapshot) => {
-    //   if (this.currentChannel?.id != this.channelId) {
-    //     unsub();
-    //   } else {
-    //     this.snapCurrentChannelMessages(snapshot);
-    //   }
-    // });
     this.updateLastVisitTimestamp();
 
   }
 
   snapCurrentChannelMessages(snapshot) {
-    this.allMessages = [];
-    snapshot.docs.forEach(async (doc) => {
-      if (!this.allMessages.find(m => m.id == doc.id)) {
-        let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', doc.id, 'comments')));
-        let message = { ...(doc.data() as object), id: doc.id, comments: comments.size };
+
+    snapshot.docChanges().forEach(async (change) => {
+      if (change.type == 'added') {
+        let comments = await getDocs(collection(this.db, 'chats', this.channelId, 'messages', change.doc.id, 'comments'));
+        let message = { ...(change.doc.data() as object), id: change.doc.id, comments: comments.size };
         message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
         this.allMessages.push(message);
+      } else if (change.type == 'removed') {
+        let indexOfMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
+        this.allMessages.splice(indexOfMessageToRemove, 1)
+      } else if (change.type == "modified") {
+        let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
+        messageToEdit[0]['msg'] = change.doc.data()['msg'];
       }
       this.channelLoading = false;
       this.showNewMessage();
-    });
+    })
   }
 
   showNewMessage() {
