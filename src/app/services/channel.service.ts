@@ -111,7 +111,18 @@ export class ChannelService {
       }
       this.channelLoading = false;
       this.showNewMessage();
+      this.checkIfSnapIsEmpty();
     })
+  }
+
+
+  //**checkes if no messages in channel */
+  checkIfSnapIsEmpty() {
+    setTimeout(() => {
+      if(this.allMessages.length < 1) {
+        this.channelLoading = false;
+      }
+    }, 500);
   }
 
 
