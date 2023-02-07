@@ -57,25 +57,22 @@ export class AuthService {
   
   //**create new user data with email and password in database */
   registrateUser(email: string, password: string, name: string, form: any) {
-    let emailUser = email;
-    let passwordUser = password;
 
     createUserWithEmailAndPassword(this.auth, email, password)
-    // cred ist ein user credentional object
-    .then((cred) => {
-      // console.log('user created:', cred.user);
-      setDoc(doc(this.colRef, cred.user.uid), {
-        userName: name,
-        id: cred.user.uid,
-        email: email,
-      });
-      this.dialog.open(DialogSuccessMessageComponent);
-      form.reset();
-    })
-    .catch((e) => {
-      this.handleError(e.message, e.code);
-    })
-    
+      // cred ist ein user credentional object
+      .then((cred) => {
+        setDoc(doc(this.colRef, cred.user.uid), {
+          userName: name,
+          id: cred.user.uid,
+          email: email,
+        });
+        this.dialog.open(DialogSuccessMessageComponent);
+        form.reset();
+      })
+      .catch((e) => {
+        this.handleError(e.message, e.code);
+      })
+
   }
   
   
@@ -95,15 +92,13 @@ export class AuthService {
   //**set registrated user to auth */
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
-    .then((cred) => {
-      
-      console.log('user logged in:', cred.user)
-      this.loggedIn = true;
-      this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
-    })
-    .catch((e) => {
-      this.handleError(e.message, e.code);
-    })
+      .then((cred) => {
+        this.loggedIn = true;
+        this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
+      })
+      .catch((e) => {
+        this.handleError(e.message, e.code);
+      })
   }
   
   

@@ -44,7 +44,6 @@ export class ChatService {
   destroy() {
     if (this.unsub) {
       this.unsub();
-      console.log('unsub');
     }
   }
 
@@ -59,6 +58,9 @@ export class ChatService {
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
       await this.snapChatroomMessages(snapshot);
+    },
+    (error) => {
+      console.warn('Loading current chatroom error',error);      
     });
   }
 
@@ -77,6 +79,7 @@ export class ChatService {
       } else if (change.type == "modified") {
         let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
         messageToEdit[0]['msg'] = change.doc.data()['msg'];
+        messageToEdit[0]['edit'] = change.doc.data()['edit'];
       }
       this.chatLoading = false;
       this.shouldScroll = true;
@@ -127,6 +130,7 @@ export class ChatService {
       timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg,
+      edit: false,
     })
 
   }
@@ -160,6 +164,9 @@ export class ChatService {
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
       this.snapChatMembers(snapshot);
+    },
+    (error) => {
+      console.warn('Loading all chats error',error);      
     });
   }
 
@@ -193,6 +200,9 @@ export class ChatService {
           chat.lastUserVisit = doc.data();
         }
       })
+    },
+    (error) => {
+      console.warn('Setting last visit to chat error',error);      
     })
   }
 
@@ -227,8 +237,7 @@ export class ChatService {
         setTimeout(() => {
           this.updateLastVisitTimestamp();
         }, 1000);
-        console.log(this.chatId)
-      });;
+      });
     this.shouldScroll = true;
   }
 
@@ -236,7 +245,7 @@ export class ChatService {
   //**loading current thread */
   async getCurrentThread() {
     this.threadComments = [];
-    let colRef = query(collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
+    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
     onSnapshot(colRef, async (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.threadComments.find(c => c.id == doc.id)) {
@@ -245,6 +254,9 @@ export class ChatService {
           this.threadComments.push(timestampConvertedMsg)
         }
       })
+    },
+    (error) => {
+      console.warn('Loading comments to thread (chat) error',error);      
     })
   }
 
@@ -278,12 +290,12 @@ export class ChatService {
       })
   }
 
-
-  //** BITTE VERVOLLSTÄNDIGEN */
-  async editMsg(msg) {    
+  async editMsg(msg) {   
+    console.log(this.msgToEdit);     
     let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
-      msg: msg
+      msg: msg,
+      edit: true,
     });
     this.msgToEdit = [];
   }

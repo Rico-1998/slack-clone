@@ -34,8 +34,8 @@
           let i = index;
           let last = last
         "
-        (click)="this.channelService.getCurrentMessage(message.id)"
         [class.border-bottom]="!last"
+        [class.editBg]="channelService.msgToEdit == message"
       >
         <div class="option-box">
           <div class="option">
@@ -96,7 +96,13 @@
               {{ message.timestamp }}
             </div>
           </div>
-          <span [innerHTML]="message.msg"></span>
+          <div
+            class="message-wrapper"
+            *ngIf="channelService.msgToEdit != message"
+          >
+            <span [innerHTML]="message.msg"></span>
+            <div class="edited" *ngIf="message.edit">(edited)</div>
+          </div>
           <div class="comments-container" *ngIf="message.comments">
             <div class="hover-container">
               <span class="open-thread-link" (click)="openThread(message.id)">

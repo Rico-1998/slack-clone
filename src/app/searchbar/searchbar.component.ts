@@ -37,7 +37,10 @@ export class SearchbarComponent implements OnInit {
           this.allUsers.push(data[i]);
         }
       }
-    }));
+    }),
+    (error) => {
+      console.warn('Loading user error', error)
+    });
   }
 
   openSettings() {

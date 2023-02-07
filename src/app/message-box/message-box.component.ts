@@ -1,8 +1,6 @@
-import { Component, OnChanges, OnInit, ViewChild, Input } from '@angular/core';
-import { addDoc, collection, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import { QuillEditorComponent } from 'ngx-quill';
 import 'quill-emoji/dist/quill-emoji.js';
 import { ChannelService } from '../services/channel.service';
@@ -43,7 +41,6 @@ export class MessageBoxComponent implements OnInit {
   constructor(
     public firestore: Firestore,
     public userService: UserService,
-    private route: ActivatedRoute,
     public channel: ChannelService,
     public chatService: ChatService) {
     this.messageForm = new FormGroup({
@@ -52,9 +49,7 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-    // console.log(this.userService.currentUser$);
-  }
+  ngOnInit(): void { }
 
 
   //**checks where to add message from quill editor */
@@ -98,24 +93,4 @@ export class MessageBoxComponent implements OnInit {
       }
     }
   }
-
-  // checkEnter(event) {  
-  //     // let text = event.target.innerHTML.replace(/<[^>]+>/g, undefined);
-  //     let text = event.target.firstChild.innerText = '\n' ? '' : event.target.innerHTML;
-  //     console.log(event);
-      
-  //     // if (text != '') {
-  //     //   console.log(text);
-  //     //   this.valid = true;
-  //     //   this.check();
-  //     // } else {
-  //     //   this.valid = false;
-  //     //   console.log(
-  //     //     text
-  //     //   );
-        
-  //     // }
-  // }
-  
-
 }

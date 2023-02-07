@@ -3,7 +3,8 @@
 .text-box {
     position: relative;
     width: 100%;
-    background-color: transparent;
+    height: 96%;
+    background-color: $bgClr-newChat;
     border-radius: $br-secondary;
 
     .editor {

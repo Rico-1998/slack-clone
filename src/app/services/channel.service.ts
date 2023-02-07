@@ -56,6 +56,9 @@ export class ChannelService {
         await this.channels.push(({ ...(doc.data() as object), id: doc.id }));
         await this.getLastVisitForChannels();
       })
+    },
+    (error) => {
+      console.warn('Loading all channels error',error);      
     });
   }
 
@@ -69,6 +72,9 @@ export class ChannelService {
           channel.lastUserVisit = doc.data();
         }
       })
+    },
+    (error) => {
+      console.warn('Setting last visit for channel error',error);      
     });
   }
 
@@ -89,6 +95,9 @@ export class ChannelService {
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
       this.snapCurrentChannelMessages(snapshot);
+    },
+    (error) => {
+      console.warn('Loading current channel error',error);      
     });
     this.updateLastVisitTimestamp();
   }
@@ -108,6 +117,7 @@ export class ChannelService {
       } else if (change.type == "modified") {
         let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
         messageToEdit[0]['msg'] = change.doc.data()['msg'];
+        messageToEdit[0]['edit'] = change.doc.data()['edit'];
       }
       this.channelLoading = false;
       this.showNewMessage();
@@ -140,7 +150,8 @@ export class ChannelService {
     addDoc(collection(this.db, 'channels', this.channelId, 'messages'), {
       author: this.user.currentUser['userName'],
       timestamp: timestamp,
-      msg: this.newMessage
+      msg: this.newMessage,
+      edit: false,
     })
       .then(() => {
         this.updateLastMessageTimestamp(timestamp);
@@ -202,22 +213,20 @@ export class ChannelService {
           this.allThreadComments.push(comment);
         }
       })
+    },
+    (error) => {
+      console.warn('Loading comments to thread (channel) error',error);      
     })
   }
-
-  //** gets id of the clicked message*/
-  getCurrentMessage(id: string) {
-    this.messageId = id;
-    return this.allMessages.find(item => item.id === id);
-  }
-
 
   //** edit picked message and save in array and firebase */
   async editMessage(msg) {
-    let docToUpdate = doc(this.db, 'channels', this.channelId, 'messages', this.messageId);
+    let docToUpdate = doc(this.db, 'channels', this.channelId, 'messages', this.msgToEdit['id']);
     await updateDoc(docToUpdate, {
-      msg: msg
-    })
+      msg: msg,
+      edit: true,
+    });
+    this.msgToEdit = [];
   }
 
 
@@ -227,27 +236,21 @@ export class ChannelService {
       return timestamp
     } else {
       let date = timestamp?.toDate();
-      let mm = date?.getMonth();
+      let mm = date?.getMonth() + 1;
       let dd = date?.getDate();
       let yyyy = date?.getFullYear();
       let hours = date?.getHours();
       let minutes = date?.getMinutes();
-      let secondes = date?.getSeconds();
-      if (secondes < 10) {
-        secondes = '0' + secondes
-      }
-      if (hours < 10) {
-        hours = '0' + hours
-      }
-      if (minutes < 10) {
-        minutes = '0' + minutes
-      }
-      let fullDate = dd + '/' + (mm + 1) + '/' + yyyy + ' ' + hours + ':' + minutes;
-      let onlyDate = dd + '/' + (mm + 1) + '/' + yyyy;
-      if (type == 'full') {
-        return fullDate;
-      } else return onlyDate;
+      let fullDate = this.addZero(dd) + '/' + (this.addZero(mm)) + '/' + yyyy + ' ' + this.addZero(hours) + ':' + this.addZero(minutes);
+      let onlyDate = dd + '/' + (mm) + '/' + yyyy;
+      return (type == 'full') ? fullDate : onlyDate;
     }
+  }
+
+  addZero(time) {
+    if (time < 10) {
+      return '0' + time;      
+    } else return time;
   }
 
 

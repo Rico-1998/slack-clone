@@ -5,6 +5,7 @@ $bgClr-thirdary: #fff;
 $bgClr-input: #333333;
 $bgClr-newChat: #222529;
 $bgClr-chatList: #1a2933;
+$bgClr-newMessage: #453F28;
 
 //border-color
 $border-clr: #313438;
@@ -33,7 +34,7 @@ $padding-sidenav-header: 10px 15px;
 $padding-sidenav-content: 0 10px;
 $padding-messages: 16px;
 $padding-messages-comments: 5px;
-$padding-message-box: 0 16px 16px 16px;
+$padding-message-box: 16px;
 
 //sizes
 $size-profile-img: 40px;
@@ -45,6 +46,7 @@ $size-profile-img-chatroom: 40px;
 
 // borders
 $border-primary: 1px solid $border-clr;
+$border-secondary: 1px solid $border-clr-input;
 
 //border-radius
 $br-primary: 5px;
@@ -55,7 +57,7 @@ $online: #39E500;
 $absent: #F4F4F4;
 
 //gap
-$gap-primary: 8px;
+$gap-primary: 5px;
 
 //texteditor
 $bgClr-txtEditor: #222529;

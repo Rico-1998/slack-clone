@@ -95,7 +95,6 @@ export class ChatroomComponent implements OnInit {
     this.chatService.msgToEdit = message;
     setTimeout(() => {
       let quillEditorTextfield = document.querySelectorAll('.ql-editor');
-      console.log(quillEditorTextfield);
       quillEditorTextfield[0].innerHTML = message.msg;
       quillEditorTextfield    
     });

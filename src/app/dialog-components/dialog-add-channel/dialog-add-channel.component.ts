@@ -35,7 +35,6 @@ export class DialogAddChannelComponent implements OnInit {
     this.angularFirestore
       .collection('channels')
       .add(this.channel.toJSON());
-    console.log('New Channel created')
   }
 
 }

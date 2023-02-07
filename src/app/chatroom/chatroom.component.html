@@ -53,7 +53,13 @@
     </mat-card>
     <mat-card
       class="message-container"
-      *ngFor="let message of chatService?.currentChatMessages; let i = index"
+      *ngFor="
+        let message of chatService?.currentChatMessages;
+        let i = index;
+        let last = last
+      "
+      [class.editBg]="chatService.msgToEdit == message"
+      [class.border-bottom]="!last"
     >
       <div class="option-box">
         <div class="option">
@@ -116,11 +122,10 @@
             {{ message.timestamp }}
           </div>
         </div>
-
-        <span
-          *ngIf="chatService.msgToEdit != message"
-          [innerHTML]="message.msg"
-        ></span>
+        <div class="message-wrapper" *ngIf="chatService.msgToEdit != message">
+          <span [innerHTML]="message.msg"></span>
+          <div class="edited" *ngIf="message.edit">(edited)</div>
+        </div>
         <div class="comments-container" *ngIf="message.comments">
           <div class="hover-container">
             <span class="open-thread-link" (click)="openThread(message)">
