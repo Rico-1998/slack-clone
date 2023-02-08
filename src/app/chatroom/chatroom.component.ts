@@ -49,15 +49,19 @@ export class ChatroomComponent implements OnInit {
     this.scrollToBottom();
   }
 
+  
   handleComponentChange() {
     this.chatService.chatLoading = true;
     this.chatService.threadOpen = false
   }
   
+  
   ngAfterViewChecked() {
     this.scrollToBottom();
   }
 
+
+  //**scrolls to last message of current chat if necessary*/
   scrollToBottom(): void {
     if(this.chatService.shouldScroll) {
       setTimeout(() => {
@@ -69,11 +73,15 @@ export class ChatroomComponent implements OnInit {
     }
   }
 
+
+  //**delete message in server collection */
   async deleteMessage(message: any) {
     let actualMsg = doc(this.chatService.db, 'chats', message.id.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
   } 
 
+
+  //**puts message in quill editor to edit it*/
   changePath(message) {
     this.chatService.msgToEdit = message;
     setTimeout(() => {
@@ -83,7 +91,5 @@ export class ChatroomComponent implements OnInit {
     });
     
   }
-
-  
 
 }

@@ -42,18 +42,20 @@ export class AuthService {
     })
 
   }
+ 
 
+  //**check if user exist in database and set var logedIn to true if so */
   isLoggedIn(): any {
     const user = JSON.parse(localStorage.getItem('user')!);
-
     if (user !== null && !user?.isAnonymous) {
       this.loggedIn = true
     } else {
       this.loggedIn = false
     }
   }
-
-
+  
+  
+  //**create new user data with email and password in database */
   registrateUser(email: string, password: string, name: string, form: any) {
 
     createUserWithEmailAndPassword(this.auth, email, password)
@@ -72,20 +74,22 @@ export class AuthService {
       })
 
   }
-
-
+  
+  
+  //**remove current user from local storage and auth */
   logout() {
     signOut(this.auth)
-      .then(() => {
-        localStorage.removeItem('user');
-        this.router.navigate(['/']);
-      })
-      .catch((e) => {
-        this.handleError(e.message, e.code);
-      })
+    .then(() => {
+      localStorage.removeItem('user');
+      this.router.navigate(['/']);
+    })
+    .catch((e) => {
+      this.handleError(e.message, e.code);
+    })
   }
-
-
+  
+  
+  //**set registrated user to auth */
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
@@ -96,11 +100,27 @@ export class AuthService {
         this.handleError(e.message, e.code);
       })
   }
-
-
+  
+  
+  //**opens dialog with error message if login failed */
   handleError(eMessage: any, eCode: any) {
     this.errorMessage = eMessage;
     this.errorCode = eCode;
     this.dialog.open(DialogErrorComponent);
   }
+  
+  // guestLogin() {
+  //   signInAnonymously(this.auth)
+  //     .then((guest) => {
+  //       // console.log(guest);
+  //       setDoc(doc(this.colRef, guest.user.uid), {
+  //         userName: 'guest',
+  //       });
+  //       this.loggedIn = true;
+  //       this.router.navigate(['/home']);
+  //     })
+  //     .catch((e) => {
+  //       this.handleError(e.message, e.code);
+  //     })
+  // }
 }
