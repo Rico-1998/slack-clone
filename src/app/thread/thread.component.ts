@@ -10,27 +10,14 @@ import { doc, getDoc } from '@angular/fire/firestore';
   styleUrls: ['./thread.component.scss']
 })
 export class ThreadComponent implements OnInit {
-
-  db = getFirestore();
-  message: any;
-  allComments: any[] = []
   public textBoxPath: string = 'thread';
-  threadMessage: any ;
 
   constructor(
-    public channel: ChannelService,
+    public channelService: ChannelService,
   ) {}
 
   ngOnInit(): void {
-    this.channel.threadLoading = true;
-    this.threadMessage = this.channel.allMessages.find(m => m.id === this.channel.threadId);
-  }
-
-  closeThread() {
-    this.channel.threadOpen = false;
-    this.channel.allThreadComments = [];
-    this.channel.threadMessage = undefined;
-    this.channel.threadId = undefined;
-  }
+    this.channelService.threadLoading = true;    
+  } 
 
 }

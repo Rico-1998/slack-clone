@@ -87,13 +87,7 @@ export class ChannelsComponent implements OnInit {
   }
 
 
-  //** open thread with all comments of the picked message*/
-  openThread(id) {
-    this.channelService.threadId = id;
-    this.channelService.threadOpen = true;
-    this.channelService.loadCommentsToThread();
-    this.channelService.loadMessageToThread();
-  }
+  
 
 
   //**Changes the path to identify the message to edit */

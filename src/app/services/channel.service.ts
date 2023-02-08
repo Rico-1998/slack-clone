@@ -217,6 +217,8 @@ export class ChannelService {
     (error) => {
       console.warn('Loading comments to thread (channel) error',error);      
     })
+    console.log(this.allThreadComments);
+    
   }
 
   //** edit picked message and save in array and firebase */
@@ -251,6 +253,21 @@ export class ChannelService {
     if (time < 10) {
       return '0' + time;      
     } else return time;
+  }
+
+  //** open thread with all comments of the picked message*/
+  openThread(id) {
+    this.threadId = id;
+    this.threadOpen = true;
+    this.loadCommentsToThread();
+    this.loadMessageToThread(); 
+  }
+
+  closeThread() {
+    this.threadOpen = false;
+    this.allThreadComments = [];
+    this.threadMessage = undefined;
+    this.threadId = undefined;
   }
 
 

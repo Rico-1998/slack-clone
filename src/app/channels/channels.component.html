@@ -39,7 +39,7 @@
       >
         <div class="option-box">
           <div class="option">
-            <button class="btn" (click)="openThread(message.id)">
+            <button class="btn" (click)="channelService.openThread(message.id)">
               <mat-icon
                 matTooltip="Reply in thread"
                 [matTooltipPosition]="'above'"
@@ -105,7 +105,10 @@
           </div>
           <div class="comments-container" *ngIf="message.comments">
             <div class="hover-container">
-              <span class="open-thread-link" (click)="openThread(message.id)">
+              <span
+                class="open-thread-link"
+                (click)="channelService.openThread(message.id)"
+              >
                 {{ message.comments }} Antworten
               </span>
               <span class="open-thread-info">Thread anzeigen</span>

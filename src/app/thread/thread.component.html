@@ -1,43 +1,21 @@
 <div class="thread-main-container">
   <div class="heading">
-    <span># Thread {{ this.channel.currentChannel.channelName }}</span>
-    <mat-icon class="close" (click)="closeThread()">close</mat-icon>
+    <div class="heading-wrapper">
+      <h2>Thread</h2>
+      <span class="channel-name">{{
+        this.channelService.currentChannel.channelName
+      }}</span>
+    </div>
+    <mat-icon class="close" (click)="channelService.closeThread()"
+      >close</mat-icon
+    >
   </div>
 
   <div class="thread-content-container">
     <div class="message">
-      <mat-card *ngIf="this.channel.threadMessage" class="message-container">
-        <div class="img-container">
-          <img
-            class="profile-img"
-            src="assets/img/slack-big.svg"
-            alt="profile-img"
-          />
-        </div>
-        <div class="message-content">
-          <div>
-            <strong>{{
-              this.channel.threadMessage?.author | titlecase
-            }}</strong>
-            {{ this.channel.threadMessage?.timestamp }}
-          </div>
-          <span [innerHTML]="this.channel.threadMessage?.msg"></span>
-        </div>
-      </mat-card>
-    </div>
-
-    <div class="scroll-box">
-      <div class="devider" *ngIf="this.threadMessage.comments">
-        <span *ngIf="this.threadMessage.comments == 1"
-          >{{ this.threadMessage.comments }} Antwort</span
-        >
-        <span *ngIf="this.threadMessage.comments > 1"
-          >{{ this.threadMessage.comments }} Antworten</span
-        >
-      </div>
       <mat-card
-        *ngFor="let comment of this.channel.allThreadComments; let i = index"
-        class="comment-container"
+        *ngIf="this.channelService.threadMessage"
+        class="message-container"
       >
         <div class="img-container">
           <img
@@ -46,10 +24,59 @@
             alt="profile-img"
           />
         </div>
-        <div class="comment-content">
-          <div class="">
-            <strong>{{ comment.author | titlecase }}</strong>
-            {{ comment.timestamp }}
+        <div class="message-content">
+          <div class="message-header">
+            <div>
+              <strong>{{
+                this.channelService.threadMessage?.author | titlecase
+              }}</strong>
+            </div>
+            <div>
+              {{ this.channelService.threadMessage?.timestamp }}
+            </div>
+          </div>
+          <span [innerHTML]="this.channelService.threadMessage?.msg"></span>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="scroll-box">
+      <div class="answer-wrapper">
+        <div class="answer" *ngIf="this.channelService.allThreadComments">
+          <span
+            >{{
+              this.channelService.allThreadComments.length
+            }}
+            Answer<ng-container
+              *ngIf="this.channelService.allThreadComments.length > 1"
+              >s</ng-container
+            ></span
+          >
+        </div>
+        <div class="devider"></div>
+      </div>
+      <mat-card
+        *ngFor="
+          let comment of this.channelService.allThreadComments;
+          let i = index
+        "
+        class="message-container"
+      >
+        <div class="img-container">
+          <img
+            class="profile-img"
+            src="assets/img/slack-big.svg"
+            alt="profile-img"
+          />
+        </div>
+        <div class="message-content">
+          <div class="message-header">
+            <div>
+              <strong>{{ comment.author | titlecase }}</strong>
+            </div>
+            <div>
+              {{ comment.timestamp }}
+            </div>
           </div>
           <span [innerHTML]="comment.comment"> </span>
         </div>
@@ -60,7 +87,7 @@
     class="message-box"
     [textBoxPath]="textBoxPath"
   ></app-message-box>
-  <div *ngIf="this.channel.threadLoading" id="loading-container">
+  <div *ngIf="this.channelService.threadLoading" id="loading-container">
     <div class="lds-ring" id="loading-ring">
       <div></div>
       <div></div>

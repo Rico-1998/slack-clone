@@ -17,6 +17,7 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: $fs-regular;
 }
 
 .custom-dialog-container .mat-dialog-container {
@@ -43,7 +44,23 @@ body {
     border-top-right-radius: $br-primary !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    border-color: $border-clr !important;
+    border-color: $border-clr-texteditor !important;
+
+    .ql-formats {
+        margin: unset !important;
+        border-left: $border-primary;
+        &:not(:last-child, :first-child) {
+            padding: 0 7.5px;
+        }
+
+        &:first-child {
+            padding-right: 7.5px;
+        }
+
+        &:last-child {
+            padding-left: 7.5px;
+        }
+    }
 }
 
 .ql-editor.ql-blank::before {
@@ -53,7 +70,15 @@ body {
 .ql-snow {
     border-bottom-left-radius: $br-primary;
     border-bottom-right-radius: $br-primary;
-    border-color: $border-clr !important;
+    border-color: $border-clr-texteditor !important;
+}
+
+pre {
+    border: $border-secondary;
+    border-radius: $br-primary;
+    background-color: $bgClr-newChat;
+    color: $txt-clr-new;
+    padding: 0 5px;
 }
 
 /* 
@@ -91,7 +116,68 @@ body {
     border: 2.5px solid $absent;
 }
 
+.img-container {
+    position: relative;
+    height: $size-profile-img;
+    aspect-ratio: 1;
+    background-color: $bgClr-start;
+    border-radius: $br-primary;
+    
+    .profile-img {
+        height: inherit;
+        aspect-ratio: 1;
+        object-fit: cover;
+    }
+
+}
+
+.heading {
+    min-height: $height-headers !important;
+    max-height: $height-headers !important;
+    display: flex;
+    align-items: center;
+    gap: $gap-primary;
+    padding: $padding-sidenav-header;
+    border-bottom: $border-primary;
+    font-size: $fs-l;
+}
+
+.scroll-box {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.border-bottom {
+    border-bottom: 1px solid $border-clr;
+}
+
+.editBg {
+    background: $bgClr-newMessage !important;
+}
+
+.message-wrapper {
+    display: flex;
+    gap: $gap-primary;
+
+    .edited {
+        font-weight: 100;
+        font-size: $fs-s;
+        color: $txt-clr-primary;
+    }
+}
+
+.message-box {
+    padding: $padding-message-box;
+}
+
 .message-container {
+    display: flex !important;
+    gap: $gap-primary;    
+    position: relative;
+    background-color: $bgClr-primary;
+    color: #D1D2D3;
     box-shadow: unset !important;
     border-radius: unset !important;
 
@@ -166,70 +252,6 @@ body {
             }
         }
 
-    }
-
-.img-container {
-    position: relative;
-    height: $size-profile-img;
-    aspect-ratio: 1;
-    background-color: $bgClr-start;
-    border-radius: $br-primary;
-    
-    .profile-img {
-        height: inherit;
-        aspect-ratio: 1;
-        object-fit: cover;
-    }
-
-}
-
-.heading {
-    min-height: $height-headers !important;
-    max-height: $height-headers !important;
-    display: flex;
-    align-items: center;
-    gap: $gap-primary;
-    padding: $padding-sidenav-header;
-    border-bottom: $border-primary;
-    font-size: $fs-l;
-}
-
-.scroll-box {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-}
-
-.border-bottom {
-    border-bottom: 1px solid $border-clr;
-}
-
-.editBg {
-    background: $bgClr-newMessage !important;
-}
-
-.message-wrapper {
-    display: flex;
-    gap: $gap-primary;
-
-    .edited {
-        font-weight: 100;
-        font-size: $fs-s;
-    }
-}
-
-.message-box {
-    padding: $padding-message-box;
-}
-
-.message-container {
-    background-color: $bgClr-primary;
-    color: #D1D2D3;
-    display: flex !important;
-    gap: $gap-primary;    
-    position: relative;
-
     .message-content {
         width: 100%;
         display: flex;
@@ -301,7 +323,6 @@ body {
             }
         }
     }
-
 }
 
 .add-channel mat-dialog-container {
