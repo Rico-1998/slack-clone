@@ -205,7 +205,7 @@ export class ChannelService {
     this.allThreadComments = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages', this.threadId, 'comments');
     const q = query(colRef, orderBy('timestamp'));
-    await onSnapshot(q, (snapshot) => {
+    onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.allThreadComments.find(c => c.id == doc.id)) {
           let comment = { ...(doc.data() as object), id: doc.id };

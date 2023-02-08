@@ -49,6 +49,8 @@ export class ChatService {
   async getChatRoom(chatroomId) {
     this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
+    console.log(this.currentChat[0].otherUsers);
+    
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
     this.currentChatMessages = [];
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
@@ -194,7 +196,9 @@ export class ChatService {
         getDoc(doc(this.db, 'users', actualMember))
           .then((docData) => {
             let index = otherUsers.indexOf(actualMember);
-            otherUsers[index] = docData.data();
+            if(index != -1) {
+              otherUsers[index] = docData.data();
+            }
           })
       }
     }
@@ -287,6 +291,13 @@ export class ChatService {
     await setDoc(docToUpdate, {
       time: Timestamp.fromDate(new Date())
     });
+  }
+
+  openThread(message) {
+    this.thread = message;
+    this.threadOpen = true;
+    this.getCurrentThread();
+    this.loadMessageToThread();
   }
 }
 
