@@ -116,6 +116,10 @@ pre {
     border: 2.5px solid $absent;
 }
 
+.highlight {
+    background-color: $bgClr-highlight !important;
+}
+
 .img-container {
     position: relative;
     height: $size-profile-img;
@@ -154,7 +158,7 @@ pre {
 }
 
 .editBg {
-    background: $bgClr-newMessage !important;
+    background: $bgClr-highlight !important;
 }
 
 .answer-wrapper {

@@ -20,7 +20,6 @@ export class ChatroomComponent implements OnInit {
   hover: boolean = false;
   showEditor = false;
 
-
   constructor(
     public chatService: ChatService,
     private route: ActivatedRoute,
@@ -49,7 +48,6 @@ export class ChatroomComponent implements OnInit {
     this.scrollToBottom();
   }
 
-  
   handleComponentChange() {
     this.chatService.chatLoading = true;
     this.chatService.threadOpen = false

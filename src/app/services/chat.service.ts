@@ -52,8 +52,6 @@ export class ChatService {
   async getChatRoom(chatroomId) {
     this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
-    console.log(this.currentChat[0].otherUsers);
-    
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
     this.currentChatMessages = [];
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
@@ -74,7 +72,7 @@ export class ChatService {
         let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', change.doc.id, 'comments'));
         let timestampConvertedMsg = { ...(change.doc.data() as object), id: this.chatId, documentId: change.doc.id, comments: comments.size };
         timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-        this.currentChatMessages.push(timestampConvertedMsg);
+        this.currentChatMessages.push(timestampConvertedMsg);     
       } else if (change.type == 'removed') {
         let indexOfMessageToRemove = this.currentChatMessages.findIndex(m => m.documentId == change.doc.id);
         this.currentChatMessages.splice(indexOfMessageToRemove, 1)
