@@ -13,8 +13,6 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./message-box.component.scss']
 })
 export class MessageBoxComponent implements OnInit {
-
-  // db: any = getFirestore();
   messageText: string = '';
   valid: boolean = false;
   @ViewChild('messageInput')

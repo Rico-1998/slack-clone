@@ -90,15 +90,18 @@
             />
             <div class="dot-sidenav online"></div>
           </div>
-          <span *ngFor="let otherUser of chat.otherUsers; let last = last" [class.highlight]="
-            chat?.lastMessage > chat.lastUserVisit?.time &&
-            this.chatService.chatId !== chat.id &&
-            chat.lastUserVisit?.time
-          ">
+          <span
+            *ngFor="let otherUser of chat.otherUsers; let last = last"
+            [class.highlight]="
+              chat?.lastMessage > chat.lastUserVisit?.time &&
+              this.chatService.chatId !== chat.id &&
+              chat.lastUserVisit?.time
+            "
+          >
             {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
           </span>
         </div>
-        <mat-icon class="close" *ngIf="hover[i]" (click)="deleteChat()"
+        <mat-icon class="close" *ngIf="hover[i]" (click)="deleteChat(chat)"
           >close</mat-icon
         >
       </div>

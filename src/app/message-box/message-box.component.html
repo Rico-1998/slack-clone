@@ -1,5 +1,5 @@
 <div class="text-box">
-  <form [formGroup]="messageForm" (submit)="check()">
+  <form class="textEditorForm" [formGroup]="messageForm" (submit)="check()">
     <!-- (keydown.enter)="checkEnter($event)" -->
     <quill-editor
       class="editor"

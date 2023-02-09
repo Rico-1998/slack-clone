@@ -16,7 +16,7 @@
         .scroll-box {
             .welcome-card {
                 display: flex;
-                padding: $padding-messages;
+                padding: $padding-message-box;
                 background-color: transparent;
                 color: $txt-clr-h2;
 
@@ -47,11 +47,6 @@
                     .option-box {
                         opacity: 1;
                     }
-                }
-
-                .highlight {
-                    color: $txt-clr-link;
-                    font-weight: bold;
                 }
 
                 .option-box {

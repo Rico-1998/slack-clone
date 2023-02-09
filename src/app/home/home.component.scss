@@ -44,19 +44,21 @@ mat-drawer-container {
         }
 
         .new-chat-container {
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            transform-origin: 5px 5px;
-            height: 40px;
+            height: 30px;
             aspect-ratio: 1;
             border-radius: 100%;
-            background-color: $bgClr-thirdary;
-            color: $txt-clr-thirdary;
+            background-color: $txt-clr-primary;
+            cursor: pointer;
 
             mat-icon {
-                margin-bottom: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: $fs-xl;
+                color: $bgClr-primary;
             }
         }
     }

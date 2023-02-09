@@ -6,6 +6,7 @@ import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { ChannelService } from '../services/channel.service';
+import { deleteDoc, doc } from '@firebase/firestore';
 
 
 
@@ -47,18 +48,14 @@ export class NavTreeComponent implements OnInit {
     });
   }
 
-  // async deleteChat(chat: any) {
-  //   console.log('selected chat',chat);
-  //   this.chatService.currentChatMessages.forEach(async (message) => {
-  //     let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
-  //     await deleteDoc(actualChatMessages);
-  //   });
+  async deleteChat(chat: any) {
+    console.log('selected chat',chat);
+    this.chatService.currentChatMessages.forEach(async (message) => {
+      let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
+      await deleteDoc(actualChatMessages);
+    });
     
-  //   let actualChat = doc(this.chatService.db, 'chats', chat.id);    
-  //   await deleteDoc(actualChat);
-  // }
-
-  deleteChat() {
-    console.log('delete');    
+    let actualChat = doc(this.chatService.db, 'chats', chat.id);    
+    await deleteDoc(actualChat);
   }
 }

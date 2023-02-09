@@ -42,7 +42,7 @@
 
     <div class="scroll-box">
       <div class="answer-wrapper">
-        <div class="answer" *ngIf="this.channelService.allThreadComments">
+        <div class="answer" *ngIf="this.channelService.allThreadComments != 0">
           <span
             >{{
               this.channelService.allThreadComments.length
