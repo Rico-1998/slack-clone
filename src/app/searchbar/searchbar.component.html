@@ -10,20 +10,15 @@
     <mat-icon>keyboard_double_arrow_right</mat-icon>
   </button>
   <div class="searchbar-container">
-    <input
-      class="searchbar"
-      type="text"
-      [matAutocomplete]="users"
-      placeholder="Developer Akademie durchsuchen"
-    />
+    <input class="searchbar" type="text" placeholder="Search message ..." />
   </div>
-  <mat-autocomplete #users="matAutocomplete">
+  <!-- [matAutocomplete]="users" -->
+  <!-- <mat-autocomplete #users="matAutocomplete">
     <mat-option *ngFor="let user of allUsers">
       {{ user.userName }}
     </mat-option>
-  </mat-autocomplete>
+  </mat-autocomplete> -->
   <div class="settings">
-    <!-- <mat-icon class="material-symbols-outlined help-icon"> help </mat-icon> -->
     <div
       class="img-container-settings"
       (click)="openSettings()"

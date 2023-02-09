@@ -90,4 +90,23 @@ export class MessageBoxComponent implements OnInit {
       }
     }
   }
+
+  onSelectionChanged = (event) =>{
+    if(event.oldRange == null){
+       this.onFocus(event);
+    }
+    if(event.range == null){
+       this.onBlur(event);
+    }
+ }
+
+ onFocus(event) {
+  event.editor.theme.quill.container.style = "border-color: #818385 !important;";
+  event.editor.theme.modules.toolbar.container.style = "border-color: #818385 !important;";
+}
+
+ onBlur(event) {
+  event.editor.theme.quill.container.style = "border-color: #464646 !important;";
+  event.editor.theme.modules.toolbar.container.style = "border-color: #464646 !important;";  
+}
 }
