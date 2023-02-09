@@ -63,7 +63,6 @@ export class ChatroomComponent implements OnInit {
   async deleteMessage(message: any) {
     let actualMsg = doc(this.chatService.db, 'chats', message.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
-    this.getChatRoom(this.chatId);
   }
 
   openThread(message) {
