@@ -26,7 +26,7 @@ export class SearchbarComponent implements OnInit {
 
     showToggleBtn: boolean = false;
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     let data = [];
     onSnapshot(this.colref, ((snapshot) => {
       snapshot.docs.forEach((doc) => {
@@ -37,7 +37,10 @@ export class SearchbarComponent implements OnInit {
           this.allUsers.push(data[i]);
         }
       }
-    }));
+    }),
+    (error) => {
+      console.warn('Loading user error', error)
+    });
   }
 
   openSettings() {

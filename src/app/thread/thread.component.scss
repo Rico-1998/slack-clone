@@ -1,18 +1,34 @@
 @import 'src/modules/_vars';
 
-
-
 .thread-main-container {
-    width: 300px;
-    border-left: 1px solid $border-clr;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     position: relative;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 300px;
+    max-height: 100%;
+    border-left: $border-primary;
 
     .heading {
+        display: flex;
+        align-items: center;
         justify-content: space-between;
+
+        .heading-wrapper {
+
+            h2 {
+                margin: unset;
+            }
+
+            display: flex;
+            align-items: center;
+            gap: $gap-primary;
+        }
+
+        .channel-name {
+            font-size: $fs-m;
+            font-weight: 300;
+        }
 
         .close {
             cursor: pointer;
@@ -25,17 +41,7 @@
 
 
         .scroll-box {
-            height: calc(100vh - 350px);
-
-            .devider {
-                padding-left: 16px;
-                padding-top: 6px;
-                padding-bottom: 6px;
-                border-bottom: 1px solid #313438;
-                border-radius: 4px;
-                font-style: italic;
-                font-size: 14px;
-            }
+            max-height: calc(100vh - 344px);            
 
             .comment-container {
                 background-color: transparent;
@@ -48,6 +54,10 @@
                     display: flex;
                     flex-direction: column;
                     gap: 5px;
+                }
+
+                &:hover {
+                    background-color: $bgClr-newChat;
                 }
             }
         }

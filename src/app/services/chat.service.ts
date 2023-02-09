@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService implements OnDestroy {
+export class ChatService {
   visibleTextEditor: boolean = false;
   selectedUserList = [];
   foundedUsers: any[] = [];
@@ -23,13 +23,14 @@ export class ChatService implements OnDestroy {
   currentChatMembers: any;
   currentChatMessages = [];
   loading: boolean = false;
+  chatLoading: boolean = false;
   threadOpen: boolean = false;
   threadComments: any[] = [];
   thread: any;
   threadMessage: any;
   msgToEdit: object;
   shouldScroll = true;
-
+  unsub: any;
 
 
   constructor(public userService: UserService,
@@ -39,35 +40,59 @@ export class ChatService implements OnDestroy {
   ) {
   }
 
-  ngOnDestroy() {
-    
+
+  destroy() {
+    if (this.unsub) {
+      this.unsub();
+    }
   }
 
+
+  //**get current chatroom to load messages inside */
   async getChatRoom(chatroomId) {
-    this.chatId = chatroomId['id'];
+    this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
-    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages'), orderBy('timestamp', 'asc'));
-    const unsub = onSnapshot(colRef, async (snapshot) => {
-      if(this.chatId != this.currentChat[0]?.id) {
-        unsub();
-      } else {
-        await this.snapChatroomMessages(chatroomId, snapshot);
-      }
-    });    
-  }
-
-  async snapChatroomMessages(chatroomId, snapshot) {
-    this.currentChatMessages = [];    
-    snapshot.docs.forEach(async (document) => {
-      let comments = (await getDocs(collection(this.db, 'chats', chatroomId['id'], 'messages', document.id, 'comments')));
-      let timestampConvertedMsg = { ...(document.data() as object), id: chatroomId['id'], documentId: document.id, comments: comments.size };
-      timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-      this.currentChatMessages.push(timestampConvertedMsg);
-      this.shouldScroll = true;      
+    this.currentChatMessages = [];
+    const colRef = collection(this.db, 'chats', this.chatId, 'messages');
+    const q = query(colRef, orderBy('timestamp', 'asc'))
+    this.unsub = onSnapshot(q, async (snapshot) => {
+      await this.snapChatroomMessages(snapshot);
+    },
+    (error) => {
+      console.warn('Loading current chatroom error',error);      
     });
   }
 
+
+  //**update messages in chat when new message written by any user in this chat */
+  async snapChatroomMessages(snapshot) {
+    snapshot.docChanges().forEach(async (change) => {
+      if (change.type == 'added') {
+        let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', change.doc.id, 'comments'));
+        let timestampConvertedMsg = { ...(change.doc.data() as object), id: this.chatId, documentId: change.doc.id, comments: comments.size };
+        timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+        this.currentChatMessages.push(timestampConvertedMsg);     
+      } else if (change.type == 'removed') {
+        let indexOfMessageToRemove = this.currentChatMessages.findIndex(m => m.documentId == change.doc.id);
+        this.currentChatMessages.splice(indexOfMessageToRemove, 1)
+      } else if (change.type == "modified") {
+        let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
+        messageToEdit[0]['msg'] = change.doc.data()['msg'];
+        messageToEdit[0]['edit'] = change.doc.data()['edit'];
+      }
+      this.chatLoading = false;
+      this.shouldScroll = true;
+    })
+    setTimeout(() => {
+      if(this.currentChatMessages.length < 1) {
+        this.chatLoading = false;
+      }
+    }, 500);
+  }
+
+
+  //**add user to current chat if not allready in */
   setToChatList(user) {
     if (!this.selectedUserList.includes(user) && this.selectedUserList.length <= 2) {
       this.selectedUserList.push(user);
@@ -81,37 +106,46 @@ export class ChatService implements OnDestroy {
     }
   }
 
+
+  //**delete user from chat */
   spliceUser(index) {
     this.selectedUserList.splice(index, 1);
   }
 
+
+  //**put user ID´s in roomId array */
   createRoomId() {
     let roomId = [this.userService.currentUser.id];
     this.selectedUserList.forEach((user) => {
       roomId.push(user.id);
     })
     return roomId;
-  }  
+  }
 
-  saveMsg(roomId) { // Bei add vergibt firebase automatisch eine id
+
+  //**add message to current chat and collection in firebase */
+  saveMsg(roomId) {
     let timestamp = Timestamp.fromDate(new Date());
     addDoc(collection(this.db, 'chats', roomId, 'messages'), {
       timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg,
+      edit: false,
     })
-    
+
   }
 
-  setChatRoom(roomId) { //bei set muss man die id selbst angeben 
+
+  //**sets chat-ID = value of roomId */
+  setChatRoom(roomId) { 
     setDoc(doc(this.db, 'chats', roomId), {
       userIds: this.createRoomId(),
     });
   }
 
 
-  async createChatRoom() {
-    // this.foundedUsers = [];    
+  //** BITTE VERVOLLSTÄNDIGEN */
+  async createChatRoom() {   
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
     if (!((await chatRoomExists).data())) {
@@ -125,28 +159,37 @@ export class ChatService implements OnDestroy {
     this.shouldScroll = true;
   }
 
+
+  //** BITTE VERVOLLSTÄNDIGEN */
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
-      this.chats = [];
-      await this.snapChatMembers(snapshot);
-      await this.findOtherUsers();
+      this.snapChatMembers(snapshot);
+    },
+    (error) => {
+      console.warn('Loading all chats error',error);      
     });
   }
 
 
+  //** BITTE VERVOLLSTÄNDIGEN */
   async snapChatMembers(snapshot) {
     snapshot.docs.forEach((doc) => {
-      let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-      let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
-      if (otherUsers.length == 0) {
-        const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
-      } else {
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+      if (!this.chats.find(a => a.id == doc.id)) {
+        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+        if (otherUsers.length == 0) {
+          const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
+        } else {
+          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+        }
+        this.findOtherUsers();
       }
     });
     this.getLastVisitsForChats();
+
   }
+
 
   //**load and connects the lastVisitTimestamps into the chats */
   async getLastVisitsForChats() {
@@ -157,45 +200,55 @@ export class ChatService implements OnDestroy {
           chat.lastUserVisit = doc.data();
         }
       })
+    },
+    (error) => {
+      console.warn('Setting last visit to chat error',error);      
     })
   }
 
+
+  //** BITTE VERVOLLSTÄNDIGEN */
   async findOtherUsers() {
     for (let i = 0; i < this.chats.length; i++) {
       let otherUsers = this.chats[i]?.otherUsers;
       for (let i = 0; i < otherUsers.length; i++) {
         let actualMember = otherUsers[i];
-        await getDoc(doc(this.db, 'users', actualMember))
+        getDoc(doc(this.db, 'users', actualMember))
           .then((docData) => {
             let index = otherUsers.indexOf(actualMember);
-            otherUsers[index] = docData.data();
+            if(index != -1) {
+              otherUsers[index] = docData.data();
+            }
           })
       }
     }
   }
 
+
+  //**add message to current chat and scroll to last message in chat */
   addMessage() {
-    let colRef = collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages');
+    let colRef = collection(this.db, 'chats', this.chatId, 'messages');
     let timestamp = Timestamp.fromDate(new Date());
     addDoc(colRef, {
       timestamp: timestamp,
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
     })
-    .then(() => {
-      this.updateLastMessageTimestamp(timestamp)
-      setTimeout(() => {
-        this.updateLastVisitTimestamp()
-      }, 1000);
-      console.log(this.chatId)
-    });; 
+      .then(() => {
+        this.updateLastMessageTimestamp(timestamp);
+        setTimeout(() => {
+          this.updateLastVisitTimestamp();
+        }, 1000);
+      });
     this.shouldScroll = true;
   }
 
+
+  //**loading current thread */
   async getCurrentThread() {
     this.threadComments = [];
-    let colRef = query(collection(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
-    await onSnapshot(colRef, async (snapshot) => {
+    let colRef = query(collection(this.db, 'chats', this.chatId, 'messages', this.thread.documentId, 'comments'), orderBy('timestamp'))
+    onSnapshot(colRef, async (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (!this.threadComments.find(c => c.id == doc.id)) {
           let timestampConvertedMsg = { ...(doc.data() as object), id: doc.id };
@@ -203,9 +256,14 @@ export class ChatService implements OnDestroy {
           this.threadComments.push(timestampConvertedMsg)
         }
       })
+    },
+    (error) => {
+      console.warn('Loading comments to thread (chat) error',error);      
     })
   }
 
+
+  //**loading messages to current thread */
   async loadMessageToThread() {
     this.loading = true;
     let document = doc(this.db, 'chats', this.currentChatMessages[0].id, 'messages', this.thread.documentId);
@@ -217,6 +275,8 @@ export class ChatService implements OnDestroy {
       })
   }
 
+
+  //**add message to current thread */
   msgToChatThread() {
     this.loading = true;
     let timestamp = Timestamp.fromDate(new Date());
@@ -226,19 +286,28 @@ export class ChatService implements OnDestroy {
       author: this.userService.currentUser.userName,
       msg: this.chatMsg
     })
-    this.loading = false;
+      .then(() => {
+        this.thread.comment = this.thread['comments']++;
+        this.loading = false;
+      })
   }
 
-  async editMsg(msg) {
+  async editMsg(msg) {   
+    console.log(this.msgToEdit);     
     let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
-      msg: msg
+      msg: msg,
+      edit: true,
     });
+    this.msgToEdit = [];
   }
 
+
+  //** BITTE VERVOLLSTÄNDIGEN */
   arrayToString(array) {
     return array.sort().join('');
   }
+
 
   //* Updates the time when last message was send in chats */
   async updateLastMessageTimestamp(timestamp) {
@@ -247,12 +316,20 @@ export class ChatService implements OnDestroy {
     })
   }
 
-   //* Updates the timestap when user last visited the chat*/
-   async updateLastVisitTimestamp() {
+  
+  //* Updates the timestap when user last visited the chat*/
+  async updateLastVisitTimestamp() {
     const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits', this.chatId);
     await setDoc(docToUpdate, {
       time: Timestamp.fromDate(new Date())
     });
+  }
+
+  openThread(message) {
+    this.thread = message;
+    this.threadOpen = true;
+    this.getCurrentThread();
+    this.loadMessageToThread();
   }
 }
 

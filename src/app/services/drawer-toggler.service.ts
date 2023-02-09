@@ -14,9 +14,7 @@ export class DrawerTogglerService {
   constructor(
     public channel: ChannelService,
     public chats: ChatService,
-  ) {
-   
-  }
+  ) { }
 
   toggleNav() {
     if(this.open) {
@@ -24,10 +22,6 @@ export class DrawerTogglerService {
     } else {
       this.open = true;
     }
-  }
-
-  test() {
-    console.log('test')
   }
 
   //Closes Nav and Threads on small screens

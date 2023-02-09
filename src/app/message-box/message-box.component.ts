@@ -1,8 +1,6 @@
-import { Component, OnChanges, OnInit, ViewChild, Input } from '@angular/core';
-import { addDoc, collection, Firestore, onSnapshot } from '@angular/fire/firestore';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import { QuillEditorComponent } from 'ngx-quill';
 import 'quill-emoji/dist/quill-emoji.js';
 import { ChannelService } from '../services/channel.service';
@@ -34,8 +32,7 @@ export class MessageBoxComponent implements OnInit {
       ['blockquote', 'code-block'],
       [{ 'list': 'ordered' },
       { 'list': 'bullet' }],
-      ['link', 'image'],
-      ['emoji']                   // link and image, video
+      ['image','emoji'],                  // link and image, video
     ]
   };
 
@@ -43,7 +40,6 @@ export class MessageBoxComponent implements OnInit {
   constructor(
     public firestore: Firestore,
     public userService: UserService,
-    private route: ActivatedRoute,
     public channel: ChannelService,
     public chatService: ChatService) {
     this.messageForm = new FormGroup({
@@ -52,13 +48,12 @@ export class MessageBoxComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-    // console.log(this.userService.currentUser$);
-  }
+  ngOnInit(): void { }
 
 
+  //**checks where to add message from quill editor */
   check() {
-    let quillEditorTextfield = document.getElementsByClassName("ql-editor");
+    let quillEditorTextfield = document.querySelector('.ql-editor');
     if (this.textBoxPath == 'channels') {
       this.channel.postInChannel();
       this.messageForm.reset();
@@ -79,10 +74,11 @@ export class MessageBoxComponent implements OnInit {
     } else if (this.textBoxPath == 'edit-channel') {
       this.channel.editMessage(this.chatService.chatMsg);
     }
-    quillEditorTextfield[0].innerHTML = "";
+    quillEditorTextfield.innerHTML = "";
   }
 
 
+  //**puts message.value in quill editor */
   checkEditor(event: any) {
     if (event.event === 'text-change') {
       let text = event.html;
@@ -96,24 +92,4 @@ export class MessageBoxComponent implements OnInit {
       }
     }
   }
-
-  // checkEnter(event) {  
-  //     // let text = event.target.innerHTML.replace(/<[^>]+>/g, undefined);
-  //     let text = event.target.firstChild.innerText = '\n' ? '' : event.target.innerHTML;
-  //     console.log(event);
-      
-  //     // if (text != '') {
-  //     //   console.log(text);
-  //     //   this.valid = true;
-  //     //   this.check();
-  //     // } else {
-  //     //   this.valid = false;
-  //     //   console.log(
-  //     //     text
-  //     //   );
-        
-  //     // }
-  // }
-  
-
 }

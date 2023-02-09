@@ -1,28 +1,24 @@
-import { Injectable, Injector } from '@angular/core';
-import { getFirestore } from '@angular/fire/firestore';
+import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { ChannelService } from './channel.service';
+import { DialogDeleteMessageComponent } from '../dialog-components/dialog-delete-message/dialog-delete-message.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FirestoreService {
-
+export class DeleteDialogService {
   currentMessage: any;
-  db = getFirestore();
 
   constructor(
     public dialog: MatDialog,
     public channelService: ChannelService,
   ) { }
 
-//** open dialog for confirming to delete message */
+  //** open dialog for confirming to delete message */
 openDeleteMessageDialog(message) {
   this.currentMessage = message;
   this.dialog.open(DialogDeleteMessageComponent, {
     panelClass: 'delete-message'
   })
 }
-  
 }

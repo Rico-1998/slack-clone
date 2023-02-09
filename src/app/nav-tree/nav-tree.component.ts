@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogAddChannelComponent } from '../dialog-components/dialog-add-channel/dialog-add-channel.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore'; //Tobi added Firestore version 8
-import { deleteDoc, deleteField, doc, docData, Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { collection, getFirestore, onSnapshot, setDoc } from '@firebase/firestore';
 import { UserService } from '../services/user.service';
 import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
-import { Observable } from 'rxjs';
 import { ChannelService } from '../services/channel.service';
 
 
@@ -22,11 +18,8 @@ import { ChannelService } from '../services/channel.service';
 })
 export class NavTreeComponent implements OnInit {
   openChannelPanel = true;
-  openChatsPanel = true;
-  db = getFirestore();
+  openChatsPanel = true; 
   currentUser = JSON.parse(localStorage.getItem('user'));
-  // currentUserChats = query(collection(this.db, 'chats'), where('userIds', 'array-contains', this.currentUser.uid));
-  // channels: any = [];
   _lastUserVisits: any;
   hover: any = [];
 
@@ -42,9 +35,10 @@ export class NavTreeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.chatService.getChats();
+    if(this.chatService.chats.length == 0) {
+      await this.chatService.getChats();
+    }
     await this.channelService.getChannels();    
-    
   }
 
   openDialogAddChannel() {

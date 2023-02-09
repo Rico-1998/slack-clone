@@ -7,12 +7,12 @@
     <span>Direct message</span>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span>To:</span>
-    <div
-      class="selectedUser-container"
-      *ngFor="let selectedUser of chatService.selectedUserList; let i = index"
-    >
-      <div class="selectedUser">
+    <span>To: </span>
+    <div class="selectedUser-container">
+      <div
+        class="selectedUser"
+        *ngFor="let selectedUser of chatService.selectedUserList; let i = index"
+      >
         <div class="img-container sidenav-shrink">
           <img
             class="profile-img"
@@ -20,7 +20,7 @@
             alt="profile-img"
           />
         </div>
-        <span>
+        <span #user[i]>
           {{ selectedUser.userName }}
         </span>
         <mat-icon (click)="chatService.spliceUser(i)">close</mat-icon>
@@ -31,6 +31,7 @@
       (ngModelChange)="searchUser($event)"
       [matAutocomplete]="searchedUsers"
       [(ngModel)]="value"
+      *ngIf="chatService.selectedUserList.length < 3"
       #usersField
       placeholder="@someone or someone@some.one"
     />
@@ -54,18 +55,22 @@
     </mat-autocomplete>
   </mat-toolbar-row>
 </mat-toolbar>
-<div class="last-messages">
-  <div class="message">
-    <p>{{ lastMessages.date }}</p>
-    <mat-card>
-      <mat-card-content>
-        <span>{{ lastMessages.name }}</span>
-        <span>{{ lastMessages.message }}</span>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
 <div class="texteditor-container">
+  <div class="new-chat-info">
+    <span>Du erstellst einen Chat</span>
+    <ng-container *ngIf="chatService.selectedUserList.length > 0">
+      <span> zwischen dir und </span>
+      <span
+        *ngFor="
+          let chatMembers of chatService.selectedUserList;
+          let last = last
+        "
+      >
+        <span>{{ chatMembers.userName }}</span>
+        <ng-container *ngIf="!last">, </ng-container>
+      </span>
+    </ng-container>
+  </div>
   <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
   <!-- *ngIf="visibleTextEditor" -->
 </div>

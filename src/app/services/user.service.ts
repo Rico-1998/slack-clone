@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { docData, Firestore, getDocs, doc, getDoc } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { collection, onSnapshot } from '@firebase/firestore';
-import { filter, map, Observable, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 
 
 @Injectable({
@@ -26,6 +26,9 @@ export class UserService {
       snapshot.docs.forEach((doc) => {
         this.users.push({ ...(doc.data() as object), id: doc.id });
       })
+    },
+    (error) => {
+      console.warn('Loading all users error',error);      
     })
 
     this.authService.loggedUser?.subscribe((user$) => {
@@ -41,33 +44,15 @@ export class UserService {
       switchMap((user) => {
         if (!user?.uid) {
           return of(null);
-        }
+        }        
         const ref = doc(this.firestore, 'users', user?.uid);
         return docData(ref) as Observable<any>
       })
     )
-
-    // this.loadLastVisitTimestamps()
   }
 
 
   getData() {
-    getDocs(this.userRef)
-      .then((response) => {
-        // console.log(response.docs.map(docs => docs.data()));
-      })
-    // console.log('das ist der Current User:', this.currentUser);
+    getDocs(this.userRef);
   }
-
-  // loadLastVisitTimestamps() {
-  //   this.loadedChannelVisits = false
-  //   onSnapshot(collection(this.firestore, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits'), (snapshot) => {
-  //     snapshot.docs.forEach((doc) => {
-  //       if(!this.lastChannelVisits.find(v => v.id == doc.id)) {
-  //         this.lastChannelVisits.push({ ...(doc.data() as object), id: doc.id });
-  //       }
-  //     })
-  //     this.loadedChannelVisits = true;
-  //   }) 
-  // }
 }

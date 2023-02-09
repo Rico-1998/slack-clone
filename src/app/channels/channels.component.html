@@ -9,77 +9,77 @@
           <span class="material-symbols-outlined"> tag </span>
         </div>
         <mat-card-content class="welcome-content">
-          <span>
-            Thats the beginning of this channel
+          <span
+            >Thats the beginning of this channel
             <span class="highlight"
-              >#{{ this.channelService.currentChannel?.channelName }}</span
-            > </span
+              >#{{ this.channelService.currentChannel?.channelName }}
+            </span> </span
           ><br />
           <span
             >This Channel was created at:
-            {{ this.channelService.currentChannel?.created }}</span
+            {{ this.channelService.currentChannel?.created }} </span
           ><br />
           <span
             >Channeldescription:
             <span class="highlight"
-              >#{{
-                this.channelService.currentChannel?.channelDescription
-              }}</span
-            ></span
-          >
+              >#{{ this.channelService.currentChannel?.channelDescription }}
+            </span>
+          </span>
         </mat-card-content>
       </mat-card>
       <mat-card
         class="message-container"
-        *ngFor="let message of this.channelService.allMessages; let i = index"
-        (click)="this.channelService.getCurrentMessage(message.id)"
+        *ngFor="
+          let message of this.channelService.allMessages;
+          let i = index;
+          let last = last
+        "
+        [class.border-bottom]="!last"
+        [class.editBg]="channelService.msgToEdit == message"
       >
         <div class="option-box">
           <div class="option">
-            <mat-icon matTooltip="Reaktion hinzufügen"> add_reaction </mat-icon>
+            <button class="btn" (click)="channelService.openThread(message.id)">
+              <mat-icon
+                matTooltip="Reply in thread"
+                [matTooltipPosition]="'above'"
+                [matTooltipShowDelay]="800"
+              >
+                comment
+              </mat-icon>
+            </button>
           </div>
           <div class="option">
-            <mat-icon
-              matTooltip="Im Thread antworten"
-              (click)="openThread(message.id)"
+            <button
+              class="btn edit"
+              [disabled]="userService.currentUser?.userName != message.author"
+              (click)="changePath(message)"
             >
-              comment
-            </mat-icon>
+              <mat-icon
+                matTooltip="Edit message"
+                [matTooltipPosition]="'above'"
+                [matTooltipShowDelay]="800"
+              >
+                edit
+              </mat-icon>
+            </button>
           </div>
           <div class="option">
-            <mat-icon matTooltip="Weitere Aktionen" [matMenuTriggerFor]="menu">
-              more_vert
-            </mat-icon>
+            <button
+              class="btn delete"
+              [disabled]="userService.currentUser?.userName != message.author"
+              (click)="deleteDialogService.openDeleteMessageDialog(message)"
+            >
+              <mat-icon
+                matTooltip="Delete Message"
+                [matTooltipPosition]="'above'"
+                [matTooltipShowDelay]="800"
+              >
+                delete
+              </mat-icon>
+            </button>
           </div>
-
-          <mat-menu #menu="matMenu" class="del-menu">
-            <div class="menu-options">
-              <button
-                mat-menu-item
-                class="hoverEdit"
-                *ngIf="userService.currentUser?.userName == message.author"
-                (click)="changePath(message)"
-              >
-                Nachricht bearbeiten
-              </button>
-              <button
-                mat-menu-item
-                class="delete"
-                (click)="service.openDeleteMessageDialog(message)"
-                *ngIf="userService.currentUser?.userName == message.author"
-              >
-                Nachricht löschen
-              </button>
-              <button
-                *ngIf="userService.currentUser?.userName != message.author"
-                mat-menu-item
-              >
-                Nicht deine Nachricht
-              </button>
-            </div>
-          </mat-menu>
         </div>
-
         <div class="img-container">
           <img
             class="profile-img"
@@ -88,14 +88,27 @@
           />
         </div>
         <div class="message-content">
-          <div class="">
-            <strong>{{ message.author | titlecase }}</strong>
-            {{ message.timestamp }}
+          <div class="message-header">
+            <div>
+              <strong>{{ message.author | titlecase }}</strong>
+            </div>
+            <div>
+              {{ message.timestamp }}
+            </div>
           </div>
-          <span [innerHTML]="message.msg"></span>
+          <div
+            class="message-wrapper"
+            *ngIf="channelService.msgToEdit != message"
+          >
+            <span [innerHTML]="message.msg"></span>
+            <div class="edited" *ngIf="message.edit">(edited)</div>
+          </div>
           <div class="comments-container" *ngIf="message.comments">
             <div class="hover-container">
-              <span class="open-thread-link" (click)="openThread(message.id)">
+              <span
+                class="open-thread-link"
+                (click)="channelService.openThread(message.id)"
+              >
                 {{ message.comments }} Antworten
               </span>
               <span class="open-thread-info">Thread anzeigen</span>
@@ -111,10 +124,17 @@
         </div>
       </mat-card>
     </div>
-    <app-message-box
-      class="message-box"
-      [textBoxPath]="textBoxPath"
-    ></app-message-box>
+    <div class="message-box">
+      <app-message-box [textBoxPath]="textBoxPath"></app-message-box>
+    </div>
+    <div *ngIf="this.channelService.channelLoading" id="loading-container">
+      <div class="lds-ring" id="loading-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
   </div>
   <app-thread *ngIf="this.channelService.threadOpen"></app-thread>
 </div>
