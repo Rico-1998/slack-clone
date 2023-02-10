@@ -63,7 +63,6 @@ export class SearchbarComponent implements OnInit {
       } else if (this.channelService.currentChannel) {
         if(this.value == '') {
           this.channelService.currentFilteredMessages = this.channelService.allMessages;        
-          
         } else {
           this.channelService.currentFilteredMessages = this.channelService.allMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').includes(this.value));
         }

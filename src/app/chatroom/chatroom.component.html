@@ -35,7 +35,7 @@
           {{ otherUser.userName }}
         </span>
         <span
-          >Diese Unterhaltung findet nur zwischen
+          >This conversation takes place only between
           <span class="highlight"
             >@<span
               *ngFor="
@@ -47,7 +47,7 @@
               }}<ng-container *ngIf="!last">,</ng-container></span
             >
           </span>
-          und dir statt.</span
+          and you.</span
         >
       </div>
     </mat-card>
@@ -133,10 +133,12 @@
             <span
               class="open-thread-link"
               (click)="chatService.openThread(message)"
+              >{{ message.comments }} Answer<ng-container
+                *ngIf="message.comments > 1"
+                >s</ng-container
+              ></span
             >
-              {{ message.comments }} Antworten
-            </span>
-            <span class="open-thread-info">Thread anzeigen</span>
+            <span class="open-thread-info">Show Thread</span>
           </div>
           <mat-icon class="arrow">navigate_next</mat-icon>
         </div>

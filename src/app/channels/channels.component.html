@@ -108,10 +108,12 @@
               <span
                 class="open-thread-link"
                 (click)="channelService.openThread(message.id)"
+                >{{ message.comments }} Answer<ng-container
+                  *ngIf="message.comments > 1"
+                  >s</ng-container
+                ></span
               >
-                {{ message.comments }} Antworten
-              </span>
-              <span class="open-thread-info">Thread anzeigen</span>
+              <span class="open-thread-info">Show thread</span>
             </div>
             <mat-icon class="arrow">navigate_next</mat-icon>
           </div>
