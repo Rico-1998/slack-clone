@@ -18,6 +18,7 @@ export class ChannelService {
   messageId: string;
   channels: any = [];
   allMessages: any[] = [];
+  currentFilteredMessages = [];
   allThreadComments: any = [];
   newMessage: Message;
   newComment: Message;
@@ -30,6 +31,7 @@ export class ChannelService {
   channelLoading: boolean = false;
   shouldScroll = true;
   unsub: any;
+  filteredValue: any;
 
 
   constructor(
@@ -111,11 +113,15 @@ export class ChannelService {
         let message = { ...(change.doc.data() as object), id: change.doc.id, comments: comments.size };
         message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
         this.allMessages.push(message);
+        this.currentFilteredMessages.push(message);
       } else if (change.type == 'removed') {
         let indexOfMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
         this.allMessages.splice(indexOfMessageToRemove, 1);
+        let indexOfFilteredMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
+        this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1);
       } else if (change.type == "modified") {
         let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
+        messageToEdit = this.currentFilteredMessages.filter(m => m.id == change.doc.id);
         messageToEdit[0]['msg'] = change.doc.data()['msg'];
         messageToEdit[0]['edit'] = change.doc.data()['edit'];
       }

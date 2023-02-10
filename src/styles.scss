@@ -29,6 +29,21 @@ body {
     padding: unset;
 }
 
+mat-option {
+    line-height: unset !important;
+    height: unset !important;
+    padding: unset !important;
+    overflow: unset !important;
+
+    .mat-option-text {
+        overflow: unset !important;
+    }
+}
+
+.mat-option .mat-icon {
+    margin-right: 0 !important;
+}
+
 #emoji-palette {
     top: -185px !important;
     left: 0px !important;
@@ -43,8 +58,6 @@ body {
 #tab-toolbar, #tab-panel {
     background-color: $bgClr-primary !important;
 }
-
-
 
 .ql-toolbar.ql-snow {
     border-top-left-radius: $br-primary !important;
@@ -99,27 +112,35 @@ body {
   .ql-italic:hover:after {
      content: 'Italic';
   }
+
   .ql-underline:hover:after {
      content: 'Underline';
   }
+
   .ql-strike:hover:after {
      content: 'Strike';
   }
+
   .ql-blockquote:hover:after {
      content: 'Blockquote';
   }
+
   .ql-code-block:hover:after {
      content: 'Code-Block';
   }
+
   .ql-list[value='ordered']:hover:after {
      content: 'Ordered list';
   }
+
   .ql-list[value='bullet']:hover:after {
      content: 'Bullet list';
   }
+
   .ql-image:hover:after {
      content: 'Image upload';
   }
+
   .ql-emoji:hover:after {
      content: 'Emojis';
   }

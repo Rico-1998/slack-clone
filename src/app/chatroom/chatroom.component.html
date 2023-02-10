@@ -54,7 +54,7 @@
     <mat-card
       class="message-container"
       *ngFor="
-        let message of chatService?.currentChatMessages;
+        let message of chatService?.currentFilteredMessages;
         let i = index;
         let last = last
       "
@@ -77,7 +77,9 @@
           <button
             class="btn edit"
             [disabled]="userService.currentUser?.userName != message.author"
-            (click)="changePath(message); showEditor = true"
+            (click)="
+              chatService.changePath(message); chatService.showEditor = true
+            "
           >
             <mat-icon
               matTooltip="Edit message"

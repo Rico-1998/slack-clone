@@ -22,6 +22,7 @@ export class ChatService {
   currentChat: any;
   currentChatMembers: any;
   currentChatMessages = [];
+  currentFilteredMessages = [];
   loading: boolean = false;
   chatLoading: boolean = false;
   threadOpen: boolean = false;
@@ -29,8 +30,10 @@ export class ChatService {
   thread: any;
   threadMessage: any;
   msgToEdit: object;
-  shouldScroll = true;
+  shouldScroll = true;  
+  showEditor = false;
   unsub: any;
+  filteredValue: any;
 
 
   constructor(public userService: UserService,
@@ -72,12 +75,16 @@ export class ChatService {
         let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', change.doc.id, 'comments'));
         let timestampConvertedMsg = { ...(change.doc.data() as object), id: this.chatId, documentId: change.doc.id, comments: comments.size };
         timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-        this.currentChatMessages.push(timestampConvertedMsg);     
+        this.currentChatMessages.push(timestampConvertedMsg);
+        this.currentFilteredMessages.push(timestampConvertedMsg);
       } else if (change.type == 'removed') {
         let indexOfMessageToRemove = this.currentChatMessages.findIndex(m => m.documentId == change.doc.id);
+        let indexOfFilteredMessageToRemove = this.currentFilteredMessages.findIndex(m => m.documentId == change.doc.id);
         this.currentChatMessages.splice(indexOfMessageToRemove, 1)
+        this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1)
       } else if (change.type == "modified") {
         let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
+        messageToEdit = this.currentFilteredMessages.filter(m => m.documentId == change.doc.id);
         messageToEdit[0]['msg'] = change.doc.data()['msg'];
         messageToEdit[0]['edit'] = change.doc.data()['edit'];
       }
@@ -330,6 +337,17 @@ export class ChatService {
     this.threadOpen = true;
     this.getCurrentThread();
     this.loadMessageToThread();
+  }
+
+  //**puts message in quill editor to edit it*/
+  changePath(message) {
+    this.msgToEdit = message;
+    setTimeout(() => {
+      let quillEditorTextfield = document.querySelectorAll('.ql-editor');
+      quillEditorTextfield[0].innerHTML = message.msg;
+      quillEditorTextfield    
+    });
+    
   }
 }
 

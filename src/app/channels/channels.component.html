@@ -30,7 +30,7 @@
       <mat-card
         class="message-container"
         *ngFor="
-          let message of this.channelService.allMessages;
+          let message of channelService.currentFilteredMessages;
           let i = index;
           let last = last
         "
