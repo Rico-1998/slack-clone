@@ -41,7 +41,7 @@
     </div>
     <div class="scroll-box">
       <div class="answer-wrapper">
-        <div class="answer" *ngIf="this.chatService.thread.comments">
+        <div class="answer" *ngIf="this.chatService.thread.comments != 0">
           <span
             >{{ this.chatService.thread.comments }} Answer<ng-container
               *ngIf="this.chatService.thread.comments > 1"

@@ -42,6 +42,7 @@ $inner-size: 18px;
                 width: $icon-size;
                 border-radius: $br-primary;
                 transition: $transition-hover;
+                cursor: pointer;
 
                 &:hover {
                     background-color: $bgClr-secondary;

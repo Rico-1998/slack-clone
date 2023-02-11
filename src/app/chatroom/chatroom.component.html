@@ -22,7 +22,7 @@
           ">
           {{ otherUser.userName }}
         </span>
-        <span>Diese Unterhaltung findet nur zwischen
+        <span>This conversation takes place only between
           <span class="highlight">@<span *ngFor="
                 let otherUser of chatService?.currentChatMembers;
                 let last = last
@@ -30,11 +30,11 @@
               {{ otherUser.userName
               }}<ng-container *ngIf="!last">,</ng-container></span>
           </span>
-          und dir statt.</span>
+          and you.</span>
       </div>
     </mat-card>
     <mat-card class="message-container" *ngFor="
-        let message of chatService?.currentChatMessages;
+        let message of chatService?.currentFilteredMessages;
         let i = index;
         let last = last
       " [class.editBg]="chatService.msgToEdit == message" [class.border-bottom]="!last">
@@ -47,8 +47,9 @@
           </button>
         </div>
         <div class="option">
-          <button class="btn edit" [disabled]="userService.currentUser?.userName != message.author"
-            (click)="changePath(message); showEditor = true">
+          <button class="btn edit" [disabled]="userService.currentUser?.userName != message.author" (click)="
+              chatService.changePath(message); chatService.showEditor = true
+            ">
             <mat-icon matTooltip="Edit message" [matTooltipPosition]="'above'" [matTooltipShowDelay]="800">
               edit
             </mat-icon>
@@ -83,10 +84,9 @@
         </div>
         <div class="comments-container" *ngIf="message.comments">
           <div class="hover-container">
-            <span class="open-thread-link" (click)="chatService.openThread(message)">
-              {{ message.comments }} Antworten
-            </span>
-            <span class="open-thread-info">Thread anzeigen</span>
+            <span class="open-thread-link" (click)="chatService.openThread(message)">{{ message.comments }}
+              Answer<ng-container *ngIf="message.comments > 1">s</ng-container></span>
+            <span class="open-thread-info">Show Thread</span>
           </div>
           <mat-icon class="arrow">navigate_next</mat-icon>
         </div>

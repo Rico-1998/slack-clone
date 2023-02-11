@@ -20,13 +20,14 @@ mat-toolbar {
             height: 30px;
             border-radius: 5px;
             outline: none;
-            background-color: $bgClr-input;
             padding: 0 8px;
+            background-color: $bgClr-input;
+            color: $txt-clr-secondary;
             border: 1px solid $border-clr-input;
 
             &::placeholder {
                 /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: $txt-clr-secondary;
+                color: $txt-clr-primary;
                 opacity: 1;
                 /* Firefox */
             }

@@ -4,21 +4,20 @@
     padding: unset;
 
     mat-card {
-        width: 300px;
-        background-color: #333333;
+        width: 250px;
+        background-color: $bgClr-input;
         padding: unset;
         position: absolute;
-        top: 47px;
-        right: 15px;
-        border-radius: $br-secondary;
-        padding: 25px 0;
+        top: 55px;
+        right: 10px;
+        border-radius: $br-primary;
+        padding: $padding-message-box;
 
         .user-info-box {
             display: flex;
             align-items: center;
             color: $txt-clr-primary;
             gap: 15px;
-            padding: 0 25px;
 
             mat-card-title {
                 font-size: $fs-m;
@@ -37,7 +36,7 @@
 
                 .dot-sidenav {
                     position: unset;
-                    outline: none;
+                    outline: $bgClr-input;
                 }
             }
         }
@@ -47,7 +46,6 @@
             height: 30px !important;
             color: $txt-clr-primary;
             transition: $transition-hover;
-            padding: 0 25px;
 
             &:hover {
                 background-color: $txt-clr-link;

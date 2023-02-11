@@ -1,5 +1,5 @@
 <div class="text-box">
-  <form [formGroup]="messageForm" (submit)="check()">
+  <form class="textEditorForm" [formGroup]="messageForm" (submit)="check()">
     <!-- (keydown.enter)="checkEnter($event)" -->
     <quill-editor
       class="editor"
@@ -7,6 +7,7 @@
       formControlName="msgEditor"
       minlength="1"
       (onEditorChanged)="checkEditor($event)"
+      (onSelectionChanged)="onSelectionChanged($event)"
     ></quill-editor>
     <button class="" type="submit" mat-raised-button [disabled]="!valid">
       <mat-icon>send</mat-icon>

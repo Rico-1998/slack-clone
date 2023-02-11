@@ -21,11 +21,11 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout() {
+  logout(currentUser) {
     this.dialogRef.close()
     this.channelService.threadOpen = false;
     this.chatService.threadOpen = false;
-    this.auth.logout();
+    this.auth.logout(currentUser);
     this.auth.loggedIn = false;
   }
 

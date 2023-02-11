@@ -6,6 +6,8 @@ import { ChatService } from '../services/chat.service';
 import { UserService } from '../services/user.service';
 import { UserSettingsComponent } from '../user-settings/user-settings.component';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
+import { ChannelService } from '../services/channel.service';
+import { DeleteDialogService } from '../services/delete-dialog.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -17,12 +19,16 @@ export class SearchbarComponent implements OnInit {
   db: any = getFirestore();
   colref: any = collection(this.db, 'users');
   sortedUser: any = query(this.colref, orderBy('name'), limit(5));
+  value: any = '';
+  currentFilteredMessages = [];
 
   constructor(
     public chatService: ChatService,
+    public channelService: ChannelService,
     public dialog: MatDialog,
     public userService: UserService,
-    public toggler: DrawerTogglerService) { }
+    public toggler: DrawerTogglerService,    
+    public deleteDialogService: DeleteDialogService) { }
 
     showToggleBtn: boolean = false;
 
@@ -47,4 +53,19 @@ export class SearchbarComponent implements OnInit {
     this.dialog.open(UserSettingsComponent, { panelClass: 'custom-dialog-container' })
   }
 
+  searchInput() {
+      if(this.chatService.currentChat) {
+        if(this.value == '') {
+          this.chatService.currentFilteredMessages = this.chatService.currentChatMessages;       
+        } else {
+          this.chatService.currentFilteredMessages = this.chatService.currentChatMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').includes(this.value));
+        }
+      } else if (this.channelService.currentChannel) {
+        if(this.value == '') {
+          this.channelService.currentFilteredMessages = this.channelService.allMessages;        
+        } else {
+          this.channelService.currentFilteredMessages = this.channelService.allMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').includes(this.value));
+        }
+      }
+  }
 }

@@ -18,7 +18,6 @@ export class ChatroomComponent implements OnInit {
   textBoxPathEdit: string = 'edit';
   @ViewChild('scrollBox') private scrollBox: ElementRef;
   hover: boolean = false;
-  showEditor = false;
 
   constructor(
     public chatService: ChatService,
@@ -79,15 +78,6 @@ export class ChatroomComponent implements OnInit {
   }
 
 
-  //**puts message in quill editor to edit it*/
-  changePath(message) {
-    this.chatService.msgToEdit = message;
-    setTimeout(() => {
-      let quillEditorTextfield = document.querySelectorAll('.ql-editor');
-      quillEditorTextfield[0].innerHTML = message.msg;
-      quillEditorTextfield
-    });
 
-  }
 
 }

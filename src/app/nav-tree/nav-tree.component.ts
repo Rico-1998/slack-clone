@@ -6,6 +6,7 @@ import { ChatService } from '../services/chat.service';
 import { AuthService } from '../services/auth.service';
 import { DrawerTogglerService } from '../services/drawer-toggler.service';
 import { ChannelService } from '../services/channel.service';
+import { deleteDoc, doc } from '@firebase/firestore';
 
 
 
@@ -28,7 +29,7 @@ export class NavTreeComponent implements OnInit {
     public userService: UserService,
     public chatService: ChatService,
     public channelService: ChannelService,
-    public auth: AuthService,
+    public authService: AuthService,
     public toggler: DrawerTogglerService,
   ) {
 
@@ -38,7 +39,7 @@ export class NavTreeComponent implements OnInit {
     if(this.chatService.chats.length == 0) {
       await this.chatService.getChats();
     }
-    await this.channelService.getChannels();    
+    await this.channelService.getChannels();        
   }
 
   openDialogAddChannel() {
@@ -47,18 +48,24 @@ export class NavTreeComponent implements OnInit {
     });
   }
 
-  // async deleteChat(chat: any) {
-  //   console.log('selected chat',chat);
-  //   this.chatService.currentChatMessages.forEach(async (message) => {
-  //     let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
-  //     await deleteDoc(actualChatMessages);
-  //   });
+  async deleteChat(chat: any) {
+    console.log('selected chat',chat);
+    this.chatService.currentChatMessages.forEach(async (message) => {
+      let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
+      await deleteDoc(actualChatMessages);
+    });
     
-  //   let actualChat = doc(this.chatService.db, 'chats', chat.id);    
-  //   await deleteDoc(actualChat);
-  // }
+    let actualChat = doc(this.chatService.db, 'chats', chat.id);    
+    await deleteDoc(actualChat);
+  }
 
-  deleteChat() {
-    console.log('delete');    
+  status(chat) {
+    let status = false;
+    this.userService.users.forEach(user => {
+      if(user.id == chat.otherUsers[0].id && user.loggedIn) {
+        status = true;
+      }
+    });
+    return status;
   }
 }
