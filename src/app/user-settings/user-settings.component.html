@@ -24,7 +24,7 @@
     <mat-selection-list [multiple]="false">
       <mat-list-item>
         <div matListItemTitle [ngStyle]="{ cursor: 'pointer' }">
-          <span (click)="logout()">Logout</span>
+          <span (click)="logout(userService.currentUser)">Logout</span>
         </div>
       </mat-list-item>
     </mat-selection-list>

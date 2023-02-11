@@ -23,13 +23,19 @@ export class UserService {
     public authService: AuthService,
     private firestore: Firestore) {
     onSnapshot(collection(this.firestore, 'users'), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        this.users.push({ ...(doc.data() as object), id: doc.id });
+      snapshot.docChanges().forEach((change) => {
+        if(change.type === 'added') {
+          this.users.push({ ...(change.doc.data() as object), id: change.doc.id });
+        } else if( change.type === 'modified') {
+          let userToEdit = this.users.filter(m => m.id == change.doc.id);
+          userToEdit[0]['loggedIn'] = change.doc.data()['loggedIn'];
+        }
       })
     },
     (error) => {
       console.warn('Loading all users error',error);      
     })
+    console.log(this.users);
 
     this.authService.loggedUser?.subscribe((user$) => {
       if (user$) {

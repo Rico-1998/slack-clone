@@ -29,7 +29,7 @@ export class NavTreeComponent implements OnInit {
     public userService: UserService,
     public chatService: ChatService,
     public channelService: ChannelService,
-    public auth: AuthService,
+    public authService: AuthService,
     public toggler: DrawerTogglerService,
   ) {
 
@@ -39,7 +39,7 @@ export class NavTreeComponent implements OnInit {
     if(this.chatService.chats.length == 0) {
       await this.chatService.getChats();
     }
-    await this.channelService.getChannels();    
+    await this.channelService.getChannels();        
   }
 
   openDialogAddChannel() {
@@ -57,5 +57,15 @@ export class NavTreeComponent implements OnInit {
     
     let actualChat = doc(this.chatService.db, 'chats', chat.id);    
     await deleteDoc(actualChat);
+  }
+
+  status(chat) {
+    let status = false;
+    this.userService.users.forEach(user => {
+      if(user.id == chat.otherUsers[0].id && user.loggedIn) {
+        status = true;
+      }
+    });
+    return status;
   }
 }

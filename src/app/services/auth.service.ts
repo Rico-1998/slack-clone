@@ -29,18 +29,17 @@ export class AuthService {
     private firestore: Firestore,
     private router: Router
   ) {
-    this.isLoggedIn();
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.userData = user;
+        this.userData = user;    
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user')!);
       } else {
         localStorage.setItem('user', 'null');
         JSON.parse(localStorage.getItem('user')!);
       }
-    })
-
+    });
+    this.isLoggedIn();
   }
  
 
@@ -48,9 +47,9 @@ export class AuthService {
   isLoggedIn(): any {
     const user = JSON.parse(localStorage.getItem('user')!);
     if (user !== null && !user?.isAnonymous) {
-      this.loggedIn = true
+      this.loggedIn = true;
     } else {
-      this.loggedIn = false
+      this.loggedIn = false;
     }
   }
   
@@ -65,6 +64,7 @@ export class AuthService {
           userName: name,
           id: cred.user.uid,
           email: email,
+          loggedIn: false,
         });
         this.dialog.open(DialogSuccessMessageComponent);
         form.reset();
@@ -77,9 +77,12 @@ export class AuthService {
   
   
   //**remove current user from local storage and auth */
-  logout() {
+  logout(currentUser) {
     signOut(this.auth)
     .then(() => {
+      updateDoc(doc(this.colRef, currentUser.id), {
+        loggedIn: false,
+      });
       localStorage.removeItem('user');
       this.router.navigate(['/']);
     })
@@ -93,6 +96,9 @@ export class AuthService {
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
+        updateDoc(doc(this.colRef, cred.user.uid), {
+          loggedIn: true,
+        });            
         this.loggedIn = true;
         this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
       })

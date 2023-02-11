@@ -180,8 +180,7 @@ export class ChatService {
 
   //** BITTE VERVOLLSTÄNDIGEN */
   async snapChatMembers(snapshot) {
-    snapshot.docs.forEach((doc) => {
-      if (!this.chats.find(a => a.id == doc.id)) {
+    snapshot.docs.forEach((doc) => {         
         let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
         let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
         if (otherUsers.length == 0) {
@@ -190,9 +189,10 @@ export class ChatService {
         } else {
           this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
         }
-        this.findOtherUsers();
-      }
+        this.findOtherUsers();      
     });
+    console.log(this.chats);
+    
     this.getLastVisitsForChats();
 
   }
@@ -225,6 +225,7 @@ export class ChatService {
             let index = otherUsers.indexOf(actualMember);
             if(index != -1) {
               otherUsers[index] = docData.data();
+              console.log(docData.data());              
             }
           })
       }
