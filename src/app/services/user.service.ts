@@ -16,7 +16,7 @@ export class UserService {
   channelEditor: boolean = false;
   chatEditor: boolean = false;
   threadEditor: boolean = false;
- 
+
 
 
   constructor(
@@ -24,18 +24,17 @@ export class UserService {
     private firestore: Firestore) {
     onSnapshot(collection(this.firestore, 'users'), (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        if(change.type === 'added') {
+        if (change.type === 'added') {
           this.users.push({ ...(change.doc.data() as object), id: change.doc.id });
-        } else if( change.type === 'modified') {
+        } else if (change.type === 'modified') {
           let userToEdit = this.users.filter(m => m.id == change.doc.id);
           userToEdit[0]['loggedIn'] = change.doc.data()['loggedIn'];
         }
       })
     },
-    (error) => {
-      console.warn('Loading all users error',error);      
-    })
-    console.log(this.users);
+      (error) => {
+        console.warn('Loading all users error', error);
+      })
 
     this.authService.loggedUser?.subscribe((user$) => {
       if (user$) {
@@ -50,7 +49,7 @@ export class UserService {
       switchMap((user) => {
         if (!user?.uid) {
           return of(null);
-        }        
+        }
         const ref = doc(this.firestore, 'users', user?.uid);
         return docData(ref) as Observable<any>
       })

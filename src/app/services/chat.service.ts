@@ -30,7 +30,7 @@ export class ChatService {
   thread: any;
   threadMessage: any;
   msgToEdit: object;
-  shouldScroll = true;  
+  shouldScroll = true;
   showEditor = false;
   unsub: any;
   filteredValue: any;
@@ -62,9 +62,9 @@ export class ChatService {
     this.unsub = onSnapshot(q, async (snapshot) => {
       await this.snapChatroomMessages(snapshot);
     },
-    (error) => {
-      console.warn('Loading current chatroom error',error);      
-    });
+      (error) => {
+        console.warn('Loading current chatroom error', error);
+      });
   }
 
 
@@ -92,7 +92,7 @@ export class ChatService {
       this.shouldScroll = true;
     })
     setTimeout(() => {
-      if(this.currentChatMessages.length < 1) {
+      if (this.currentChatMessages.length < 1) {
         this.chatLoading = false;
       }
     }, 500);
@@ -144,7 +144,7 @@ export class ChatService {
 
 
   //**sets chat-ID = value of roomId */
-  setChatRoom(roomId) { 
+  setChatRoom(roomId) {
     setDoc(doc(this.db, 'chats', roomId), {
       userIds: this.createRoomId(),
     });
@@ -152,7 +152,7 @@ export class ChatService {
 
 
   //** BITTE VERVOLLSTÄNDIGEN */
-  async createChatRoom() {   
+  async createChatRoom() {
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
     if (!((await chatRoomExists).data())) {
@@ -172,27 +172,26 @@ export class ChatService {
     onSnapshot(this.currentUserChats, async (snapshot) => {
       this.snapChatMembers(snapshot);
     },
-    (error) => {
-      console.warn('Loading all chats error',error);      
-    });
+      (error) => {
+        console.warn('Loading all chats error', error);
+      });
   }
 
 
   //** BITTE VERVOLLSTÄNDIGEN */
   async snapChatMembers(snapshot) {
-    snapshot.docs.forEach((doc) => {         
-        let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-        let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
-        if (otherUsers.length == 0) {
-          const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
-          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
-        } else {
-          this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
-        }
-        this.findOtherUsers();      
+    snapshot.docs.forEach((doc) => {
+      let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+      let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+      if (otherUsers.length == 0) {
+        const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
+      } else {
+        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+      }
+      this.findOtherUsers();
     });
-    console.log(this.chats);
-    
+
     this.getLastVisitsForChats();
 
   }
@@ -208,9 +207,9 @@ export class ChatService {
         }
       })
     },
-    (error) => {
-      console.warn('Setting last visit to chat error',error);      
-    })
+      (error) => {
+        console.warn('Setting last visit to chat error', error);
+      })
   }
 
 
@@ -223,9 +222,8 @@ export class ChatService {
         getDoc(doc(this.db, 'users', actualMember))
           .then((docData) => {
             let index = otherUsers.indexOf(actualMember);
-            if(index != -1) {
+            if (index != -1) {
               otherUsers[index] = docData.data();
-              console.log(docData.data());              
             }
           })
       }
@@ -265,9 +263,9 @@ export class ChatService {
         }
       })
     },
-    (error) => {
-      console.warn('Loading comments to thread (chat) error',error);      
-    })
+      (error) => {
+        console.warn('Loading comments to thread (chat) error', error);
+      })
   }
 
 
@@ -300,8 +298,8 @@ export class ChatService {
       })
   }
 
-  async editMsg(msg) {   
-    console.log(this.msgToEdit);     
+  async editMsg(msg) {
+    console.log(this.msgToEdit);
     let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
       msg: msg,
@@ -324,7 +322,7 @@ export class ChatService {
     })
   }
 
-  
+
   //* Updates the timestap when user last visited the chat*/
   async updateLastVisitTimestamp() {
     const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits', this.chatId);
@@ -346,9 +344,9 @@ export class ChatService {
     setTimeout(() => {
       let quillEditorTextfield = document.querySelectorAll('.ql-editor');
       quillEditorTextfield[0].innerHTML = message.msg;
-      quillEditorTextfield    
+      quillEditorTextfield
     });
-    
+
   }
 }
 
