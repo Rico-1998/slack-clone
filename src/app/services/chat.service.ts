@@ -53,10 +53,13 @@ export class ChatService {
 
   //**get current chatroom to load messages inside */
   async getChatRoom(chatroomId) {
+    this.currentChatMessages = [];
+    this.currentFilteredMessages = [];
     this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
-    this.currentChatMessages = [];
+    console.log('cCM', this.currentChatMembers);
+    
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
@@ -83,10 +86,13 @@ export class ChatService {
         this.currentChatMessages.splice(indexOfMessageToRemove, 1)
         this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1)
       } else if (change.type == "modified") {
+        debugger;
         let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
-        messageToEdit = this.currentFilteredMessages.filter(m => m.documentId == change.doc.id);
+        let messageToEditFiltered = this.currentFilteredMessages.filter(m => m.documentId == change.doc.id);
         messageToEdit[0]['msg'] = change.doc.data()['msg'];
         messageToEdit[0]['edit'] = change.doc.data()['edit'];
+        messageToEditFiltered[0]['msg'] = change.doc.data()['msg'];
+        messageToEditFiltered[0]['edit'] = change.doc.data()['edit'];
       }
       this.chatLoading = false;
       this.shouldScroll = true;
@@ -180,30 +186,50 @@ export class ChatService {
 
   //** BITTE VERVOLLSTÄNDIGEN */
   async snapChatMembers(snapshot) {
-    snapshot.docs.forEach((doc) => {
-      let otherUsers = (doc.data()['userIds'].filter(a => a != this.currentUser.uid));
-      let currentUser = (doc.data()['userIds'].filter(a => a == this.currentUser.uid));
-      if (otherUsers.length == 0) {
-        const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: toFindDuplicates(currentUser) }));
-      } else {
-        this.chats.push(({ ...(doc.data() as object), id: doc.id, otherUsers: otherUsers }));
+    snapshot.docChanges().forEach(async (change) => {
+      if(change.type == 'added') {
+        let otherUsers = (change.doc.data()['userIds'].filter(a => a != this.currentUser.uid));
+        let currentUser = (change.doc.data()['userIds'].filter(a => a == this.currentUser.uid));
+        if (otherUsers.length == 0) {
+          this.findCurrentUser(currentUser, change)
+        } else {
+          this.findOtherUser(otherUsers, change)
+        }
       }
-      this.findOtherUsers();
-    });
-
-    this.getLastVisitsForChats();
-
+    });        
+    // this.getLastVisitsForChats();
   }
 
+  findCurrentUser(currentUser, change) {
+    const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
+    currentUser = this.userService.users.filter(a => a.id == toFindDuplicates(currentUser));
+    this.chats.push(({ ...(change.doc.data() as object), id: change.doc.id, otherUsers: currentUser }));
+  }
+
+  findOtherUser(otherUsers, change) {
+    otherUsers.forEach(otherUser => {
+      otherUser = this.userService.users.find(a => a.id == otherUser);
+      let index = otherUsers.indexOf(otherUser['id']);
+      if (index != -1) {
+        otherUsers[index] = otherUser;
+      }
+    });        
+    this.chats.push(({ ...(change.doc.data() as object), id: change.doc.id, otherUsers: otherUsers }));
+  }
 
   //**load and connects the lastVisitTimestamps into the chats */
   async getLastVisitsForChats() {
-    onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits'), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        let chat = this.chats.find(c => c.id == doc.id);
-        if (chat) {
-          chat.lastUserVisit = doc.data();
+    let currentUserId = JSON.parse(localStorage.getItem('user')).uid;
+    onSnapshot(collection(this.db, 'users', currentUserId, 'lastChatVisits'), (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if(change.type == 'added') {
+          console.log(change.doc.id);        
+          let chat = this.chats.find(c => c.id == change.doc.id);
+          if (chat) {
+            chat.lastUserVisit = change.doc.data();
+          }
+        } else if (change.type == 'modified') {
+
         }
       })
     },
@@ -212,23 +238,16 @@ export class ChatService {
       })
   }
 
-
-  //** BITTE VERVOLLSTÄNDIGEN */
-  async findOtherUsers() {
-    for (let i = 0; i < this.chats.length; i++) {
-      let otherUsers = this.chats[i]?.otherUsers;
-      for (let i = 0; i < otherUsers.length; i++) {
-        let actualMember = otherUsers[i];
-        getDoc(doc(this.db, 'users', actualMember))
-          .then((docData) => {
-            let index = otherUsers.indexOf(actualMember);
-            if (index != -1) {
-              otherUsers[index] = docData.data();
-            }
-          })
-      }
-    }
-  }
+//* Updates the timestap when user last visited the chat*/
+async updateLastVisitTimestamp() {
+  console.log('last visit');
+  let currentUserId = await JSON.parse(localStorage.getItem('user')).uid;
+  const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChatVisits', this.chatId);
+  await updateDoc(docToUpdate, {
+    time: Timestamp.fromDate(new Date())
+  });
+}
+  
 
 
   //**add message to current chat and scroll to last message in chat */
@@ -242,9 +261,7 @@ export class ChatService {
     })
       .then(() => {
         this.updateLastMessageTimestamp(timestamp);
-        setTimeout(() => {
-          this.updateLastVisitTimestamp();
-        }, 1000);
+        // this.updateLastVisitTimestamp();
       });
     this.shouldScroll = true;
   }
@@ -322,14 +339,6 @@ export class ChatService {
     })
   }
 
-
-  //* Updates the timestap when user last visited the chat*/
-  async updateLastVisitTimestamp() {
-    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits', this.chatId);
-    await setDoc(docToUpdate, {
-      time: Timestamp.fromDate(new Date())
-    });
-  }
 
   openThread(message) {
     this.thread = message;

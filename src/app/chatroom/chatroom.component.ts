@@ -8,11 +8,14 @@ import { DeleteDialogService } from '../services/delete-dialog.service';
 
 
 
+
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
   styleUrls: ['./chatroom.component.scss']
 })
+
+
 export class ChatroomComponent implements OnInit {
   textBoxPath: string = 'chatroom';
   textBoxPathEdit: string = 'edit';
@@ -36,11 +39,11 @@ export class ChatroomComponent implements OnInit {
         this.route.params.subscribe(async chatroomId => {
           this.handleComponentChange();
           if (this.chatService.chatId) {
-            await this.chatService.updateLastVisitTimestamp()
+            // await this.chatService.updateLastVisitTimestamp();
             this.chatService.destroy();
           }
           this.chatService.getChatRoom(chatroomId);
-          this.chatService.updateLastVisitTimestamp();
+          // this.chatService.updateLastVisitTimestamp();
         });
       }
     }, 500)

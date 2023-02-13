@@ -93,6 +93,7 @@ export class ChannelService {
   //**subscribes the channel messages */
   snapCurrentChannel() {
     this.allMessages = [];
+    this.currentFilteredMessages = [];
     const colRef = collection(this.db, 'channels', this.channelId, 'messages');
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
@@ -279,7 +280,8 @@ export class ChannelService {
 
   //* Updates the timestap when user last visited the channel*/
   async updateLastVisitTimestamp() {
-    const docToUpdate = doc(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChannelVisits', this.channelId);
+    let currentUserId = JSON.parse(localStorage.getItem('user')).uid;
+    const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChannelVisits', this.channelId);
     await setDoc(docToUpdate, {
       time: Timestamp.fromDate(new Date()).toDate()
     });

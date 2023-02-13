@@ -57,12 +57,15 @@ export class NavTreeComponent implements OnInit {
     
     let actualChat = doc(this.chatService.db, 'chats', chat.id);    
     await deleteDoc(actualChat);
+
+    // let index = this.chatService.chats.indexOf(chat.id);
+    // this.chatService.chats.splice(index, 1); 
   }
 
   status(chat) {
     let status = false;
     this.userService.users.forEach(user => {
-      if(user.id == chat.otherUsers[0].id && user.loggedIn) {
+      if(user.id == chat.otherUsers[0]['id'] && user.loggedIn) {
         status = true;
       }
     });

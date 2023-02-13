@@ -1,10 +1,16 @@
 <div class="chatroomContainer">
   <div class="heading">
     <div class="img-container-chatroom sidenav-shrink">
-      <img class="profile-img" src="assets/img/slack-big.svg" alt="profile-img" />
+      <img
+        class="profile-img"
+        src="assets/img/slack-big.svg"
+        alt="profile-img"
+      />
       <div class="dot-sidenav online"></div>
     </div>
-    <span *ngFor="let otherUser of chatService?.currentChatMembers; let last = last">
+    <span
+      *ngFor="let otherUser of chatService?.currentChatMembers; let last = last"
+    >
       {{ otherUser.userName }}<ng-container *ngIf="!last">,</ng-container>
     </span>
   </div>
@@ -12,53 +18,89 @@
   <div class="scroll-box" #scrollBox>
     <mat-card class="first-message-container">
       <div class="img-container">
-        <img class="profile-img" src="assets/img/slack-big.svg" alt="profile-img" />
+        <img
+          class="profile-img"
+          src="assets/img/slack-big.svg"
+          alt="profile-img"
+        />
       </div>
 
       <div class="message-content">
-        <span *ngFor="
+        <span
+          *ngFor="
             let otherUser of chatService?.currentChatMembers;
             let last = last
-          ">
+          "
+        >
           {{ otherUser.userName }}
         </span>
-        <span>This conversation takes place only between
-          <span class="highlight">@<span *ngFor="
+        <span
+          >This conversation takes place only between
+          <span class="highlight"
+            >@<span
+              *ngFor="
                 let otherUser of chatService?.currentChatMembers;
                 let last = last
-              ">
+              "
+            >
               {{ otherUser.userName
-              }}<ng-container *ngIf="!last">,</ng-container></span>
+              }}<ng-container *ngIf="!last">,</ng-container></span
+            >
           </span>
-          and you.</span>
+          and you.</span
+        >
       </div>
     </mat-card>
-    <mat-card class="message-container" *ngFor="
+    <mat-card
+      class="message-container"
+      *ngFor="
         let message of chatService?.currentFilteredMessages;
         let i = index;
         let last = last
-      " [class.editBg]="chatService.msgToEdit == message" [class.border-bottom]="!last">
+      "
+      [class.editBg]="chatService.msgToEdit == message"
+      [class.border-bottom]="!last"
+    >
       <div class="option-box">
         <div class="option">
           <button class="btn" (click)="chatService.openThread(message)">
-            <mat-icon matTooltip="Reply in thread" [matTooltipPosition]="'above'" [matTooltipShowDelay]="800">
+            <mat-icon
+              matTooltip="Reply in thread"
+              [matTooltipPosition]="'above'"
+              [matTooltipShowDelay]="800"
+            >
               comment
             </mat-icon>
           </button>
         </div>
         <div class="option">
-          <button class="btn edit" [disabled]="userService.currentUser?.userName != message.author" (click)="
+          <button
+            class="btn edit"
+            [disabled]="userService.currentUser?.userName != message.author"
+            (click)="
               chatService.changePath(message); chatService.showEditor = true
-            ">
-            <mat-icon matTooltip="Edit message" [matTooltipPosition]="'above'" [matTooltipShowDelay]="800">
+            "
+          >
+            <mat-icon
+              matTooltip="Edit message"
+              [matTooltipPosition]="'above'"
+              [matTooltipShowDelay]="800"
+            >
               edit
             </mat-icon>
           </button>
         </div>
         <div class="option">
-          <button class="btn delete" [disabled]="userService.currentUser?.userName != message.author"
-            (click)="deleteDialogService.openDeleteMessageDialog(message)">
-            <mat-icon matTooltip="Delete Message" [matTooltipPosition]="'above'" [matTooltipShowDelay]="800">
+          <button
+            class="btn delete"
+            [disabled]="userService.currentUser?.userName != message.author"
+            (click)="deleteDialogService.openDeleteMessageDialog(message)"
+          >
+            <mat-icon
+              matTooltip="Delete Message"
+              [matTooltipPosition]="'above'"
+              [matTooltipShowDelay]="800"
+            >
               delete
             </mat-icon>
           </button>
@@ -66,7 +108,11 @@
       </div>
 
       <div class="img-container">
-        <img class="profile-img" src="assets/img/slack-big.svg" alt="profile-img" />
+        <img
+          class="profile-img"
+          src="assets/img/slack-big.svg"
+          alt="profile-img"
+        />
       </div>
 
       <div class="message-content">
@@ -79,20 +125,29 @@
           </div>
         </div>
         <div class="message-wrapper" *ngIf="chatService.msgToEdit != message">
-          <span [innerHTML]="message.msg"></span>
+          <span [innerHTML]="message.msg | sanitizeHtml"></span>
           <div class="edited" *ngIf="message.edit">(edited)</div>
         </div>
         <div class="comments-container" *ngIf="message.comments">
           <div class="hover-container">
-            <span class="open-thread-link" (click)="chatService.openThread(message)">{{ message.comments }}
-              Answer<ng-container *ngIf="message.comments > 1">s</ng-container></span>
+            <span
+              class="open-thread-link"
+              (click)="chatService.openThread(message)"
+              >{{ message.comments }} Answer<ng-container
+                *ngIf="message.comments > 1"
+                >s</ng-container
+              ></span
+            >
             <span class="open-thread-info">Show Thread</span>
           </div>
           <mat-icon class="arrow">navigate_next</mat-icon>
         </div>
 
         <div class="phils-div-box-zum-stylen-des-editors">
-          <app-message-box *ngIf="chatService.msgToEdit == message" [textBoxPath]="textBoxPathEdit"></app-message-box>
+          <app-message-box
+            *ngIf="chatService.msgToEdit == message"
+            [textBoxPath]="textBoxPathEdit"
+          ></app-message-box>
         </div>
       </div>
     </mat-card>
