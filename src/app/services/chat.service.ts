@@ -197,7 +197,8 @@ export class ChatService {
         }
       }
     });        
-    // this.getLastVisitsForChats();
+    console.log(this.chats);    
+    this.getLastVisitsForChats();
   }
 
   findCurrentUser(currentUser, change) {
@@ -219,23 +220,17 @@ export class ChatService {
 
   //**load and connects the lastVisitTimestamps into the chats */
   async getLastVisitsForChats() {
-    let currentUserId = JSON.parse(localStorage.getItem('user')).uid;
-    onSnapshot(collection(this.db, 'users', currentUserId, 'lastChatVisits'), (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if(change.type == 'added') {
-          console.log(change.doc.id);        
-          let chat = this.chats.find(c => c.id == change.doc.id);
-          if (chat) {
-            chat.lastUserVisit = change.doc.data();
-          }
-        } else if (change.type == 'modified') {
-
+    onSnapshot(collection(this.db, 'users', JSON.parse(localStorage.getItem('user')).uid, 'lastChatVisits'), (snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        let chat = this.chats.find(c => c.id == doc.id);
+        if (chat) {
+          chat.lastUserVisit = doc.data();
         }
       })
     },
-      (error) => {
-        console.warn('Setting last visit to chat error', error);
-      })
+        (error) => {
+          console.warn('Setting last visit to chat error', error);
+        })
   }
 
 //* Updates the timestap when user last visited the chat*/
@@ -261,7 +256,7 @@ async updateLastVisitTimestamp() {
     })
       .then(() => {
         this.updateLastMessageTimestamp(timestamp);
-        // this.updateLastVisitTimestamp();
+        this.updateLastVisitTimestamp();
       });
     this.shouldScroll = true;
   }
