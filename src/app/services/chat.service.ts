@@ -238,7 +238,7 @@ async updateLastVisitTimestamp() {
   console.log('last visit');
   let currentUserId = await JSON.parse(localStorage.getItem('user')).uid;
   const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChatVisits', this.chatId);
-  await updateDoc(docToUpdate, {
+  await setDoc(docToUpdate, {
     time: Timestamp.fromDate(new Date())
   });
 }
