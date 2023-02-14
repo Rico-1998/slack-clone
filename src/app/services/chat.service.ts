@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { query, Timestamp } from '@firebase/firestore';
+import { catchError } from 'rxjs';
 import { ChannelService } from './channel.service';
 import { UserService } from './user.service';
 
@@ -59,7 +60,7 @@ export class ChatService {
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
     console.log('cCM', this.currentChatMembers);
-    
+
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
@@ -187,7 +188,7 @@ export class ChatService {
   //** BITTE VERVOLLSTÄNDIGEN */
   async snapChatMembers(snapshot) {
     snapshot.docChanges().forEach(async (change) => {
-      if(change.type == 'added') {
+      if (change.type == 'added') {
         let otherUsers = (change.doc.data()['userIds'].filter(a => a != this.currentUser.uid));
         let currentUser = (change.doc.data()['userIds'].filter(a => a == this.currentUser.uid));
         if (otherUsers.length == 0) {
@@ -195,9 +196,15 @@ export class ChatService {
         } else {
           this.findOtherUser(otherUsers, change)
         }
+      } else if (change.type == 'modified') {
+        let chatToUpdate = this.chats.filter((chat) => chat.id == change.doc.id,'snap');
+        chatToUpdate[0].lastMessage = change.doc.data().lastMessage;
+        console.log(change.doc.id,'snap')
+        console.log(change.doc.data().lastMessage)
+        console.log(chatToUpdate[0].lastMessage,'chattoupdate')
       }
-    });        
-    console.log(this.chats);    
+    });
+    console.log(this.chats);
     this.getLastVisitsForChats();
   }
 
@@ -214,7 +221,7 @@ export class ChatService {
       if (index != -1) {
         otherUsers[index] = otherUser;
       }
-    });        
+    });
     this.chats.push(({ ...(change.doc.data() as object), id: change.doc.id, otherUsers: otherUsers }));
   }
 
@@ -228,21 +235,22 @@ export class ChatService {
         }
       })
     },
-        (error) => {
-          console.warn('Setting last visit to chat error', error);
-        })
+      (error) => {
+        console.warn('Setting last visit to chat error', error);
+      })
   }
 
-//* Updates the timestap when user last visited the chat*/
-async updateLastVisitTimestamp() {
-  console.log('last visit');
-  let currentUserId = await JSON.parse(localStorage.getItem('user')).uid;
-  const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChatVisits', this.chatId);
-  await setDoc(docToUpdate, {
-    time: Timestamp.fromDate(new Date())
-  });
-}
-  
+  //* Updates the timestap when user last visited the chat*/
+  async updateLastVisitTimestamp() {
+    console.log('last visit');
+    let currentUserId = await JSON.parse(localStorage.getItem('user')).uid;
+    const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChatVisits', this.chatId);
+    await setDoc(docToUpdate, {
+      time: Timestamp.fromDate(new Date())
+    })
+      ;
+  }
+
 
 
   //**add message to current chat and scroll to last message in chat */
@@ -329,6 +337,7 @@ async updateLastVisitTimestamp() {
 
   //* Updates the time when last message was send in chats */
   async updateLastMessageTimestamp(timestamp) {
+    console.log('update last message');
     await updateDoc(doc(this.db, 'chats', this.chatId), {
       lastMessage: timestamp
     })
