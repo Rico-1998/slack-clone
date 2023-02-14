@@ -100,7 +100,7 @@
             class="message-wrapper"
             *ngIf="channelService.msgToEdit != message"
           >
-            <span [innerHTML]="message.msg"></span>
+            <span [innerHTML]="message.msg | sanitizeHtml"></span>
             <div class="edited" *ngIf="message.edit">(edited)</div>
           </div>
           <div class="comments-container" *ngIf="message.comments">

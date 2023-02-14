@@ -32,7 +32,6 @@ export class NavTreeComponent implements OnInit {
     public authService: AuthService,
     public toggler: DrawerTogglerService,
   ) {
-
   }
 
   async ngOnInit() {
@@ -48,6 +47,7 @@ export class NavTreeComponent implements OnInit {
     });
   }
 
+
   async deleteChat(chat: any) {
     console.log('selected chat', chat);
     let msgs = [];
@@ -55,20 +55,15 @@ export class NavTreeComponent implements OnInit {
       let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages', message.documentId);
       msgs.push(actualChatMessages)
     });
-
-    for (let i = 0; i < msgs.length; i++) {
-      deleteDoc(msgs[i]);
-      // deleteDoc(doc(this.chatService.db, 'chats', chat.id,));
-    }
-
-    // let actualChat = doc(this.chatService.db, 'chats', chat.id);
-    // await deleteDoc(actualChat);
+    let actualChat = doc(this.chatService.db, 'chats', chat.id);
+    await deleteDoc(actualChat);
   }
+
 
   status(chat) {
     let status = false;
     this.userService.users.forEach(user => {
-      if (user.id == chat.otherUsers[0].id && user.loggedIn) {
+      if (user.id == chat.otherUsers[0]['id'] && user.loggedIn) {
         status = true;
       }
     });

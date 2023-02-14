@@ -38,6 +38,10 @@ export class ChannelsComponent implements OnInit {
     public deleteDialogService: DeleteDialogService,
   ) {
     route.params.subscribe((channelRoomId) => {
+      if (this.channelService.channelId) {
+        console.log(this.channelService.channelId,'#1')
+       this.channelService.updateLastVisitTimestamp();
+      }
       this.channelService.channelId = channelRoomId['id'];
     });
   }
@@ -49,9 +53,11 @@ export class ChannelsComponent implements OnInit {
       this.channelService.destroy();
         //Checkes if we alredy visited a channel and updates the lastVisitTimestamp
       if (this.channelService.channelId) {
+        console.log(this.channelService.channelId,'#2')
         await this.channelService.updateLastVisitTimestamp();
       }
       this.channelService.getChannelRoom(channelRoomId);
+      console.log(this.channelService.channelId,'#3')
     })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;
@@ -87,9 +93,6 @@ export class ChannelsComponent implements OnInit {
   }
 
 
-  
-
-
   //**Changes the path to identify the message to edit */
   changePath(message) {
     this.channelService.msgToEdit = message;
@@ -99,5 +102,4 @@ export class ChannelsComponent implements OnInit {
       quillEditorTextfield    
     });
   }
-
 }

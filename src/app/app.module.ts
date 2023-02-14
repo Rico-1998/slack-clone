@@ -49,6 +49,7 @@ import { ThreadComponent } from './thread/thread.component';
 import { DialogDeleteMessageComponent } from './dialog-components/dialog-delete-message/dialog-delete-message.component';
 import { UserSettingsComponent } from './user-settings/user-settings.component';
 import { ChatThreadComponent } from './chat-thread/chat-thread.component';
+import { SanitizeHtmlPipePipe } from './sanitize-html-pipe.pipe';
 
 
 
@@ -73,6 +74,7 @@ import { ChatThreadComponent } from './chat-thread/chat-thread.component';
     DialogDeleteMessageComponent,
     UserSettingsComponent,
     ChatThreadComponent,
+    SanitizeHtmlPipePipe,
   ],
   imports: [
     BrowserModule,

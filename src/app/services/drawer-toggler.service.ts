@@ -16,6 +16,8 @@ export class DrawerTogglerService {
     public chats: ChatService,
   ) { }
 
+
+  //**toggles open boolean */
   toggleNav() {
     if(this.open) {
       this.open = false;
@@ -23,6 +25,7 @@ export class DrawerTogglerService {
       this.open = true;
     }
   }
+
 
   //Closes Nav and Threads on small screens
   closeNav() {

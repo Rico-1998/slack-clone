@@ -53,6 +53,10 @@ mat-option {
     border-radius: $br-primary !important;
     border: $border-primary !important;
     overflow: hidden;
+
+    #tab-panel {
+        max-height: 100px;
+    }
 }
 
 #tab-toolbar, #tab-panel {

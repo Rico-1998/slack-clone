@@ -8,11 +8,14 @@ import { DeleteDialogService } from '../services/delete-dialog.service';
 
 
 
+
 @Component({
   selector: 'app-chatroom',
   templateUrl: './chatroom.component.html',
   styleUrls: ['./chatroom.component.scss']
 })
+
+
 export class ChatroomComponent implements OnInit {
   textBoxPath: string = 'chatroom';
   textBoxPathEdit: string = 'edit';
@@ -36,7 +39,7 @@ export class ChatroomComponent implements OnInit {
         this.route.params.subscribe(async chatroomId => {
           this.handleComponentChange();
           if (this.chatService.chatId) {
-            await this.chatService.updateLastVisitTimestamp()
+            await this.chatService.updateLastVisitTimestamp();
             this.chatService.destroy();
           }
           this.chatService.getChatRoom(chatroomId);
@@ -47,6 +50,7 @@ export class ChatroomComponent implements OnInit {
     this.scrollToBottom();
   }
 
+  
   handleComponentChange() {
     this.chatService.chatLoading = true;
     this.chatService.threadOpen = false
@@ -76,8 +80,4 @@ export class ChatroomComponent implements OnInit {
     let actualMsg = doc(this.chatService.db, 'chats', message.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
   }
-
-
-
-
 }

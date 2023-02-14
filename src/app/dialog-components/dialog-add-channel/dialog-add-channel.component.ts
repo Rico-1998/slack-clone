@@ -6,9 +6,6 @@ import { Channel } from 'src/modules/channels.class';
 import { timestamp } from 'rxjs';
 
 
-
-
-
 @Component({
   selector: 'app-dialog-add-channel',
   templateUrl: './dialog-add-channel.component.html',

@@ -33,14 +33,15 @@ export class HomeComponent implements OnInit {
     private userService: UserService, 
     public toggler: DrawerTogglerService, ) { }
 
+    
   async ngOnInit() {
     this.userService.getData();
         
+
     if(window.innerWidth < 600) {
       this.toggler.open = false;
       this.toggler.type = 'over';
       this.toggler.showToggleBtn = true;
     } 
   }
-
 }
