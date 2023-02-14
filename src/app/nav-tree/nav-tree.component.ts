@@ -19,7 +19,7 @@ import { deleteDoc, doc } from '@firebase/firestore';
 })
 export class NavTreeComponent implements OnInit {
   openChannelPanel = true;
-  openChatsPanel = true; 
+  openChatsPanel = true;
   currentUser = JSON.parse(localStorage.getItem('user'));
   _lastUserVisits: any;
   hover: any = [];
@@ -36,10 +36,10 @@ export class NavTreeComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if(this.chatService.chats.length == 0) {
+    if (this.chatService.chats.length == 0) {
       await this.chatService.getChats();
     }
-    await this.channelService.getChannels();        
+    await this.channelService.getChannels();
   }
 
   openDialogAddChannel() {
@@ -49,20 +49,26 @@ export class NavTreeComponent implements OnInit {
   }
 
   async deleteChat(chat: any) {
-    console.log('selected chat',chat);
+    console.log('selected chat', chat);
+    let msgs = [];
     this.chatService.currentChatMessages.forEach(async (message) => {
-      let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages',message.documentId);
-      await deleteDoc(actualChatMessages);
+      let actualChatMessages = doc(this.chatService.db, 'chats', chat.id, 'messages', message.documentId);
+      msgs.push(actualChatMessages)
     });
-    
-    let actualChat = doc(this.chatService.db, 'chats', chat.id);    
-    await deleteDoc(actualChat);
+
+    for (let i = 0; i < msgs.length; i++) {
+      deleteDoc(msgs[i]);
+      // deleteDoc(doc(this.chatService.db, 'chats', chat.id,));
+    }
+
+    // let actualChat = doc(this.chatService.db, 'chats', chat.id);
+    // await deleteDoc(actualChat);
   }
 
   status(chat) {
     let status = false;
     this.userService.users.forEach(user => {
-      if(user.id == chat.otherUsers[0].id && user.loggedIn) {
+      if (user.id == chat.otherUsers[0].id && user.loggedIn) {
         status = true;
       }
     });
