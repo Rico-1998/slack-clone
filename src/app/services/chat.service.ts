@@ -59,8 +59,6 @@ export class ChatService {
     this.chatId = chatroomId['id'] || chatroomId;
     this.currentChat = this.chats.filter(a => a.id == this.chatId);
     this.currentChatMembers = this.currentChat[0]?.otherUsers;
-    console.log('cCM', this.currentChatMembers);
-
     const colRef = collection(this.db, 'chats', this.chatId, 'messages');
     const q = query(colRef, orderBy('timestamp', 'asc'))
     this.unsub = onSnapshot(q, async (snapshot) => {
@@ -76,24 +74,11 @@ export class ChatService {
   async snapChatroomMessages(snapshot) {
     snapshot.docChanges().forEach(async (change) => {
       if (change.type == 'added') {
-        let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', change.doc.id, 'comments'));
-        let timestampConvertedMsg = { ...(change.doc.data() as object), id: this.chatId, documentId: change.doc.id, comments: comments.size };
-        timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
-        this.currentChatMessages.push(timestampConvertedMsg);
-        this.currentFilteredMessages.push(timestampConvertedMsg);
+       this.addSnapMessage(change);
       } else if (change.type == 'removed') {
-        let indexOfMessageToRemove = this.currentChatMessages.findIndex(m => m.documentId == change.doc.id);
-        let indexOfFilteredMessageToRemove = this.currentFilteredMessages.findIndex(m => m.documentId == change.doc.id);
-        this.currentChatMessages.splice(indexOfMessageToRemove, 1)
-        this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1)
+        this.removeSnapMessage(change);
       } else if (change.type == "modified") {
-        debugger;
-        let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
-        let messageToEditFiltered = this.currentFilteredMessages.filter(m => m.documentId == change.doc.id);
-        messageToEdit[0]['msg'] = change.doc.data()['msg'];
-        messageToEdit[0]['edit'] = change.doc.data()['edit'];
-        messageToEditFiltered[0]['msg'] = change.doc.data()['msg'];
-        messageToEditFiltered[0]['edit'] = change.doc.data()['edit'];
+        this.modifySnapMessage(change);
       }
       this.chatLoading = false;
       this.shouldScroll = true;
@@ -103,6 +88,36 @@ export class ChatService {
         this.chatLoading = false;
       }
     }, 500);
+  }
+
+
+  //**finds and modifies the snapped messages */
+  modifySnapMessage(change) {
+    let messageToEdit = this.currentChatMessages.filter(m => m.documentId == change.doc.id);
+    let messageToEditFiltered = this.currentFilteredMessages.filter(m => m.documentId == change.doc.id);
+    messageToEdit[0]['msg'] = change.doc.data()['msg'];
+    messageToEdit[0]['edit'] = change.doc.data()['edit'];
+    messageToEditFiltered[0]['msg'] = change.doc.data()['msg'];
+    messageToEditFiltered[0]['edit'] = change.doc.data()['edit'];
+  }
+
+
+  //**finds and removes the snapped messages */
+  removeSnapMessage(change) {
+    let indexOfMessageToRemove = this.currentChatMessages.findIndex(m => m.documentId == change.doc.id);
+        let indexOfFilteredMessageToRemove = this.currentFilteredMessages.findIndex(m => m.documentId == change.doc.id);
+        this.currentChatMessages.splice(indexOfMessageToRemove, 1)
+        this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1)
+  }
+
+
+  //**add the snapped messages to the chat */
+  async addSnapMessage(change) {
+    let comments = await getDocs(collection(this.db, 'chats', this.chatId, 'messages', change.doc.id, 'comments'));
+    let timestampConvertedMsg = { ...(change.doc.data() as object), id: this.chatId, documentId: change.doc.id, comments: comments.size };
+    timestampConvertedMsg['timestamp'] = this.channelService.convertTimestamp(timestampConvertedMsg['timestamp'], 'full');
+    this.currentChatMessages.push(timestampConvertedMsg);
+    this.currentFilteredMessages.push(timestampConvertedMsg);
   }
 
 
@@ -158,7 +173,7 @@ export class ChatService {
   }
 
 
-  //** BITTE VERVOLLSTÄNDIGEN */
+  //**checkes if a chatroom already exists, if not creates a new chatroom */
   async createChatRoom() {
     let roomId = this.arrayToString(this.createRoomId());
     let chatRoomExists = getDoc(doc(this.db, 'chats', roomId));
@@ -174,7 +189,7 @@ export class ChatService {
   }
 
 
-  //** BITTE VERVOLLSTÄNDIGEN */
+  //**gets the chat from backend */
   async getChats() {
     onSnapshot(this.currentUserChats, async (snapshot) => {
       this.snapChatMembers(snapshot);
@@ -185,7 +200,7 @@ export class ChatService {
   }
 
 
-  //** BITTE VERVOLLSTÄNDIGEN */
+  //**finds and sorts all chatmembers and handles data change */
   async snapChatMembers(snapshot) {
     snapshot.docChanges().forEach(async (change) => {
       if (change.type == 'added') {
@@ -199,21 +214,21 @@ export class ChatService {
       } else if (change.type == 'modified') {
         let chatToUpdate = this.chats.filter((chat) => chat.id == change.doc.id,'snap');
         chatToUpdate[0].lastMessage = change.doc.data().lastMessage;
-        console.log(change.doc.id,'snap')
-        console.log(change.doc.data().lastMessage)
-        console.log(chatToUpdate[0].lastMessage,'chattoupdate')
       }
     });
-    console.log(this.chats);
     this.getLastVisitsForChats();
   }
 
+
+  //**finds the current user and pushes in to chat array on forst place */
   findCurrentUser(currentUser, change) {
     const toFindDuplicates = currentUser => currentUser.filter((item, index) => currentUser.indexOf(item) !== index);
     currentUser = this.userService.users.filter(a => a.id == toFindDuplicates(currentUser));
     this.chats.push(({ ...(change.doc.data() as object), id: change.doc.id, otherUsers: currentUser }));
   }
 
+
+  //**find other chat users and puishes them in to the chat array */
   findOtherUser(otherUsers, change) {
     otherUsers.forEach(otherUser => {
       otherUser = this.userService.users.find(a => a.id == otherUser);
@@ -224,6 +239,7 @@ export class ChatService {
     });
     this.chats.push(({ ...(change.doc.data() as object), id: change.doc.id, otherUsers: otherUsers }));
   }
+
 
   //**load and connects the lastVisitTimestamps into the chats */
   async getLastVisitsForChats() {
@@ -240,9 +256,9 @@ export class ChatService {
       })
   }
 
+
   //* Updates the timestap when user last visited the chat*/
   async updateLastVisitTimestamp() {
-    console.log('last visit');
     let currentUserId = await JSON.parse(localStorage.getItem('user')).uid;
     const docToUpdate = doc(this.db, 'users', currentUserId, 'lastChatVisits', this.chatId);
     await setDoc(docToUpdate, {
@@ -250,7 +266,6 @@ export class ChatService {
     })
       ;
   }
-
 
 
   //**add message to current chat and scroll to last message in chat */
@@ -318,8 +333,9 @@ export class ChatService {
       })
   }
 
+
+  //**updates the message on backend with the new message text */
   async editMsg(msg) {
-    console.log(this.msgToEdit);
     let docToUpdate = doc(this.db, 'chats', this.msgToEdit['id'], 'messages', this.msgToEdit['documentId']);
     await updateDoc(docToUpdate, {
       msg: msg,
@@ -329,7 +345,7 @@ export class ChatService {
   }
 
 
-  //** BITTE VERVOLLSTÄNDIGEN */
+  //** makes a string out of an array */
   arrayToString(array) {
     return array.sort().join('');
   }
@@ -337,13 +353,12 @@ export class ChatService {
 
   //* Updates the time when last message was send in chats */
   async updateLastMessageTimestamp(timestamp) {
-    console.log('update last message');
     await updateDoc(doc(this.db, 'chats', this.chatId), {
       lastMessage: timestamp
     })
   }
 
-
+  //**handles open thread */
   openThread(message) {
     this.thread = message;
     this.threadOpen = true;

@@ -87,9 +87,6 @@ export class ChannelsComponent implements OnInit {
   }
 
 
-  
-
-
   //**Changes the path to identify the message to edit */
   changePath(message) {
     this.channelService.msgToEdit = message;
@@ -99,5 +96,4 @@ export class ChannelsComponent implements OnInit {
       quillEditorTextfield    
     });
   }
-
 }

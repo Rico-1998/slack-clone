@@ -115,6 +115,7 @@ export class AuthService {
     this.dialog.open(DialogErrorComponent);
   }
   
+  
   // guestLogin() {
   //   signInAnonymously(this.auth)
   //     .then((guest) => {

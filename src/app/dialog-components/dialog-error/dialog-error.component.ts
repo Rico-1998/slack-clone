@@ -14,17 +14,17 @@ export class DialogErrorComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private dialogRef: MatDialogRef<DialogErrorComponent>
-    ) {
-      if(authService.errorCode == 'auth/wrong-password') {
-        this.errorMessage = 'Seems like you insert a wrong password. Please try again.'
-      } else if(authService.errorCode == 'auth/user-not-found') {
-        this.errorMessage = 'Seems like you insert a wrong username. Please try again.'
-      } else if (authService.errorCode == 'auth/email-already-in-use') {
-        this.errorMessage = 'Seems like you already have an account. Please login.'
-      } else if (authService.errorCode == 'auth/too-many-requests') {
-        this.errorMessage = 'Seems like you insert wrong data to many times. Pleas wait a moment and try it again later.'
-      } else this.errorMessage = authService.errorCode;
-     }
+  ) {
+    if (authService.errorCode == 'auth/wrong-password') {
+      this.errorMessage = 'Seems like you insert a wrong password. Please try again.'
+    } else if (authService.errorCode == 'auth/user-not-found') {
+      this.errorMessage = 'Seems like you insert a wrong username. Please try again.'
+    } else if (authService.errorCode == 'auth/email-already-in-use') {
+      this.errorMessage = 'Seems like you already have an account. Please login.'
+    } else if (authService.errorCode == 'auth/too-many-requests') {
+      this.errorMessage = 'Seems like you insert wrong data to many times. Pleas wait a moment and try it again later.'
+    } else this.errorMessage = authService.errorCode;
+  }
 
 
   ngOnInit(): void {

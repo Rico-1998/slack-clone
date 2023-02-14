@@ -18,7 +18,6 @@ export class UserService {
   threadEditor: boolean = false;
 
 
-
   constructor(
     public authService: AuthService,
     private firestore: Firestore) {
@@ -36,6 +35,7 @@ export class UserService {
         console.warn('Loading all users error', error);
       })
 
+
     this.authService.loggedUser?.subscribe((user$) => {
       if (user$) {
         getDoc(doc(this.userRef, user$.uid as string))
@@ -44,6 +44,7 @@ export class UserService {
           })
       }
     })
+
 
     this.currentUser$ = this.authService.loggedUser.pipe(
       switchMap((user) => {

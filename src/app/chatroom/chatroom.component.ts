@@ -50,6 +50,7 @@ export class ChatroomComponent implements OnInit {
     this.scrollToBottom();
   }
 
+  
   handleComponentChange() {
     this.chatService.chatLoading = true;
     this.chatService.threadOpen = false
@@ -79,8 +80,4 @@ export class ChatroomComponent implements OnInit {
     let actualMsg = doc(this.chatService.db, 'chats', message.id, 'messages', message.documentId);
     await deleteDoc(actualMsg);
   }
-
-
-
-
 }

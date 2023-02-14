@@ -49,9 +49,11 @@ export class SearchbarComponent implements OnInit {
     });
   }
 
+  
   openSettings() {
     this.dialog.open(UserSettingsComponent, { panelClass: 'custom-dialog-container' })
   }
+
 
   searchInput() {
       if(this.chatService.currentChat) {

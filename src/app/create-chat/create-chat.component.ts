@@ -49,6 +49,7 @@ export class CreateChatComponent implements OnInit {
     });
   }
 
+  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.viewportWidth = event.target.innerWidth > 600 ? false : true;

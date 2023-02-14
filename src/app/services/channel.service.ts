@@ -110,26 +110,44 @@ export class ChannelService {
   snapCurrentChannelMessages(snapshot) {
     snapshot.docChanges().forEach(async (change) => {
       if (change.type == 'added') {
-        let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', change.doc.id, 'comments')));
-        let message = { ...(change.doc.data() as object), id: change.doc.id, comments: comments.size };
-        message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
-        this.allMessages.push(message);
-        this.currentFilteredMessages.push(message);
+        this.addSnapMessage(change);
       } else if (change.type == 'removed') {
-        let indexOfMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
-        this.allMessages.splice(indexOfMessageToRemove, 1);
-        let indexOfFilteredMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
-        this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1);
+        this.deleteSnapMessage(change);
       } else if (change.type == "modified") {
-        let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
-        messageToEdit = this.currentFilteredMessages.filter(m => m.id == change.doc.id);
-        messageToEdit[0]['msg'] = change.doc.data()['msg'];
-        messageToEdit[0]['edit'] = change.doc.data()['edit'];
+        this.modifySnapMessage(change);
       }
       this.channelLoading = false;
       this.showNewMessage();
       this.checkIfSnapIsEmpty();
     })
+  }
+
+
+  //**adds snapped messages to channel */
+  async addSnapMessage(change) {
+    let comments = (await getDocs(collection(this.db, 'channels', this.channelId, 'messages', change.doc.id, 'comments')));
+    let message = { ...(change.doc.data() as object), id: change.doc.id, comments: comments.size };
+    message['timestamp'] = this.convertTimestamp(message['timestamp'], 'full');
+    this.allMessages.push(message);
+    this.currentFilteredMessages.push(message);
+  }
+
+
+  //**finds and deletes snapped message */
+  deleteSnapMessage(change) {
+    let indexOfMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
+    this.allMessages.splice(indexOfMessageToRemove, 1);
+    let indexOfFilteredMessageToRemove = this.allMessages.findIndex(m => m.id == change.doc.id);
+    this.currentFilteredMessages.splice(indexOfFilteredMessageToRemove, 1);
+  }
+
+
+  //**finds the snaped message and modifies it */
+  modifySnapMessage(change) {
+    let messageToEdit = this.allMessages.filter(m => m.id == change.doc.id);
+    messageToEdit = this.currentFilteredMessages.filter(m => m.id == change.doc.id);
+    messageToEdit[0]['msg'] = change.doc.data()['msg'];
+    messageToEdit[0]['edit'] = change.doc.data()['edit'];
   }
 
 
@@ -224,9 +242,8 @@ export class ChannelService {
     (error) => {
       console.warn('Loading comments to thread (channel) error',error);      
     })
-    console.log(this.allThreadComments);
-    
   }
+
 
   //** edit picked message and save in array and firebase */
   async editMessage(msg) {
