@@ -40,14 +40,14 @@
 </mat-toolbar>
 <div class="texteditor-container">
   <div class="new-chat-info">
-    <span *ngIf="chatService.selectedUserList.length > 0">This Chat is only</span>
+    <span>Select user for chat</span>
     <ng-container *ngIf="chatService.selectedUserList.length > 0">
       <span> between you and </span>
       <span *ngFor="
           let chatMembers of chatService.selectedUserList;
           let last = last
         ">
-        <span>{{ chatMembers.userName }}</span>
+        <span>{{ chatMembers.userName | lowercase }}</span>
         <ng-container *ngIf="!last">, </ng-container>
       </span>
     </ng-container>

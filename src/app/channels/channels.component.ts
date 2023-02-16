@@ -39,7 +39,6 @@ export class ChannelsComponent implements OnInit {
   ) {
     route.params.subscribe((channelRoomId) => {
       if (this.channelService.channelId) {
-        console.log(this.channelService.channelId, '#1')
         this.channelService.updateLastVisitTimestamp();
       }
       this.channelService.channelId = channelRoomId['id'];
@@ -55,7 +54,7 @@ export class ChannelsComponent implements OnInit {
       if (this.channelService.channelId) {
         await this.channelService.updateLastVisitTimestamp();
       }
-      await this.channelService.getChannelRoom(channelRoomId);
+      this.channelService.getChannelRoom(channelRoomId);
     })
     this.channelService.updateLastVisitTimestamp()
     this.userService.channelEditor = true;

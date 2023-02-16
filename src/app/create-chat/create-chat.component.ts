@@ -15,12 +15,6 @@ import { ChatService } from '../services/chat.service';
 })
 export class CreateChatComponent implements OnInit {
   viewportWidth: any;
-  lastMessages = {
-    "name": "Phil Schmucker",
-    "date": '09.01.2022',
-    "message": 'Du: Das ist eine Testnachricht!',
-  }
-
   value: any;
   db = getFirestore();
   textBoxPath: string = 'create-chat';
@@ -38,6 +32,7 @@ export class CreateChatComponent implements OnInit {
   ngOnInit(): void {
     this.userService.chatEditor = true;
     this.userService.channelEditor = false;
+    this.chatService.selectedUserList = [];
     onSnapshot(collection(this.db, 'chats'), (snapshot) => {
       snapshot.docs.forEach((doc) => {
         this.chatDocs.push(({ ...(doc.data() as object), chatIdDoc: doc.id }));
@@ -58,6 +53,8 @@ export class CreateChatComponent implements OnInit {
 
   //**search for registrated user in database */
   searchUser(event: any) {
+    console.log(event);
+    
     this.chatService.foundedUsers = event;
   }
 

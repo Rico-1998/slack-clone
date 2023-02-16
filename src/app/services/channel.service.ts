@@ -85,7 +85,9 @@ export class ChannelService {
   async getChannelRoom(channelRoomId) {
     this.channelId = channelRoomId['id'] || channelRoomId;
     this.currentChannel = await this.channels.find(a => a.id == this.channelId);
-    this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');
+    if (this.currentChannel.created) {
+      this.currentChannel.created = this.convertTimestamp(this.currentChannel?.created, 'onlyDate');
+    }
     this.snapCurrentChannel();
   }
 
@@ -98,6 +100,7 @@ export class ChannelService {
     const q = query(colRef, orderBy('timestamp'));
     this.unsub = onSnapshot(q, (snapshot) => {
       this.snapCurrentChannelMessages(snapshot);
+      this.checkIfSnapIsEmpty();
     },
       (error) => {
         console.warn('Loading current channel error', error);
@@ -115,10 +118,9 @@ export class ChannelService {
         this.deleteSnapMessage(change);
       } else if (change.type == "modified") {
         this.modifySnapMessage(change);
-      }
+      } 
       this.channelLoading = false;
       this.showNewMessage();
-      this.checkIfSnapIsEmpty();
     })
   }
 

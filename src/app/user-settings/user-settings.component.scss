@@ -42,25 +42,16 @@
         }
 
 
-        mat-list-item {
-            height: 30px !important;
-            color: $txt-clr-primary;
-            transition: $transition-hover;
+        .btn-container {
+            justify-content: flex-end;
+            button {
+                background-color: $bgClr-primary;
+                color: $txt-clr-secondary;
 
-            &:hover {
-                background-color: $txt-clr-link;
+                &:hover {
+                    background-color: $txt-clr-link;
+                }
             }
-
-            .listItem {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                gap: $gap-primary;
-                padding: $padding-sidenav-content;
-                font-size: $fs-m;
-            }
-
         }
     }
 
