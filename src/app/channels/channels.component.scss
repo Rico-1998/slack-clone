@@ -37,6 +37,15 @@
 
                 .welcome-content {
                     margin-left: 24px;
+
+                    .enterMessage {
+                        margin: 10px 0;
+                        padding: 10px;
+                        font-size: $fs-regular;
+                        background-color: $bgClr-highlight;
+                        border-radius: $br-primary;
+                        width: fit-content;
+                    }
                 }
             }
 

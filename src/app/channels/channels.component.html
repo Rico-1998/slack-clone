@@ -29,6 +29,13 @@
               </strong>
             </span>
           </span>
+
+          <div
+            class="enterMessage"
+            *ngIf="this.channelService.allMessages.length == 0"
+          >
+            Please enter the first messages for this channel
+          </div>
         </mat-card-content>
       </mat-card>
       <mat-card
