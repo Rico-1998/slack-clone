@@ -31,7 +31,7 @@ export class AuthService {
   ) {
     onAuthStateChanged(this.auth, (user) => {
       if (user) {
-        this.userData = user;    
+        this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user')!);
       } else {
@@ -41,7 +41,7 @@ export class AuthService {
     });
     this.isLoggedIn();
   }
- 
+
 
   //**check if user exist in database and set var logedIn to true if so */
   isLoggedIn(): any {
@@ -52,8 +52,8 @@ export class AuthService {
       this.loggedIn = false;
     }
   }
-  
-  
+
+
   //**create new user data with email and password in database */
   registrateUser(email: string, password: string, name: string, form: any) {
 
@@ -74,31 +74,31 @@ export class AuthService {
       })
 
   }
-  
-  
+
+
   //**remove current user from local storage and auth */
   logout(currentUser) {
     signOut(this.auth)
-    .then(() => {
-      updateDoc(doc(this.colRef, currentUser.id), {
-        loggedIn: false,
-      });
-      localStorage.removeItem('user');
-      this.router.navigate(['/']);
-    })
-    .catch((e) => {
-      this.handleError(e.message, e.code);
-    })
+      .then(() => {
+        updateDoc(doc(this.colRef, currentUser.id), {
+          loggedIn: false,
+        });
+        localStorage.removeItem('user');
+        this.router.navigate(['/']);
+      })
+      .catch((e) => {
+        this.handleError(e.message, e.code);
+      })
   }
-  
-  
+
+
   //**set registrated user to auth */
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((cred) => {
         updateDoc(doc(this.colRef, cred.user.uid), {
           loggedIn: true,
-        });            
+        });
         this.loggedIn = true;
         this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
       })
@@ -106,16 +106,16 @@ export class AuthService {
         this.handleError(e.message, e.code);
       })
   }
-  
-  
+
+
   //**opens dialog with error message if login failed */
   handleError(eMessage: any, eCode: any) {
     this.errorMessage = eMessage;
     this.errorCode = eCode;
     this.dialog.open(DialogErrorComponent);
   }
-  
-  
+
+
   // guestLogin() {
   //   signInAnonymously(this.auth)
   //     .then((guest) => {
