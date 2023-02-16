@@ -47,6 +47,7 @@ export class SearchbarComponent implements OnInit {
     (error) => {
       console.warn('Loading user error', error)
     });
+    this.searchInput();
   }
 
   
@@ -59,14 +60,16 @@ export class SearchbarComponent implements OnInit {
       if(this.chatService.currentChat) {
         if(this.value == '') {
           this.chatService.currentFilteredMessages = this.chatService.currentChatMessages;       
+          this.value = undefined;
         } else {
-          this.chatService.currentFilteredMessages = this.chatService.currentChatMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').includes(this.value));
+          this.chatService.currentFilteredMessages = this.chatService.currentChatMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').toLowerCase().includes(this.value.toLowerCase()));
         }
       } else if (this.channelService.currentChannel) {
         if(this.value == '') {
-          this.channelService.currentFilteredMessages = this.channelService.allMessages;        
+          this.channelService.currentFilteredMessages = this.channelService.allMessages;   
+          this.value = undefined;
         } else {
-          this.channelService.currentFilteredMessages = this.channelService.allMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').includes(this.value));
+          this.channelService.currentFilteredMessages = this.channelService.allMessages.filter(a => a.msg.replace(/<[^>]+>/g, '').toLowerCase().includes(this.value.toLowerCase()));
         }
       }
   }
