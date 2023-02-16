@@ -7,15 +7,16 @@ import { CreateChatComponent } from './create-chat/create-chat.component';
 import { ChannelsComponent } from './channels/channels.component';
 import { ChatroomComponent } from './chatroom/chatroom.component';
 
+// , canActivate: [AuthGuard]
 const routes: Routes = [ 
-{ path: '', component: StartScreenComponent, canActivate: [AuthGuard] },
-  { path: 'channels', component: ChannelsComponent, canActivate: [AuthGuard] },
+{ path: '', component: StartScreenComponent},
+  { path: 'channels', component: ChannelsComponent},
   {
-    path: 'home', component: HomeComponent, canActivate: [AuthGuard],
+    path: 'home', component: HomeComponent,
     children: [
-      { path: 'create-chat', component: CreateChatComponent, canActivate: [AuthGuard] },
-      { path: 'channel/:id', component: ChannelsComponent, canActivate: [AuthGuard] },
-      { path: 'chatroom/:id', component: ChatroomComponent, canActivate: [AuthGuard] },
+      { path: 'create-chat', component: CreateChatComponent },
+      { path: 'channel/:id', component: ChannelsComponent },
+      { path: 'chatroom/:id', component: ChatroomComponent },
     ]
   },
 ];
