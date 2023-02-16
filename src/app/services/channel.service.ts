@@ -59,9 +59,9 @@ export class ChannelService {
         await this.getLastVisitForChannels();
       })
     },
-    (error) => {
-      console.warn('Loading all channels error',error);      
-    });
+      (error) => {
+        console.warn('Loading all channels error', error);
+      });
   }
 
 
@@ -75,9 +75,9 @@ export class ChannelService {
         }
       })
     },
-    (error) => {
-      console.warn('Setting last visit for channel error',error);      
-    });
+      (error) => {
+        console.warn('Setting last visit for channel error', error);
+      });
   }
 
 
@@ -99,9 +99,9 @@ export class ChannelService {
     this.unsub = onSnapshot(q, (snapshot) => {
       this.snapCurrentChannelMessages(snapshot);
     },
-    (error) => {
-      console.warn('Loading current channel error',error);      
-    });
+      (error) => {
+        console.warn('Loading current channel error', error);
+      });
     this.updateLastVisitTimestamp();
   }
 
@@ -154,7 +154,7 @@ export class ChannelService {
   //**checkes if no messages in channel */
   checkIfSnapIsEmpty() {
     setTimeout(() => {
-      if(this.allMessages.length < 1) {
+      if (this.allMessages.length < 1) {
         this.channelLoading = false;
       }
     }, 500);
@@ -239,9 +239,9 @@ export class ChannelService {
         }
       })
     },
-    (error) => {
-      console.warn('Loading comments to thread (channel) error',error);      
-    })
+      (error) => {
+        console.warn('Loading comments to thread (channel) error', error);
+      })
   }
 
 
@@ -275,7 +275,7 @@ export class ChannelService {
 
   addZero(time) {
     if (time < 10) {
-      return '0' + time;      
+      return '0' + time;
     } else return time;
   }
 
@@ -284,7 +284,7 @@ export class ChannelService {
     this.threadId = id;
     this.threadOpen = true;
     this.loadCommentsToThread();
-    this.loadMessageToThread(); 
+    this.loadMessageToThread();
   }
 
   closeThread() {

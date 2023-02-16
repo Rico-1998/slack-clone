@@ -59,7 +59,8 @@ mat-option {
     }
 }
 
-#tab-toolbar, #tab-panel {
+#tab-toolbar,
+#tab-panel {
     background-color: $bgClr-primary !important;
 }
 
@@ -75,6 +76,7 @@ mat-option {
     .ql-formats {
         margin: unset !important;
         border-left: $border-primary;
+
         &:not(:last-child, :first-child) {
             padding: 0 7.5px;
         }
@@ -92,74 +94,135 @@ mat-option {
 
 .ql-formats button {
     position: relative
-  }
+}
 
-  .ql-formats button:hover:after {
+.ql-formats button:hover:after {
     $width: 50px;
-      position: absolute;
-      left: calc(($width - $padding-message-box-comments)/2 * -1);
-      bottom: 150%;
-      min-width: $width;
-      background: $bgClr-secondary;
-      color: $txt-clr-h2;
-      font-weight: 700;
-      padding: $padding-sidenav-header;
-      border: $border-secondary;
-      border-radius: $br-primary;
-      z-index: 1;
-  }
+    position: absolute;
+    left: calc(($width - $padding-message-box-comments)/2 * -1);
+    bottom: 150%;
+    min-width: $width;
+    background: $bgClr-secondary;
+    color: $txt-clr-h2;
+    font-weight: 700;
+    padding: $padding-sidenav-header;
+    border: $border-secondary;
+    border-radius: $br-primary;
+    z-index: 1;
+}
 
-  .ql-bold:hover:after {
-     content: 'Bold';
-  }
+.ql-bold:hover:after {
+    content: 'Bold';
+}
 
-  .ql-italic:hover:after {
-     content: 'Italic';
-  }
+.ql-italic:hover:after {
+    content: 'Italic';
+}
 
-  .ql-underline:hover:after {
-     content: 'Underline';
-  }
+.ql-underline:hover:after {
+    content: 'Underline';
+}
 
-  .ql-strike:hover:after {
-     content: 'Strike';
-  }
+.ql-strike:hover:after {
+    content: 'Strike';
+}
 
-  .ql-blockquote:hover:after {
-     content: 'Blockquote';
-  }
+.ql-blockquote:hover:after {
+    content: 'Blockquote';
+}
 
-  .ql-code-block:hover:after {
-     content: 'Code-Block';
-  }
+.ql-code-block:hover:after {
+    content: 'Code-Block';
+}
 
-  .ql-list[value='ordered']:hover:after {
-     content: 'Ordered list';
-  }
+.ql-list[value='ordered']:hover:after {
+    content: 'Ordered list';
+}
 
-  .ql-list[value='bullet']:hover:after {
-     content: 'Bullet list';
-  }
+.ql-list[value='bullet']:hover:after {
+    content: 'Bullet list';
+}
 
-  .ql-image:hover:after {
-     content: 'Image upload';
-  }
+.ql-image:hover:after {
+    content: 'Image upload';
+}
 
-  .ql-emoji:hover:after {
-     content: 'Emojis';
-  }
+.ql-emoji:hover:after {
+    content: 'Emojis';
+}
 
-.ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow .ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke, .ql-snow .ql-toolbar button.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke, .ql-snow.ql-toolbar button:hover .ql-stroke-miter, .ql-snow .ql-toolbar button:hover .ql-stroke-miter, .ql-snow.ql-toolbar button:focus .ql-stroke-miter, .ql-snow .ql-toolbar button:focus .ql-stroke-miter, .ql-snow.ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar button.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow.ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar button:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow .ql-toolbar button:focus .ql-stroke-miter,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter {
     stroke: $txt-clr-secondary !important;
 }
 
-.ql-snow.ql-toolbar button:hover, .ql-snow .ql-toolbar button:hover, .ql-snow.ql-toolbar button.ql-active, .ql-snow .ql-toolbar button.ql-active, .ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow .ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active, .ql-snow .ql-toolbar .ql-picker-label.ql-active, .ql-snow.ql-toolbar .ql-picker-item:hover, .ql-snow .ql-toolbar .ql-picker-item:hover, .ql-snow.ql-toolbar .ql-picker-item.ql-selected, .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
     color: $txt-clr-secondary !important;
     background-color: $bgClr-hover;
     border-radius: $br-primary;
 }
 
-.ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow .ql-toolbar button:hover .ql-fill,  .ql-snow.ql-toolbar button.ql-active .ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill, .ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill, .ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill, .ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow.ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button:focus .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item:hover .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
     fill: $txt-clr-secondary !important;
 }
 
@@ -170,16 +233,17 @@ mat-option {
     border-color: $border-clr-input !important;
     transition: $transition-hover;
 }
-.ql-container.ql-snow .ql-editor::before  {
+
+.ql-container.ql-snow .ql-editor::before {
     color: $txt-clr-texteditor-blur;
     font-style: normal !important;
     transition: $transition-hover;
 }
 
-.ql-container.ql-snow .ql-editor:focus{    
+.ql-container.ql-snow .ql-editor:focus {
     &::before {
-        color: $txt-clr-primary;       
-    }    
+        color: $txt-clr-primary;
+    }
 }
 
 
@@ -233,7 +297,7 @@ pre {
     aspect-ratio: 1;
     background-color: $bgClr-start;
     border-radius: $br-primary;
-    
+
     .profile-img {
         height: inherit;
         aspect-ratio: 1;
@@ -279,7 +343,7 @@ pre {
         white-space: nowrap;
         padding: $padding-answer;
     }
-    
+
     .devider {
         border-top: 1px solid #313438;
         width: 100%;
@@ -296,6 +360,10 @@ pre {
         font-size: $fs-s;
         color: $txt-clr-primary;
     }
+
+    img {
+        width: 100%;
+    }
 }
 
 .message-box {
@@ -304,83 +372,83 @@ pre {
 
 .message-container {
     display: flex !important;
-    gap: $gap-primary;    
+    gap: $gap-primary;
     position: relative;
     background-color: $bgClr-primary;
     color: #D1D2D3;
     box-shadow: unset !important;
     border-radius: unset !important;
 
-        &:hover {
-            background-color: $bgClr-newChat;
-
-            .option-box {
-                opacity: 1;
-            }
-        }
+    &:hover {
+        background-color: $bgClr-newChat;
 
         .option-box {
-            opacity: 0;
+            opacity: 1;
+        }
+    }
 
-            display: flex;
-            align-items: center;
-            position: absolute;
+    .option-box {
+        opacity: 0;
 
-            right: 16px;
-            top: -20px;
+        display: flex;
+        align-items: center;
+        position: absolute;
 
-            background-color: $bgClr-primary;
-            border: $border-primary;
-            border-radius: $br-secondary;
-            
-            .option {
-                padding: $padding-message-box-comments;
-                
-                
-                .btn {
-                    background-color: transparent;
-                    color: $txt-clr-primary;
-                    border: none;
-                    border-radius: $br-primary;
-                    cursor: pointer;
-                    
-                    &:hover {
-                        background-color: $txt-clr-link;
-                        color: $txt-clr-secondary;
-                        
-                        &:disabled {
-                            background-color:$bgClr-primary;
-                            color: $txt-clr-primary;
-                            cursor: not-allowed;
-                        }
+        right: 16px;
+        top: -20px;
+
+        background-color: $bgClr-primary;
+        border: $border-primary;
+        border-radius: $br-secondary;
+
+        .option {
+            padding: $padding-message-box-comments;
+
+
+            .btn {
+                background-color: transparent;
+                color: $txt-clr-primary;
+                border: none;
+                border-radius: $br-primary;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: $txt-clr-link;
+                    color: $txt-clr-secondary;
+
+                    &:disabled {
+                        background-color: $bgClr-primary;
+                        color: $txt-clr-primary;
+                        cursor: not-allowed;
                     }
-
-                }
-
-                .delete {
-                    &:hover {
-                        background-color: $txt-clr-delete;
-                        color: $txt-clr-secondary;
-
-                        &:disabled {
-                            background-color:$bgClr-primary;
-                            color: $txt-clr-primary;
-                            cursor: not-allowed;
-                        }
-                    }
-                }
-            
-
-                mat-icon {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: $fs-l;
-                    line-height: unset;
                 }
 
             }
+
+            .delete {
+                &:hover {
+                    background-color: $txt-clr-delete;
+                    color: $txt-clr-secondary;
+
+                    &:disabled {
+                        background-color: $bgClr-primary;
+                        color: $txt-clr-primary;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+
+
+            mat-icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: $fs-l;
+                line-height: unset;
+            }
+
         }
+    }
 
     .message-content {
         width: 100%;
@@ -392,7 +460,7 @@ pre {
             gap: $gap-primary;
         }
 
-        span > p {
+        span>p {
             margin: 0;
         }
 
@@ -406,8 +474,8 @@ pre {
             font-size: $fs-s;
             transition: $transition-hover;
 
-            &:hover {    
-                background-color: $bgClr-primary;            
+            &:hover {
+                background-color: $bgClr-primary;
                 border: 1px solid $border-clr-input;
                 border-radius: $br-primary;
             }
@@ -428,14 +496,14 @@ pre {
                     cursor: pointer;
                     color: $txt-clr-link;
                     font-size: inherit;
-        
+
                     &:hover {
                         text-decoration: underline;
                         filter: brightness(1.2);
 
                     }
                 }
-                
+
 
                 .open-thread-info {
                     filter: brightness(0.7);
@@ -443,7 +511,7 @@ pre {
                     opacity: 0;
                 }
             }
-            
+
             .arrow {
                 opacity: 0;
                 height: $fs-m;
@@ -470,9 +538,10 @@ pre {
 
     input.mat-input-element {
         color: $txt-clr-primary;
+
         &::placeholder {
             color: $txt-clr-primary;
-           }
+        }
     }
 
     .mat-button {
@@ -487,7 +556,7 @@ pre {
     background-color: $bgClr-newChat;
     color: $txt-clr-primary;
     border-radius: $br-secondary;
-    
+
     h1 {
         color: $txt-clr-h1;
     }
@@ -600,7 +669,7 @@ pre {
 .mat-autocomplete-panel {
     background-color: $bgClr-primary;
 
-    
+
     .mat-option {
         color: $txt-clr-primary;
 

@@ -100,7 +100,7 @@ export class AuthService {
           loggedIn: true,
         });
         this.loggedIn = true;
-        this.router.navigate(['/home/channel/5jXBSiXLpYQWmpVigKY4']);
+        this.router.navigate(['/home/channel/UuD6IYNXQsHTFak2DXvw']);
       })
       .catch((e) => {
         this.handleError(e.message, e.code);
