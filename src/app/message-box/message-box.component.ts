@@ -57,7 +57,7 @@ export class MessageBoxComponent implements OnInit {
       this.messageForm.reset();
     } else if (this.textBoxPath == 'create-chat') {
       this.chatService.createChatRoom();
-      this.messageForm.reset();
+      this.messageForm.reset();      
     } else if (this.textBoxPath == 'thread') {
       this.channel.postComment();
       this.messageForm.reset();
