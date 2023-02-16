@@ -11,8 +11,10 @@
         <mat-card-content class="welcome-content">
           <span
             >Thats the beginning of this channel
-            <span class="highlight"
-              >#{{ this.channelService.currentChannel?.channelName }}
+            <span class="highlight">
+              <strong>
+                {{ this.channelService.currentChannel?.channelName }}
+              </strong>
             </span> </span
           ><br />
           <span
@@ -21,8 +23,10 @@
           ><br />
           <span
             >Channeldescription:
-            <span class="highlight"
-              >#{{ this.channelService.currentChannel?.channelDescription }}
+            <span class="highlight">
+              <strong>
+                {{ this.channelService.currentChannel?.channelDescription }}
+              </strong>
             </span>
           </span>
         </mat-card-content>

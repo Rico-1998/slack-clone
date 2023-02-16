@@ -163,6 +163,10 @@ mat-option {
     fill: $txt-clr-secondary !important;
 }
 
+.ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 {
+    padding-right: 25px;
+}
+
 
 .ql-container.ql-snow {
     border-bottom-left-radius: $br-primary;

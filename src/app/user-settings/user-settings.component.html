@@ -21,12 +21,14 @@
       </div>
     </div>
 
-    <mat-selection-list [multiple]="false">
-      <mat-list-item>
-        <div matListItemTitle [ngStyle]="{ cursor: 'pointer' }">
-          <span (click)="logout(userService.currentUser)">Logout</span>
-        </div>
-      </mat-list-item>
-    </mat-selection-list>
+    <div class="btn-container" mat-dialog-actions>
+      <button
+        (click)="logout(userService.currentUser)"
+        mat-button
+        cdkFocusInitial
+      >
+        Logout
+      </button>
+    </div>
   </mat-card>
 </div>
