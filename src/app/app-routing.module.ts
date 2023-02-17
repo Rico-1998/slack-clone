@@ -10,9 +10,8 @@ import { ChatroomComponent } from './chatroom/chatroom.component';
 // , canActivate: [AuthGuard] 
 const routes: Routes = [
   { path: '', component: StartScreenComponent },
-  { path: 'channels', component: ChannelsComponent, canActivate: [AuthGuard] },
   {
-    path: 'home', component: HomeComponent, canActivate: [AuthGuard],
+    path: 'home', component: HomeComponent,
     children: [
       { path: 'create-chat', component: CreateChatComponent },
       { path: 'channel/:id', component: ChannelsComponent },
